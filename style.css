@@ -1,5 +1,6 @@
 body {
-background: #222;
+margin: 0;
+background: linear-gradient(#1e1e1e, #2b2b2b);
 color: white;
 text-align: center;
 font-family: Arial;
@@ -7,17 +8,54 @@ font-family: Arial;
 
 h1 {
 font-size: 50px;
+margin-top: 20px;
 }
 
 #coins {
 font-size: 35px;
+margin-top: 10px;
+}
+
+#perSec {
+font-size: 18px;
+color: #aaa;
 }
 
 #horseBtn {
 font-size: 120px;
-border: none;
 background: none;
-cursor: pointer;}
-coins++;
-updateScreen();
-};
+border: none;
+cursor: pointer;
+margin-top: 20px;
+transition: transform 0.1s;
+}
+
+#horseBtn:active {
+transform: scale(0.9);
+}
+
+.shop {
+margin-top: 40px;
+width: 320px;
+margin-left: auto;
+margin-right: auto;
+background: #333;
+padding: 20px;
+border-radius: 20px;
+}
+
+.shop button {
+width: 100%;
+margin-top: 10px;
+padding: 12px;
+font-size: 16px;
+border: none;
+border-radius: 10px;
+cursor: pointer;
+background: #4c7dff;
+color: white;
+}
+
+.shop button:hover {
+background: #6a95ff;
+}

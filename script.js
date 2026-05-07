@@ -88,3 +88,19 @@ perSec = Number(savedPerSec);
 
 loadGame();
 update();
+
+// LOGIN
+function login() {
+const username = document.getElementById("username").value;
+const password = document.getElementById("password").value;
+
+if (!username || !password) return;
+
+userKey = username + "_" + password;
+
+document.getElementById("loginBox").style.display = "none";
+document.getElementById("game").style.display = "block";
+
+loadGame();
+update();
+}

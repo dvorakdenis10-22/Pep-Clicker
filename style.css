@@ -1,9 +1,11 @@
 body {
 margin: 0;
-background: linear-gradient(#1e1e1e, #2b2b2b);
-color: white;
-text-align: center;
 font-family: Arial;
+text-align: center;
+color: white;
+
+background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+min-height: 100vh;
 }
 
 h1 {
@@ -13,11 +15,9 @@ margin-top: 20px;
 
 #coins {
 font-size: 35px;
-margin-top: 10px;
 }
 
 #perSec {
-font-size: 18px;
 color: #aaa;
 }
 
@@ -58,16 +58,3 @@ color: white;
 
 .shop button:hover {
 background: #6a95ff;
-}
-
-
-body {
-margin: 0;
-font-family: Arial;
-text-align: center;
-color: white;
-
-/* 🌄 gradient pozadí */
-background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-min-height: 100vh;
-}

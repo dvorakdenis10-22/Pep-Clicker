@@ -8,17 +8,16 @@ background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
 min-height: 100vh;
 }
 
-h1 {
-font-size: 50px;
-margin-top: 20px;
+#loginBox {
+margin-top: 120px;
 }
 
-#coins {
-font-size: 35px;
-}
-
-#perSec {
-color: #aaa;
+input {
+padding: 10px;
+margin: 5px;
+font-size: 18px;
+border-radius: 10px;
+border: none;
 }
 
 #horseBtn {

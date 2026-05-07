@@ -1,14 +1,14 @@
 let coins = 0;
 let perSec = 0;
 
-// načtení uložené hry
+// načtení hry
 loadGame();
 
 const coinsText = document.getElementById("coins");
 const perSecText = document.getElementById("perSec");
 const horseBtn = document.getElementById("horseBtn");
 
-// klik na koně
+// klikání
 horseBtn.addEventListener("click", () => {
 coins++;
 update();
@@ -58,14 +58,15 @@ perSecText.innerText = perSec + " / sec";
 
 // SAVE
 function saveGame() {
-localStorage.setItem("pepCoins", coins);
-localStorage.setItem("pepPerSec", perSec);
+localStorage.setItem("coins", coins);
+localStorage.setItem("perSec", perSec);
 }
 
 // LOAD
 function loadGame() {
-let savedCoins = localStorage.getItem("pepCoins");
-let savedPerSec = localStorage.getItem("pepPerSec");
+let savedCoins = localStorage.getItem("coins");
+let savedPerSec = localStorage.getItem("perSec");
 
 if (savedCoins !== null) coins = Number(savedCoins);
 if (savedPerSec !== null) perSec = Number(savedPerSec);
+}

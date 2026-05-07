@@ -2,13 +2,22 @@
 <html lang="cs">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pep Clicker</title>
-
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+
+<div id="loginBox">
+<h2>🐎 Pep Clicker Login</h2>
+
+<input id="username" placeholder="Jméno"><br><br>
+<input id="password" type="password" placeholder="Heslo"><br><br>
+
+<button onclick="login()">Hrát</button>
+</div>
+
+<div id="game" style="display:none;">
 
 <h1>🐎 Pep Clicker</h1>
 
@@ -23,6 +32,8 @@
 <button onclick="buyHorse()">🐴 Kůň (+1/sec) — 50</button>
 <button onclick="buyStable()">🏠 Stáj (+5/sec) — 200</button>
 <button onclick="buyFarm()">🌾 Farma (+20/sec) — 1000</button>
+</div>
+
 </div>
 
 <script src="script.js"></script>

@@ -2,36 +2,71 @@
 <html lang="cs">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pep Clicker</title>
+
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div id="loginBox">
-<h2>🐎 Pep Clicker Login</h2>
+<!-- COINS -->
 
-<input id="username" placeholder="Jméno"><br><br>
-<input id="password" type="password" placeholder="Heslo"><br><br>
-
-<button onclick="login()">Hrát</button>
+<div class="coinsBox">
+<h1>Pep Coins</h1>
+<div id="coins">0</div>
 </div>
 
-<div id="game" style="display:none;">
+<!-- MAIN -->
 
-<h1>🐎 Pep Clicker</h1>
+<div class="mainContainer">
 
-<div id="coins">0 Pep Coins</div>
-<div id="perSec">0 / sec</div>
+<!-- LEFT -->
 
-<button id="horseBtn">🐎</button>
+<div class="leftSide">
 
-<div class="shop">
-<h2>Obchod</h2>
+<div class="stable">
 
-<button onclick="buyHorse()">🐴 Kůň (+1/sec) — 50</button>
-<button onclick="buyStable()">🏠 Stáj (+5/sec) — 200</button>
-<button onclick="buyFarm()">🌾 Farma (+20/sec) — 1000</button>
+<button id="horseBtn">
+🐎
+</button>
+
+</div>
+
+</div>
+
+<!-- LINE -->
+
+<div class="middleLine"></div>
+
+<!-- RIGHT -->
+
+<div class="rightSide">
+
+<h2>Obchod u Ládycha</h2>
+
+<div class="shopPanel">
+
+<button onclick="buyHorse()">
+🐴 Kůň<br>
++1/sec<br>
+50 coins
+</button>
+
+<button onclick="buyStable()">
+🏠 Stáj<br>
++5/sec<br>
+200 coins
+</button>
+
+<button onclick="buyFarm()">
+🌾 Farma<br>
++20/sec<br>
+1000 coins
+</button>
+
+</div>
+
 </div>
 
 </div>

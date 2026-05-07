@@ -1,0 +1,8 @@
+let coins = 0;
+
+function updateScreen() {
+document.getElementById("coins").innerText =
+coins + " Pep Coins";
+}
+
+document.getElementById("horseBtn").onclick = function () {

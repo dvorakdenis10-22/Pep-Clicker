@@ -1,14 +1,29 @@
 let coins = 0;
 let perSec = 0;
+let userKey = "";
 
-// načtení hry
-loadGame();
-
+// UI
 const coinsText = document.getElementById("coins");
 const perSecText = document.getElementById("perSec");
 const horseBtn = document.getElementById("horseBtn");
 
-// klikání
+// LOGIN
+function login() {
+const username = document.getElementById("username").value;
+const password = document.getElementById("password").value;
+
+if (!username || !password) return;
+
+userKey = username + "_" + password;
+
+document.getElementById("loginBox").style.display = "none";
+document.getElementById("game").style.display = "block";
+
+loadGame();
+update();
+}
+
+// klik
 horseBtn.addEventListener("click", () => {
 coins++;
 update();
@@ -58,14 +73,16 @@ perSecText.innerText = perSec + " / sec";
 
 // SAVE
 function saveGame() {
-localStorage.setItem("coins", coins);
-localStorage.setItem("perSec", perSec);
+if (!userKey) return;
+
+localStorage.setItem(userKey + "_coins", coins);
+localStorage.setItem(userKey + "_perSec", perSec);
 }
 
 // LOAD
 function loadGame() {
-let savedCoins = localStorage.getItem("coins");
-let savedPerSec = localStorage.getItem("perSec");
+const savedCoins = localStorage.getItem(userKey + "_coins");
+const savedPerSec = localStorage.getItem(userKey + "_perSec");
 
 if (savedCoins !== null) coins = Number(savedCoins);
 if (savedPerSec !== null) perSec = Number(savedPerSec);

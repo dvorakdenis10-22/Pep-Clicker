@@ -1,187 +1,44 @@
-body {
-margin: 0;
-overflow: hidden;
-font-family: Arial;
-
-background:
-repeating-linear-gradient(
-45deg,
-#fff6a3 0px,
-#fff6a3 40px,
-#fffce0 40px,
-#fffce0 80px
-);
-
-height: 100vh;
-}
-
-/* KOSTKY */
-
-body::before {
-content: "";
-
-position: fixed;
-inset: 0;
-
-background-image:
-linear-gradient(
-rgba(255, 221, 0, 0.18) 50%,
-transparent 50%
-),
-linear-gradient(
-90deg,
-rgba(255, 221, 0, 0.18) 50%,
-transparent 50%
-);
-
-background-size: 160px 160px;
-
-pointer-events: none;
-}
-
-/* COINS */
-
-.coinsBox {
+#loginBox {
 position: absolute;
 
-top: 30px;
-left: 130px;
+top: 50%;
+left: 50%;
+
+transform: translate(-50%, -50%);
+
+background: white;
+
+padding: 40px;
+
+border-radius: 20px;
+
+z-index: 10;
 
 text-align: center;
 }
 
-.coinsBox h1 {
-margin: 0;
-font-size: 50px;
+#loginBox input {
+
+padding: 12px;
+
+font-size: 18px;
+
+border-radius: 10px;
+
+border: 2px solid black;
 }
 
-#coins {
-font-size: 55px;
-font-weight: bold;
-}
+#loginBox button {
 
-/* MAIN */
+padding: 12px 25px;
 
-.mainContainer {
-display: flex;
-height: 100vh;
-}
+font-size: 20px;
 
-/* LEFT */
-
-.leftSide {
-width: 40%;
-
-display: flex;
-justify-content: center;
-align-items: center;
-}
-
-.stable {
-width: 360px;
-height: 360px;
-
-background: #8b5a2b;
-
-border: 18px solid #5e3416;
-border-radius: 20px;
-
-display: flex;
-justify-content: center;
-align-items: center;
-
-box-shadow: 0 0 20px rgba(0,0,0,0.3);
-}
-
-/* HORSE */
-
-#horseBtn {
-font-size: 150px;
-
-background: none;
 border: none;
 
-cursor: pointer;
-
-transition: 0.1s;
-}
-
-#horseBtn:active {
-transform: scale(0.9);
-}
-
-/* MIDDLE LINE */
-
-.middleLine {
-width: 35px;
-
-background: #d89a6a;
-
-border-radius: 20px;
-}
-
-/* RIGHT */
-
-.rightSide {
-flex: 1;
-
-display: flex;
-flex-direction: column;
-align-items: center;
-
-padding-top: 70px;
-}
-
-.rightSide h2 {
-font-size: 55px;
-}
-
-/* SHOP */
-
-.shopPanel {
-width: 550px;
-height: 550px;
-
-border: 18px solid black;
-
-padding: 20px;
-
-display: flex;
-flex-direction: column;
-
-gap: 20px;
-
-background: rgba(255,255,255,0.2);
-}
-
-.shopPanel button {
-height: 110px;
-
-font-size: 28px;
-font-weight: bold;
-
-border: none;
-border-radius: 18px;
-
-cursor: pointer;
+border-radius: 12px;
 
 background: #ffd84d;
 
-transition: 0.2s;
-}
-
-.shopPanel button:hover {
-transform: scale(1.03);
-
-background: #ffc400;
-#loginBox {
-margin-top: 120px;
-}
-
-input {
-padding: 10px;
-margin: 5px;
-font-size: 18px;
-border-radius: 10px;
-border: none;
+cursor: pointer;
 }

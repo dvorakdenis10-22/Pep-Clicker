@@ -13,3 +13,82 @@
 </div>
 
 <div id="game" style="display:none; flex-direction:row; height:100vh;">
+
+  
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pep Clicker</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- COINS -->
+
+<div class="coinsBox">
+<h1>Pep Coins</h1>
+<div id="coins">0</div>
+</div>
+
+<!-- MAIN -->
+
+<div class="mainContainer">
+
+<!-- LEFT -->
+
+<div class="leftSide">
+
+<div class="stable">
+
+<button id="horseBtn">
+🐎
+</button>
+
+</div>
+
+</div>
+
+<!-- LINE -->
+
+<div class="middleLine"></div>
+
+<!-- RIGHT -->
+
+<div class="rightSide">
+
+<h2>Obchod u Ládycha</h2>
+
+<div class="shopPanel">
+
+<button onclick="buyHorse()">
+🐴 Kůň<br>
++1/sec<br>
+50 coins
+</button>
+
+<button onclick="buyStable()">
+🏠 Stáj<br>
++5/sec<br>
+200 coins
+</button>
+
+<button onclick="buyFarm()">
+🌾 Farma<br>
++20/sec<br>
+1000 coins
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

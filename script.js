@@ -54,7 +54,45 @@ gain *= 2;
 
 coins += gain;
 
-createParticle();
+function createParticle() {
+
+const coin =
+document.createElement("div");
+
+coin.innerText = "🪙";
+
+coin.style.position = "absolute";
+
+coin.style.left =
+(window.innerWidth / 2 - 300) +
+Math.random() * 200 + "px";
+
+coin.style.top =
+"350px";
+
+coin.style.fontSize = "30px";
+
+coin.style.pointerEvents = "none";
+
+coin.style.transition =
+"all 1s linear";
+
+document.body.appendChild(coin);
+
+setTimeout(() => {
+
+coin.style.top = "200px";
+
+coin.style.opacity = "0";
+
+}, 10);
+
+setTimeout(() => {
+
+coin.remove();
+
+}, 1000);
+}
 
 update();
 saveGame();

@@ -7,9 +7,14 @@ let doubleCoins = false;
 
 // UI
 
-const coinsText = document.getElementById("coins");
-const horseBtn = document.getElementById("horseBtn");
-const statsText = document.getElementById("stats");
+const coinsText =
+document.getElementById("coins");
+
+const horseBtn =
+document.getElementById("horseBtn");
+
+const statsText =
+document.getElementById("stats");
 
 // LOGIN
 
@@ -23,10 +28,14 @@ document.getElementById("password").value;
 
 if (!username || !password) return;
 
-userKey = username + "_" + password;
+userKey =
+username + "_" + password;
 
-document.getElementById("loginBox").style.display = "none";
-document.getElementById("game").style.display = "block";
+document.getElementById("loginBox").style.display =
+"none";
+
+document.getElementById("game").style.display =
+"block";
 
 loadGame();
 update();
@@ -38,7 +47,8 @@ horseBtn.addEventListener("click", () => {
 
 let gain = 1;
 
-if (doubleCoins) gain *= 2;
+if (doubleCoins)
+gain *= 2;
 
 coins += gain;
 
@@ -46,16 +56,18 @@ update();
 saveGame();
 });
 
-// PEP SOUND
+// PEP SOUND BUTTON
 
 document
-.getElementById("pepSoundBtn")
+.getElementById("pepBtn")
 .addEventListener("click", () => {
 
-document
-.getElementById("pepSound")
-.play();
+const sound =
+document.getElementById("horseSound");
 
+sound.currentTime = 0;
+
+sound.play();
 });
 
 // UPGRADES
@@ -91,14 +103,14 @@ pedigree: {
 cost: 100000000,
 income: 500000
 }
-
 };
 
-// BUY
+// BUY UPGRADE
 
 function buyUpgrade(name) {
 
-const upg = upgrades[name];
+const upg =
+upgrades[name];
 
 if (coins >= upg.cost) {
 
@@ -106,15 +118,17 @@ coins -= upg.cost;
 
 perSec += upg.income;
 
-upg.cost = Math.floor(upg.cost * 1.5);
+upg.cost =
+Math.floor(upg.cost * 1.5);
+
+renderPrices();
 
 update();
 saveGame();
-renderPrices();
 }
 }
 
-// ENCHANT
+// DOUBLE COINS
 
 function buyDoubleCoins() {
 
@@ -142,13 +156,14 @@ if (coins >= 250000) {
 
 coins -= 250000;
 
-const rng = Math.random();
+const rng =
+Math.random();
 
 if (rng < 0.33) {
 
 coins += 5000000;
 
-alert("VYHRÁL JSI 5 000 000!");
+alert("Vyhrál jsi 5 000 000!");
 
 } else if (rng < 0.66) {
 
@@ -166,18 +181,23 @@ saveGame();
 }
 }
 
-// AUTOMAT
+// SLOT MACHINE
 
 function slotMachine() {
 
 const bet =
 Number(prompt("Kolik chceš vsadit?"));
 
-if (bet > coins || bet <= 0 || bet > 30000000) return;
+if (
+bet > coins ||
+bet <= 0 ||
+bet > 30000000
+) return;
 
 coins -= bet;
 
-const rng = Math.random();
+const rng =
+Math.random();
 
 if (rng < 0.4) {
 
@@ -223,7 +243,7 @@ update();
 }
 }
 
-// AUTO INCOME
+// AUTO MONEY
 
 setInterval(() => {
 
@@ -251,8 +271,15 @@ function saveGame() {
 
 if (!userKey) return;
 
-localStorage.setItem(userKey + "_coins", coins);
-localStorage.setItem(userKey + "_perSec", perSec);
+localStorage.setItem(
+userKey + "_coins",
+coins
+);
+
+localStorage.setItem(
+userKey + "_perSec",
+perSec
+);
 
 localStorage.setItem(
 userKey + "_upgrades",
@@ -265,13 +292,19 @@ JSON.stringify(upgrades)
 function loadGame() {
 
 const savedCoins =
-localStorage.getItem(userKey + "_coins");
+localStorage.getItem(
+userKey + "_coins"
+);
 
 const savedPerSec =
-localStorage.getItem(userKey + "_perSec");
+localStorage.getItem(
+userKey + "_perSec"
+);
 
 const savedUpgrades =
-localStorage.getItem(userKey + "_upgrades");
+localStorage.getItem(
+userKey + "_upgrades"
+);
 
 if (savedCoins !== null)
 coins = Number(savedCoins);
@@ -288,7 +321,7 @@ JSON.parse(savedUpgrades)
 renderPrices();
 }
 
-// RENDER
+// RENDER PRICES
 
 function renderPrices() {
 

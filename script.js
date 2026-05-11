@@ -130,11 +130,38 @@ saveGame();
 }
 
 // PRESTIGE
+let prestigeCost = 10_000_000_000; // 10B
+
 function prestige() {
-if (coins >= 10000000) {
+if (coins >= prestigeCost) {
+
 prestigeLevel++;
 coins = 0;
 perSec = 0;
+
+// růst ceny (1.5x každé prestige)
+prestigeCost = Math.floor(prestigeCost * 1.5);
+
+Object.keys(upgrades).forEach(key => {
+const defaults = {
+horse: 50,
+stable: 200,
+farm: 1000,
+workshop: 5000000,
+garage: 25000000,
+rodokmeny: 100000000
+};
+
+if (defaults[key]) {
+upgrades[key].cost = defaults[key];
+}
+});
+
+renderPrices();
+update();
+saveGame();
+}
+}
 
 Object.keys(upgrades).forEach(k => {
 const base = {

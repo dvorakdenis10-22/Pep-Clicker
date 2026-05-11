@@ -1,48 +1,3 @@
-#loginBox {
-position: absolute;
-
-top: 50%;
-left: 50%;
-
-transform: translate(-50%, -50%);
-
-background: white;
-
-padding: 40px;
-
-border-radius: 20px;
-
-z-index: 10;
-
-text-align: center;
-}
-
-#loginBox input {
-
-padding: 12px;
-
-font-size: 18px;
-
-border-radius: 10px;
-
-border: 2px solid black;
-}
-
-#loginBox button {
-
-padding: 12px 25px;
-
-font-size: 20px;
-
-border: none;
-
-border-radius: 12px;
-
-background: #ffd84d;
-
-cursor: pointer;
-}
-
 body {
 margin: 0;
 overflow: hidden;
@@ -59,8 +14,6 @@ repeating-linear-gradient(
 
 height: 100vh;
 }
-
-/* KOSTKY */
 
 body::before {
 content: "";
@@ -84,164 +37,196 @@ background-size: 160px 160px;
 pointer-events: none;
 }
 
+/* LOGIN */
+
+#loginBox {
+
+position: absolute;
+
+top: 50%;
+left: 50%;
+
+transform: translate(-50%, -50%);
+
+background: white;
+
+padding: 40px;
+
+border-radius: 20px;
+
+z-index: 10;
+
+text-align: center;
+}
+
+#game {
+display: none;
+}
+
 /* COINS */
 
 .coinsBox {
+
 position: absolute;
 
-top: 30px;
-left: 130px;
+top: 20px;
+left: 50px;
 
 text-align: center;
 }
 
 .coinsBox h1 {
 margin: 0;
-font-size: 50px;
 }
 
 #coins {
-font-size: 55px;
+font-size: 45px;
 font-weight: bold;
-}
-
-/* MAIN */
-
-.mainContainer {
-display: flex;
-height: 100vh;
-}
-
-/* LEFT */
-
-.leftSide {
-width: 40%;
-
-display: flex;
-justify-content: center;
-align-items: center;
-}
-
-.stable {
-width: 360px;
-height: 360px;
-
-background: #8b5a2b;
-
-border: 18px solid #5e3416;
-border-radius: 20px;
-
-display: flex;
-justify-content: center;
-align-items: center;
-
-box-shadow: 0 0 20px rgba(0,0,0,0.3);
 }
 
 /* HORSE */
 
-#horseBtn {
-font-size: 150px;
+.horseArea {
 
-background: none;
+position: absolute;
+
+left: 50px;
+top: 300px;
+}
+
+#horseBtn {
+
+width: 220px;
+height: 220px;
+
+font-size: 120px;
+
 border: none;
 
+border-radius: 20px;
+
 cursor: pointer;
+
+background: rgba(139, 90, 43, 0.5);
 
 transition: 0.1s;
 }
 
 #horseBtn:active {
-transform: scale(0.9);
+transform: scale(0.92);
 }
 
-/* MIDDLE LINE */
+/* SHOP */
 
-.middleLine {
-width: 35px;
+.shopBox {
 
-background: #d89a6a;
+position: absolute;
 
-border-radius: 20px;
+left: 320px;
+top: 90px;
 }
 
-/* RIGHT */
+.shopBox h2 {
+margin-left: 10px;
+}
 
-.rightSide {
-flex: 1;
+.shopPanel {
+
+width: 240px;
+height: 500px;
+
+overflow-y: auto;
 
 display: flex;
 flex-direction: column;
-align-items: center;
 
-padding-top: 70px;
+gap: 10px;
 }
 
-.rightSide h2 {
+.shopPanel button {
+
+min-height: 90px;
+
+border: none;
+
+border-radius: 15px;
+
+background: #ffe04d;
+
+font-weight: bold;
+
+cursor: pointer;
+}
+
+/* SPECIAL */
+
+.specialBox {
+
+position: absolute;
+
+left: 650px;
+top: 500px;
+}
+
+.specialPanel {
+
+width: 300px;
+
+display: flex;
+flex-direction: column;
+
+gap: 10px;
+}
+
+.specialPanel button {
+
+min-height: 80px;
+
+border: none;
+
+border-radius: 15px;
+
+background: #9cff8d;
+
+font-weight: bold;
+
+cursor: pointer;
+}
+
+/* PEP BUTTON */
+
+#pepSoundBtn {
+
+position: absolute;
+
+right: 120px;
+top: 220px;
+
+width: 180px;
+height: 180px;
+
+border: 8px solid purple;
+
+background: white;
+
 font-size: 55px;
+
+color: purple;
+
+border-radius: 20px;
+
+cursor: pointer;
 }
 
 /* STATS */
 
 #stats {
-font-size: 28px;
-font-weight: bold;
 
-margin-bottom: 20px;
+margin-top: 10px;
 
 background: rgba(0,0,0,0.15);
 
-padding: 15px;
+padding: 10px;
 
-border-radius: 15px;
-}
-
-/* VĚTŠÍ SHOP */
-
-.shopPanel {
-
-overflow-y: auto;
-
-padding-right: 10px;
-}
-
-/* SCROLLBAR */
-
-.shopPanel::-webkit-scrollbar {
-width: 10px;
-}
-
-.shopPanel::-webkit-scrollbar-thumb {
-background: black;
 border-radius: 10px;
-}
-
-/* NOVÉ BUTTONY */
-
-.shopPanel button {
-
-min-height: 110px;
-
-flex-shrink: 0;
-
-font-size: 24px;
-
-line-height: 1.4;
-}
-
-/* HOVER EFEKT */
-
-.shopPanel button:hover {
-
-transform: scale(1.04);
-
-box-shadow: 0 0 15px rgba(0,0,0,0.3);
-}
-
-/* UFO BUTTON */
-
-.shopPanel button:last-child {
-
-background: #9b59ff;
-color: white;
 }

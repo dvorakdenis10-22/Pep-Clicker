@@ -220,3 +220,68 @@ transform: scale(1.03);
 
 background: #ffc400;
 }
+
+/* STATS */
+
+#stats {
+font-size: 28px;
+font-weight: bold;
+
+margin-bottom: 20px;
+
+background: rgba(0,0,0,0.15);
+
+padding: 15px;
+
+border-radius: 15px;
+}
+
+/* VĚTŠÍ SHOP */
+
+.shopPanel {
+
+overflow-y: auto;
+
+padding-right: 10px;
+}
+
+/* SCROLLBAR */
+
+.shopPanel::-webkit-scrollbar {
+width: 10px;
+}
+
+.shopPanel::-webkit-scrollbar-thumb {
+background: black;
+border-radius: 10px;
+}
+
+/* NOVÉ BUTTONY */
+
+.shopPanel button {
+
+min-height: 110px;
+
+flex-shrink: 0;
+
+font-size: 24px;
+
+line-height: 1.4;
+}
+
+/* HOVER EFEKT */
+
+.shopPanel button:hover {
+
+transform: scale(1.04);
+
+box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+
+/* UFO BUTTON */
+
+.shopPanel button:last-child {
+
+background: #9b59ff;
+color: white;
+}

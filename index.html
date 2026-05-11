@@ -27,6 +27,7 @@
 
 <!-- TOP -->
 <div class="topBar">
+
 <div class="coinsArea">
 <h1>Pep Coins</h1>
 <div id="coins">0</div>
@@ -38,23 +39,21 @@
 <div id="prestigeLevel">Level: 0</div>
 <button onclick="prestige()">RESET + BOOST</button>
 </div>
+
 </div>
 
 <!-- MAIN -->
 <div class="mainArea">
 
-<!-- HORSE -->
 <div class="horseContainer">
 <button id="horseBtn">🐎</button>
-
 <div id="horseRarity">Common Horse</div>
-
 <button id="pepBtn">PEP</button>
 </div>
 
 <!-- SHOP -->
 <div class="shopContainer">
-<h2>Obchod u Ládycha</h2>
+<h2>Obchod</h2>
 
 <div class="shopPanel">
 <button onclick="buyUpgrade('horse')">
@@ -66,7 +65,7 @@
 </button>
 
 <button onclick="buyUpgrade('farm')">
-🌾 Sláma<br>+20/sec<br><span id="farmPrice">1 000</span>
+🌾 Sláma<br>+20/sec<br><span id="farmPrice">1000</span>
 </button>
 
 <button onclick="buyUpgrade('workshop')">
@@ -86,7 +85,7 @@
 <!-- SPECIAL -->
 <div class="specialContainer">
 
-<h2>Kotlisovy speciality</h2>
+<h2>Speciality</h2>
 
 <div class="specialPanel">
 <button onclick="buyDoubleCoins()">✨ 2x Coins</button>
@@ -94,15 +93,6 @@
 <button onclick="slotMachine()">🎰 Automaty</button>
 <button onclick="openLootbox()">🥚 Lootbox</button>
 </div>
-
-<div class="ufoPrestigeShop">
-<h2>🛸 Prestige Shop</h2>
-
-<button id="ufoPrestigeBtn" onclick="buyUFOPrestige()">
-🛸 UFO Prestige<br>
-+1 level<br>
-<span id="ufoPrestigePrice">10B</span>
-</button>
 
 </div>
 

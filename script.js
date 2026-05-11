@@ -46,11 +46,7 @@ update();
 
 horseBtn.addEventListener("click", () => {
 
-let gain =
-1 + prestigeLevel;
-
-if (doubleCoins)
-gain *= 2;
+let gain = 1 + prestigeLevel;
 
 coins += gain;
 
@@ -161,7 +157,18 @@ income: 20
 workshop: {
 cost: 5000000,
 income: 25000
+},
+
+garage: {
+cost: 25000000,
+income: 125000
+},
+
+rodokmeny: {
+cost: 100000000,
+income: 500000
 }
+
 };
 
 // BUY
@@ -303,6 +310,26 @@ update();
 }
 }
 
+// UFO PRESTIGE SHOP
+
+function buyUFOPrestige() {
+
+if (coins >= 10000000000) {
+
+coins -= 10000000000;
+
+prestigeLevel += 5;
+
+alert(
+"🛸 UFO PRESTIGE AKTIVOVÁNO! Prestige level: " +
+prestigeLevel
+);
+
+update();
+saveGame();
+}
+}
+
 // PRESTIGE
 
 function prestige() {
@@ -313,6 +340,23 @@ prestigeLevel++;
 
 coins = 0;
 perSec = 0;
+
+// reset upgrade costs
+Object.keys(upgrades).forEach(key => {
+const defaults = {
+  horse:    { cost: 50,         income: 1      },
+  stable:   { cost: 200,        income: 5      },
+  farm:     { cost: 1000,       income: 20     },
+  workshop: { cost: 5000000,    income: 25000  },
+  garage:   { cost: 25000000,   income: 125000 },
+  rodokmeny:{ cost: 100000000,  income: 500000 }
+};
+if (defaults[key]) {
+  upgrades[key].cost = defaults[key].cost;
+}
+});
+
+renderPrices();
 
 alert(
 "Prestige level " +
@@ -328,7 +372,10 @@ saveGame();
 
 setInterval(() => {
 
-coins += perSec;
+let income = perSec;
+if (doubleCoins) income *= 2;
+
+coins += income;
 
 update();
 saveGame();
@@ -340,18 +387,37 @@ saveGame();
 function update() {
 
 coinsText.innerText =
-Math.floor(coins);
+formatCoins(Math.floor(coins));
 
 statsText.innerText =
 "Výdělek za sekundu: " +
-perSec;
+formatCoins(perSec);
 
 document
 .getElementById("prestigeLevel")
 .innerText =
 "Level: " + prestigeLevel;
 
+// UFO Prestige button state
+const ufoBtn = document.getElementById("ufoPrestigeBtn");
+if (ufoBtn) {
+  if (coins >= 10000000000) {
+    ufoBtn.classList.add("canAfford");
+  } else {
+    ufoBtn.classList.remove("canAfford");
+  }
+}
+
 checkAchievements();
+}
+
+// FORMAT
+
+function formatCoins(n) {
+if (n >= 1000000000) return (n / 1000000000).toFixed(2) + "B";
+if (n >= 1000000)    return (n / 1000000).toFixed(2) + "M";
+if (n >= 1000)       return (n / 1000).toFixed(1) + "K";
+return String(n);
 }
 
 // ACHIEVEMENTS
@@ -366,8 +432,14 @@ html += "💰 1K Coins<br>";
 if (coins >= 1000000)
 html += "🔥 1M Coins<br>";
 
+if (coins >= 1000000000)
+html += "💎 1B Coins<br>";
+
 if (prestigeLevel >= 1)
 html += "⭐ Prestige I<br>";
+
+if (prestigeLevel >= 5)
+html += "🛸 UFO Prestige<br>";
 
 document
 .getElementById("achievementList")
@@ -450,14 +522,20 @@ renderPrices();
 function renderPrices() {
 
 document.getElementById("horsePrice").innerText =
-upgrades.horse.cost;
+formatCoins(upgrades.horse.cost);
 
 document.getElementById("stablePrice").innerText =
-upgrades.stable.cost;
+formatCoins(upgrades.stable.cost);
 
 document.getElementById("farmPrice").innerText =
-upgrades.farm.cost;
+formatCoins(upgrades.farm.cost);
 
 document.getElementById("workshopPrice").innerText =
-upgrades.workshop.cost;
+formatCoins(upgrades.workshop.cost);
+
+document.getElementById("garagePrice").innerText =
+formatCoins(upgrades.garage.cost);
+
+document.getElementById("rodokmenPrice").innerText =
+formatCoins(upgrades.rodokmeny.cost);
 }

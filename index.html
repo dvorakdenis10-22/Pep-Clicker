@@ -1,3 +1,19 @@
+<!DOCTYPE html>
+<html lang="cs">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Pep Clicker</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- LOGIN -->
+
 <div id="loginBox">
 
 <h1>Pep Clicker Login</h1>
@@ -12,26 +28,18 @@
 
 </div>
 
-<div id="game" style="display:none; flex-direction:row; height:100vh;">
+<!-- GAME -->
 
-  
-<!DOCTYPE html>
-<html lang="cs">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pep Clicker</title>
-
-<link rel="stylesheet" href="style.css">
-</head>
-
-<body>
+<div id="game" style="display:none;">
 
 <!-- COINS -->
 
 <div class="coinsBox">
+
 <h1>Pep Coins</h1>
+
 <div id="coins">0</div>
+
 </div>
 
 <!-- MAIN -->
@@ -64,86 +72,102 @@
 
 <div class="shopPanel">
 
-<button onclick="buyHorse()">
-🐴 Kůň<br>
-+1/sec<br>
-50 coins
-</button>
-
-<button onclick="buyStable()">
-🏠 Stáj<br>
-+5/sec<br>
-200 coins
-</button>
-
-<button onclick="buyFarm()">
-🌾 Farma<br>
-+20/sec<br>
-1000 coins
-</button>
+<!-- STATS -->
 
 <div id="stats">
 Výdělek za sekundu: 0
 </div>
 
+<!-- UPGRADES -->
+
 <button onclick="buyUpgrade('horse')">
 🐴 Kůň
 <br>
-Cena: <span id="horsePrice">50</span>
++1/sec
+<br>
+Cena:
+<span id="horsePrice">50</span>
 </button>
 
 <button onclick="buyUpgrade('stable')">
 🏠 Stáj
 <br>
-Cena: <span id="stablePrice">200</span>
++5/sec
+<br>
+Cena:
+<span id="stablePrice">200</span>
 </button>
 
 <button onclick="buyUpgrade('farm')">
 🌾 Farma
 <br>
-Cena: <span id="farmPrice">1000</span>
++20/sec
+<br>
+Cena:
+<span id="farmPrice">1000</span>
 </button>
 
 <button onclick="buyUpgrade('workshop')">
 🔧 Ládychova dílna
 <br>
-Cena: <span id="workshopPrice">5000000</span>
++25 000/sec
+<br>
+Cena:
+<span id="workshopPrice">5000000</span>
 </button>
 
 <button onclick="buyUpgrade('garage')">
 🚗 Garáž u Kotlise
 <br>
-Cena: <span id="garagePrice">25000000</span>
++125 000/sec
+<br>
+Cena:
+<span id="garagePrice">25000000</span>
 </button>
 
 <button onclick="buyUpgrade('pedigree')">
 📜 Rodokmeny
 <br>
-Cena: <span id="pedigreePrice">100000000</span>
++500 000/sec
+<br>
+Cena:
+<span id="pedigreePrice">100000000</span>
 </button>
 
+<!-- ENCHANT -->
+
 <button onclick="buyDoubleCoins()">
-✨ 2x Pep Coins (30s)
+✨ 2x Pep Coins (30 sec)
 <br>
-40 000
+Cena: 40 000
 </button>
+
+<!-- TICKET -->
 
 <button onclick="buyTicket()">
 🎟 Ticket do točky
 <br>
-250 000
+Cena: 250 000
 </button>
+
+<!-- SLOT -->
 
 <button onclick="slotMachine()">
 🎰 Automaty
+<br>
+Max vklad: 30M
 </button>
+
+<!-- UFO -->
 
 <button onclick="buyUFO()">
 🛸 UFO RESET
 <br>
-10 000 000 000
+Cena: 10 000 000 000
 </button>
-  
+
+</div>
+
 </div>
 
 </div>

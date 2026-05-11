@@ -139,10 +139,10 @@ prestigeLevel++;
 coins = 0;
 perSec = 0;
 
-// růst ceny (1.5x každé prestige)
+// 💰 zvyšování ceny každým prestigem
 prestigeCost = Math.floor(prestigeCost * 1.5);
 
-Object.keys(upgrades).forEach(key => {
+// reset upgradů
 const defaults = {
 horse: 50,
 stable: 200,
@@ -152,9 +152,8 @@ garage: 25000000,
 rodokmeny: 100000000
 };
 
-if (defaults[key]) {
+Object.keys(defaults).forEach(key => {
 upgrades[key].cost = defaults[key];
-}
 });
 
 renderPrices();
@@ -162,7 +161,6 @@ update();
 saveGame();
 }
 }
-
 Object.keys(upgrades).forEach(k => {
 const base = {
 horse: 50,

@@ -1,20 +1,21 @@
 let coins = 0;
 let perSec = 0;
-
-let userKey = "";
+let prestigeLevel = 0;
 
 let doubleCoins = false;
+
+let userKey = "";
 
 // UI
 
 const coinsText =
 document.getElementById("coins");
 
-const horseBtn =
-document.getElementById("horseBtn");
-
 const statsText =
 document.getElementById("stats");
+
+const horseBtn =
+document.getElementById("horseBtn");
 
 // LOGIN
 
@@ -41,22 +42,52 @@ loadGame();
 update();
 }
 
-// HORSE CLICK
+// CLICK
 
 horseBtn.addEventListener("click", () => {
 
-let gain = 1;
+let gain =
+1 + prestigeLevel;
 
 if (doubleCoins)
 gain *= 2;
 
 coins += gain;
 
+createParticle();
+
 update();
 saveGame();
 });
 
-// PEP SOUND BUTTON
+// PARTICLE
+
+function createParticle() {
+
+const p =
+document.createElement("div");
+
+p.innerText = "+1";
+
+p.style.position = "absolute";
+p.style.left =
+Math.random() * 250 + 100 + "px";
+
+p.style.top =
+Math.random() * 250 + 250 + "px";
+
+p.style.fontWeight = "bold";
+
+document.body.appendChild(p);
+
+setTimeout(() => {
+
+p.remove();
+
+}, 500);
+}
+
+// SOUND
 
 document
 .getElementById("pepBtn")
@@ -92,20 +123,10 @@ income: 20
 workshop: {
 cost: 5000000,
 income: 25000
-},
-
-garage: {
-cost: 25000000,
-income: 125000
-},
-
-pedigree: {
-cost: 100000000,
-income: 500000
 }
 };
 
-// BUY UPGRADE
+// BUY
 
 function buyUpgrade(name) {
 
@@ -128,7 +149,7 @@ saveGame();
 }
 }
 
-// DOUBLE COINS
+// SPECIAL
 
 function buyDoubleCoins() {
 
@@ -138,17 +159,15 @@ coins -= 40000;
 
 doubleCoins = true;
 
-update();
-
 setTimeout(() => {
 
 doubleCoins = false;
 
 }, 30000);
-}
-}
 
-// TICKET
+update();
+}
+}
 
 function buyTicket() {
 
@@ -163,25 +182,22 @@ if (rng < 0.33) {
 
 coins += 5000000;
 
-alert("Vyhrál jsi 5 000 000!");
+alert("VÝHRA 5M");
 
 } else if (rng < 0.66) {
 
-alert("Nic jsi nevyhrál.");
+alert("NIC");
 
 } else {
 
 coins = 0;
 
-alert("Točka ti vymazala coiny!");
+alert("ZTRATIL JSI COINY");
 }
 
 update();
-saveGame();
 }
 }
-
-// SLOT MACHINE
 
 function slotMachine() {
 
@@ -189,9 +205,8 @@ const bet =
 Number(prompt("Kolik chceš vsadit?"));
 
 if (
-bet > coins ||
 bet <= 0 ||
-bet > 30000000
+bet > coins
 ) return;
 
 coins -= bet;
@@ -201,49 +216,77 @@ Math.random();
 
 if (rng < 0.4) {
 
-alert("Prohrál jsi.");
-
 } else if (rng < 0.7) {
 
 coins += bet * 2;
-
-alert("2x výhra!");
 
 } else if (rng < 0.9) {
 
 coins += bet * 3;
 
-alert("3x výhra!");
-
 } else {
 
 coins += bet * 10;
-
-alert("10x JACKPOT!");
 }
 
 update();
-saveGame();
 }
 
-// UFO
+// LOOTBOX
 
-function buyUFO() {
+function openLootbox() {
 
-if (coins >= 10000000000) {
+if (coins >= 500000) {
 
-alert("DOHRÁL JSI HRU 🚀");
+coins -= 500000;
 
-localStorage.clear();
+const rarities = [
+"Common",
+"Rare",
+"Epic",
+"Legendary",
+"Mythic"
+];
+
+const rarity =
+rarities[
+Math.floor(
+Math.random() *
+rarities.length
+)
+];
+
+document
+.getElementById("horseRarity")
+.innerText =
+rarity + " Horse";
+
+update();
+}
+}
+
+// PRESTIGE
+
+function prestige() {
+
+if (coins >= 10000000) {
+
+prestigeLevel++;
 
 coins = 0;
 perSec = 0;
 
+alert(
+"Prestige level " +
+prestigeLevel
+);
+
 update();
+saveGame();
 }
 }
 
-// AUTO MONEY
+// AUTO
 
 setInterval(() => {
 
@@ -262,7 +305,36 @@ coinsText.innerText =
 Math.floor(coins);
 
 statsText.innerText =
-"Výdělek za sekundu: " + perSec;
+"Výdělek za sekundu: " +
+perSec;
+
+document
+.getElementById("prestigeLevel")
+.innerText =
+"Level: " + prestigeLevel;
+
+checkAchievements();
+}
+
+// ACHIEVEMENTS
+
+function checkAchievements() {
+
+let html = "";
+
+if (coins >= 1000)
+html += "💰 1K Coins<br>";
+
+if (coins >= 1000000)
+html += "🔥 1M Coins<br>";
+
+if (prestigeLevel >= 1)
+html += "⭐ Prestige I<br>";
+
+document
+.getElementById("achievementList")
+.innerHTML =
+html;
 }
 
 // SAVE
@@ -279,6 +351,11 @@ coins
 localStorage.setItem(
 userKey + "_perSec",
 perSec
+);
+
+localStorage.setItem(
+userKey + "_prestige",
+prestigeLevel
 );
 
 localStorage.setItem(
@@ -301,6 +378,11 @@ localStorage.getItem(
 userKey + "_perSec"
 );
 
+const savedPrestige =
+localStorage.getItem(
+userKey + "_prestige"
+);
+
 const savedUpgrades =
 localStorage.getItem(
 userKey + "_upgrades"
@@ -312,6 +394,10 @@ coins = Number(savedCoins);
 if (savedPerSec !== null)
 perSec = Number(savedPerSec);
 
+if (savedPrestige !== null)
+prestigeLevel =
+Number(savedPrestige);
+
 if (savedUpgrades !== null)
 Object.assign(
 upgrades,
@@ -321,7 +407,7 @@ JSON.parse(savedUpgrades)
 renderPrices();
 }
 
-// RENDER PRICES
+// PRICES
 
 function renderPrices() {
 
@@ -336,10 +422,4 @@ upgrades.farm.cost;
 
 document.getElementById("workshopPrice").innerText =
 upgrades.workshop.cost;
-
-document.getElementById("garagePrice").innerText =
-upgrades.garage.cost;
-
-document.getElementById("pedigreePrice").innerText =
-upgrades.pedigree.cost;
 }

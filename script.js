@@ -1,7 +1,6 @@
 let coins = 0;
 let perSec = 0;
 let prestigeLevel = 0;
-
 let doubleCoins = false;
 
 let userKey = "";
@@ -10,59 +9,6 @@ let userKey = "";
 const coinsText = document.getElementById("coins");
 const statsText = document.getElementById("stats");
 const horseBtn = document.getElementById("horseBtn");
-
-// LOGIN
-function login() {
-
-const username =
-document.getElementById("username").value;
-
-const password =
-document.getElementById("password").value;
-
-if (!username || !password) return;
-
-userKey = username + "_" + password;
-
-document.getElementById("loginBox").style.display = "none";
-document.getElementById("game").style.display = "block";
-
-// Firebase load se volá z module scriptu
-}
-
-// CLICK
-horseBtn.addEventListener("click", () => {
-
-let gain = 1 + prestigeLevel;
-coins += gain;
-
-createParticle();
-
-update();
-saveGame();
-});
-
-// PARTICLE
-function createParticle() {
-const p = document.createElement("div");
-p.innerText = "+1";
-
-p.style.position = "absolute";
-p.style.left = Math.random() * 250 + 100 + "px";
-p.style.top = Math.random() * 250 + 250 + "px";
-p.style.fontWeight = "bold";
-
-document.body.appendChild(p);
-
-setTimeout(() => p.remove(), 500);
-}
-
-// SOUND
-document.getElementById("pepBtn").addEventListener("click", () => {
-const sound = document.getElementById("horseSound");
-sound.currentTime = 0;
-sound.play();
-});
 
 // UPGRADES
 const upgrades = {
@@ -74,9 +20,33 @@ garage: { cost: 25000000, income: 125000 },
 rodokmeny: { cost: 100000000, income: 500000 }
 };
 
-// BUY
-function buyUpgrade(name) {
+// LOGIN
+function login() {
+const username = document.getElementById("username").value;
+const password = document.getElementById("password").value;
 
+if (!username || !password) return;
+
+userKey = username + "_" + password;
+
+document.getElementById("loginBox").style.display = "none";
+document.getElementById("game").style.display = "block";
+
+loadGame();
+update();
+}
+
+// CLICK
+horseBtn?.addEventListener("click", () => {
+let gain = 1 + prestigeLevel;
+coins += gain;
+
+update();
+saveGame();
+});
+
+// BUY UPGRADES
+function buyUpgrade(name) {
 const upg = upgrades[name];
 
 if (coins >= upg.cost) {
@@ -95,6 +65,7 @@ saveGame();
 function buyDoubleCoins() {
 if (coins >= 40000) {
 coins -= 40000;
+
 doubleCoins = true;
 
 setTimeout(() => {
@@ -122,57 +93,36 @@ alert("ZTRATIL JSI COINY");
 }
 
 update();
+saveGame();
 }
 }
 
 function slotMachine() {
-
 const bet = Number(prompt("Kolik chceš vsadit?"));
 
-if (bet <= 0 || bet > coins) return;
+if (!bet || bet <= 0 || bet > coins) return;
 
 coins -= bet;
 
 const rng = Math.random();
 
-if (rng < 0.4) {
-} else if (rng < 0.7) {
-coins += bet * 2;
-} else if (rng < 0.9) {
-coins += bet * 3;
-} else {
-coins += bet * 10;
-}
+if (rng >= 0.7) coins += bet * 2;
+if (rng >= 0.9) coins += bet * 10;
 
 update();
+saveGame();
 }
 
-// LOOTBOX
 function openLootbox() {
-
 if (coins >= 500000) {
-
 coins -= 500000;
 
-const rarities = ["Common","Rare","Epic","Legendary","Mythic"];
+const rarities = ["Common", "Rare", "Epic", "Legendary", "Mythic"];
 
 const rarity = rarities[Math.floor(Math.random() * rarities.length)];
 
-document.getElementById("horseRarity").innerText = rarity + " Horse";
-
-update();
-}
-}
-
-// UFO
-function buyUFOPrestige() {
-
-if (coins >= 10000000000) {
-
-coins -= 10000000000;
-prestigeLevel += 5;
-
-alert("🛸 UFO PRESTIGE: " + prestigeLevel);
+document.getElementById("horseRarity").innerText =
+rarity + " Horse";
 
 update();
 saveGame();
@@ -181,21 +131,22 @@ saveGame();
 
 // PRESTIGE
 function prestige() {
-
 if (coins >= 10000000) {
-
 prestigeLevel++;
-
 coins = 0;
 perSec = 0;
 
-Object.keys(upgrades).forEach(key => {
-if (key === "horse") upgrades[key].cost = 50;
-if (key === "stable") upgrades[key].cost = 200;
-if (key === "farm") upgrades[key].cost = 1000;
-if (key === "workshop") upgrades[key].cost = 5000000;
-if (key === "garage") upgrades[key].cost = 25000000;
-if (key === "rodokmeny") upgrades[key].cost = 100000000;
+Object.keys(upgrades).forEach(k => {
+const base = {
+horse: 50,
+stable: 200,
+farm: 1000,
+workshop: 5000000,
+garage: 25000000,
+rodokmeny: 100000000
+};
+
+upgrades[k].cost = base[k];
 });
 
 renderPrices();
@@ -206,7 +157,6 @@ saveGame();
 
 // AUTO INCOME
 setInterval(() => {
-
 let income = perSec;
 if (doubleCoins) income *= 2;
 
@@ -214,38 +164,58 @@ coins += income;
 
 update();
 saveGame();
-
 }, 1000);
 
-// UPDATE
+// UPDATE UI
 function update() {
+if (coinsText) coinsText.innerText = format(coins);
+if (statsText) statsText.innerText = "Výdělek: " + perSec + "/s";
 
-coinsText.innerText = formatCoins(Math.floor(coins));
-statsText.innerText = "Výdělek za sekundu: " + formatCoins(perSec);
-
-document.getElementById("prestigeLevel").innerText = "Level: " + prestigeLevel;
-
-checkAchievements();
+document.getElementById("prestigeLevel").innerText =
+"Level: " + prestigeLevel;
 }
 
 // FORMAT
-function formatCoins(n) {
-if (n >= 1e9) return (n/1e9).toFixed(2)+"B";
-if (n >= 1e6) return (n/1e6).toFixed(2)+"M";
-if (n >= 1e3) return (n/1e3).toFixed(1)+"K";
+function format(n) {
+if (n >= 1e9) return (n / 1e9).toFixed(2) + "B";
+if (n >= 1e6) return (n / 1e6).toFixed(2) + "M";
+if (n >= 1e3) return (n / 1e3).toFixed(1) + "K";
 return n;
 }
 
-// ACHIEVEMENTS
-function checkAchievements() {
+// SAVE (LOCAL)
+function saveGame() {
+if (!userKey) return;
 
-let html = "";
+localStorage.setItem(userKey + "_coins", coins);
+localStorage.setItem(userKey + "_perSec", perSec);
+localStorage.setItem(userKey + "_prestige", prestigeLevel);
+localStorage.setItem(userKey + "_upgrades", JSON.stringify(upgrades));
+}
 
-if (coins >= 1000) html += "💰 1K Coins<br>";
-if (coins >= 1000000) html += "🔥 1M Coins<br>";
-if (coins >= 1000000000) html += "💎 1B Coins<br>";
-if (prestigeLevel >= 1) html += "⭐ Prestige I<br>";
-if (prestigeLevel >= 5) html += "🛸 UFO Prestige<br>";
+// LOAD (LOCAL)
+function loadGame() {
+coins = Number(localStorage.getItem(userKey + "_coins")) || 0;
+perSec = Number(localStorage.getItem(userKey + "_perSec")) || 0;
+prestigeLevel = Number(localStorage.getItem(userKey + "_prestige")) || 0;
 
-document.getElementById("achievementList").innerHTML = html;
+const up = localStorage.getItem(userKey + "_upgrades");
+if (up) Object.assign(upgrades, JSON.parse(up));
+
+renderPrices();
+}
+
+// PRICES
+function renderPrices() {
+const set = (id, val) => {
+const el = document.getElementById(id);
+if (el) el.innerText = format(val);
+};
+
+set("horsePrice", upgrades.horse.cost);
+set("stablePrice", upgrades.stable.cost);
+set("farmPrice", upgrades.farm.cost);
+set("workshopPrice", upgrades.workshop.cost);
+set("garagePrice", upgrades.garage.cost);
+set("rodokmenPrice", upgrades.rodokmeny.cost);
 }

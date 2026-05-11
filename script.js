@@ -3,10 +3,15 @@ let perSec = 0;
 
 let userKey = "";
 
+// ENCHANT
+
+let doubleCoins = false;
+
 // UI
 
 const coinsText = document.getElementById("coins");
 const horseBtn = document.getElementById("horseBtn");
+const statsText = document.getElementById("stats");
 
 // LOGIN
 
@@ -30,7 +35,11 @@ update();
 
 horseBtn.addEventListener("click", () => {
 
-coins++;
+let gain = 1;
+
+if (doubleCoins) gain *= 2;
+
+coins += gain;
 
 update();
 saveGame();
@@ -39,39 +48,166 @@ saveGame();
 
 // UPGRADES
 
-function buyHorse() {
+const upgrades = {
 
-if (coins >= 50) {
+horse: {
+cost: 50,
+income: 1
+},
 
-coins -= 50;
-perSec += 1;
+stable: {
+cost: 200,
+income: 5
+},
+
+farm: {
+cost: 1000,
+income: 20
+},
+
+workshop: {
+cost: 5000000,
+income: 25000
+},
+
+garage: {
+cost: 25000000,
+income: 125000
+},
+
+pedigree: {
+cost: 100000000,
+income: 500000
+}
+
+};
+
+// BUY FUNCTION
+
+function buyUpgrade(name) {
+
+const upg = upgrades[name];
+
+if (coins >= upg.cost) {
+
+coins -= upg.cost;
+
+perSec += upg.income;
+
+upg.cost = Math.floor(upg.cost * 1.5);
+
+update();
+saveGame();
+
+renderPrices();
+}
+}
+
+// ENCHANT
+
+function buyDoubleCoins() {
+
+if (coins >= 40000) {
+
+coins -= 40000;
+
+doubleCoins = true;
+
+update();
+
+setTimeout(() => {
+
+doubleCoins = false;
+
+}, 30000);
+}
+}
+
+// TICKET
+
+function buyTicket() {
+
+if (coins >= 250000) {
+
+coins -= 250000;
+
+const rng = Math.random();
+
+if (rng < 0.33) {
+
+coins += 5000000;
+
+alert("VYHRÁL JSI 5 000 000!");
+
+} else if (rng < 0.66) {
+
+alert("Nic jsi nevyhrál.");
+
+} else {
+
+coins = 0;
+
+alert("Točka ti vymazala coiny!");
+}
 
 update();
 saveGame();
 }
 }
 
-function buyStable() {
+// AUTOMAT
 
-if (coins >= 200) {
+function slotMachine() {
 
-coins -= 200;
-perSec += 5;
+const bet = Number(prompt("Kolik chceš vsadit?"));
+
+if (bet > coins || bet <= 0 || bet > 30000000) return;
+
+coins -= bet;
+
+const rng = Math.random();
+
+if (rng < 0.4) {
+
+alert("Prohrál jsi.");
+
+} else if (rng < 0.7) {
+
+coins += bet * 2;
+
+alert("2x výhra!");
+
+} else if (rng < 0.9) {
+
+coins += bet * 3;
+
+alert("3x výhra!");
+
+} else {
+
+coins += bet * 10;
+
+alert("10x JACKPOT!");
+}
 
 update();
 saveGame();
 }
-}
 
-function buyFarm() {
+// UFO RESET
 
-if (coins >= 1000) {
+function buyUFO() {
 
-coins -= 1000;
-perSec += 20;
+if (coins >= 10000000000) {
+
+alert("DOHRÁL JSI HRU 🚀");
+
+coins = 0;
+perSec = 0;
+
+localStorage.clear();
 
 update();
-saveGame();
 }
 }
 
@@ -92,6 +228,9 @@ function update() {
 
 coinsText.innerText = Math.floor(coins);
 
+statsText.innerText =
+"Výdělek za sekundu: " + perSec;
+
 }
 
 // SAVE
@@ -103,20 +242,59 @@ if (!userKey) return;
 localStorage.setItem(userKey + "_coins", coins);
 localStorage.setItem(userKey + "_perSec", perSec);
 
+localStorage.setItem(
+userKey + "_upgrades",
+JSON.stringify(upgrades)
+);
 }
 
 // LOAD
 
 function loadGame() {
 
-const savedCoins = localStorage.getItem(userKey + "_coins");
-const savedPerSec = localStorage.getItem(userKey + "_perSec");
+const savedCoins =
+localStorage.getItem(userKey + "_coins");
 
-if (savedCoins !== null) {
+const savedPerSec =
+localStorage.getItem(userKey + "_perSec");
+
+const savedUpgrades =
+localStorage.getItem(userKey + "_upgrades");
+
+if (savedCoins !== null)
 coins = Number(savedCoins);
+
+if (savedPerSec !== null)
+perSec = Number(savedPerSec);
+
+if (savedUpgrades !== null)
+Object.assign(
+upgrades,
+JSON.parse(savedUpgrades)
+);
+
+renderPrices();
 }
 
-if (savedPerSec !== null) {
-perSec = Number(savedPerSec);
-}
+// RENDER PRICES
+
+function renderPrices() {
+
+document.getElementById("horsePrice").innerText =
+upgrades.horse.cost;
+
+document.getElementById("stablePrice").innerText =
+upgrades.stable.cost;
+
+document.getElementById("farmPrice").innerText =
+upgrades.farm.cost;
+
+document.getElementById("workshopPrice").innerText =
+upgrades.workshop.cost;
+
+document.getElementById("garagePrice").innerText =
+upgrades.garage.cost;
+
+document.getElementById("pedigreePrice").innerText =
+upgrades.pedigree.cost;
 }

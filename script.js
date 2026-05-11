@@ -318,7 +318,7 @@ if (coins >= 10000000000) {
 
 coins -= 10000000000;
 
-prestigeLevel += 5;
+prestigeLevel += 1;
 
 alert(
 "🛸 UFO PRESTIGE AKTIVOVÁNO! Prestige level: " +

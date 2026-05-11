@@ -6,15 +6,28 @@ overflow: hidden;
 font-family: Arial;
 
 background:
-linear-gradient(
-135deg,
-#fff7b1,
-#ffe066
+radial-gradient(
+circle at top left,
+#ffef9f,
+#ffd43b,
+#ffb703
 );
 
 height: 100vh;
+
+animation: bgMove 8s infinite alternate;
 }
 
+@keyframes bgMove {
+
+0% {
+background-position: left;
+}
+
+100% {
+background-position: right;
+}
+}
 /* GAME */
 
 #game {

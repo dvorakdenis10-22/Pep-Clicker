@@ -54,9 +54,9 @@ padding: 40px;
 
 border-radius: 20px;
 
-z-index: 10;
-
 text-align: center;
+
+z-index: 10;
 }
 
 #game {
@@ -69,19 +69,29 @@ display: none;
 
 position: absolute;
 
+left: 40px;
 top: 20px;
-left: 50px;
 
 text-align: center;
 }
 
-.coinsBox h1 {
-margin: 0;
-}
-
 #coins {
+
 font-size: 45px;
 font-weight: bold;
+}
+
+/* STATS */
+
+#stats {
+
+margin-top: 10px;
+
+background: rgba(0,0,0,0.15);
+
+padding: 10px;
+
+border-radius: 10px;
 }
 
 /* HORSE */
@@ -90,7 +100,7 @@ font-weight: bold;
 
 position: absolute;
 
-left: 50px;
+left: 40px;
 top: 300px;
 }
 
@@ -105,15 +115,16 @@ border: none;
 
 border-radius: 20px;
 
-cursor: pointer;
+background: rgba(139,90,43,0.5);
 
-background: rgba(139, 90, 43, 0.5);
+cursor: pointer;
 
 transition: 0.1s;
 }
 
 #horseBtn:active {
-transform: scale(0.92);
+
+transform: scale(0.9);
 }
 
 /* SHOP */
@@ -126,21 +137,17 @@ left: 320px;
 top: 90px;
 }
 
-.shopBox h2 {
-margin-left: 10px;
-}
-
 .shopPanel {
 
-width: 240px;
+width: 260px;
 height: 500px;
-
-overflow-y: auto;
 
 display: flex;
 flex-direction: column;
 
 gap: 10px;
+
+overflow-y: auto;
 }
 
 .shopPanel button {
@@ -164,8 +171,8 @@ cursor: pointer;
 
 position: absolute;
 
-left: 650px;
-top: 500px;
+left: 700px;
+top: 450px;
 }
 
 .specialPanel {
@@ -195,38 +202,27 @@ cursor: pointer;
 
 /* PEP BUTTON */
 
-#pepSoundBtn {
+#pepBtn {
 
 position: absolute;
 
 right: 120px;
-top: 220px;
+top: 180px;
 
 width: 180px;
 height: 180px;
 
 border: 8px solid purple;
 
-background: white;
+border-radius: 20px;
 
-font-size: 55px;
+background: white;
 
 color: purple;
 
-border-radius: 20px;
+font-size: 60px;
+
+font-weight: bold;
 
 cursor: pointer;
-}
-
-/* STATS */
-
-#stats {
-
-margin-top: 10px;
-
-background: rgba(0,0,0,0.15);
-
-padding: 10px;
-
-border-radius: 10px;
 }

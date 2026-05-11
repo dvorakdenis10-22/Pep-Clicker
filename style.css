@@ -253,6 +253,8 @@ body::before {
   padding: 16px; border-radius: 22px;
   width: 230px; flex-shrink: 0;
   box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  overflow-y: auto;
+  max-height: calc(100vh - 120px);
 }
 .shopContainer h2, .specialContainer h2 {
   font-family: 'Fredoka One', cursive; font-size: 17px;
@@ -277,6 +279,79 @@ body::before {
 }
 .shopPanel button:hover, .specialPanel button:hover { transform: scale(1.04); filter: brightness(1.2); }
 .shopPanel button:active, .specialPanel button:active { transform: scale(0.97); }
+
+/* ════════ UFO PRESTIGE SHOP ════════ */
+.ufoPrestigeShop {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.ufoPrestigeShop h2 {
+  font-family: 'Fredoka One', cursive; font-size: 17px;
+  color: rgba(130,200,255,0.9); margin-bottom: 10px; text-align: center;
+}
+
+#ufoPrestigeBtn {
+  width: 100%;
+  min-height: 80px;
+  border-radius: 16px;
+  border: 1px solid rgba(80,180,255,0.3);
+  background: linear-gradient(135deg, rgba(0,100,255,0.18), rgba(100,0,255,0.12));
+  color: #a8d4ff;
+  font-family: 'Fredoka One', cursive; font-size: 18px;
+  cursor: pointer;
+  padding: 12px 14px;
+  line-height: 1.6;
+  transition: transform 0.15s, filter 0.15s, box-shadow 0.2s;
+  box-shadow: 0 0 20px rgba(0,120,255,0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+#ufoPrestigeBtn::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+#ufoPrestigeBtn:hover::before {
+  transform: translateX(100%);
+}
+
+#ufoPrestigeBtn:hover {
+  transform: scale(1.04);
+  filter: brightness(1.25);
+  box-shadow: 0 0 40px rgba(80,160,255,0.35), 0 0 80px rgba(100,0,255,0.15);
+}
+
+#ufoPrestigeBtn:active { transform: scale(0.97); }
+
+#ufoPrestigeBtn.canAfford {
+  border-color: rgba(80,220,255,0.6);
+  background: linear-gradient(135deg, rgba(0,150,255,0.28), rgba(120,0,255,0.22));
+  box-shadow: 0 0 30px rgba(0,180,255,0.35), 0 0 60px rgba(100,0,255,0.2);
+  animation: ufoGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes ufoGlow {
+  0%   { box-shadow: 0 0 20px rgba(0,180,255,0.3), 0 0 40px rgba(100,0,255,0.15); }
+  100% { box-shadow: 0 0 50px rgba(0,220,255,0.6), 0 0 100px rgba(120,0,255,0.3); }
+}
+
+.ufoSub {
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px; font-weight: 700;
+  color: rgba(180,220,255,0.7);
+  letter-spacing: 0.5px;
+}
+
+.ufoPrice {
+  font-family: 'Fredoka One', cursive;
+  font-size: 13px;
+  color: rgba(120,200,255,0.9);
+}
 
 /* ACHIEVEMENTS */
 .achievementBox {

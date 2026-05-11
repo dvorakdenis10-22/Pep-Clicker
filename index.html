@@ -4,7 +4,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Pep Clicker</title>
 
 <link rel="stylesheet" href="style.css">
@@ -30,7 +29,7 @@
 
 <!-- GAME -->
 
-<div id="game" style="display:none;">
+<div id="game">
 
 <!-- COINS -->
 
@@ -40,17 +39,15 @@
 
 <div id="coins">0</div>
 
+<div id="stats">
+Výdělek za sekundu: 0
 </div>
 
-<!-- MAIN -->
+</div>
 
-<div class="mainContainer">
+<!-- KŮŇ -->
 
-<!-- LEFT -->
-
-<div class="leftSide">
-
-<div class="stable">
+<div class="horseArea">
 
 <button id="horseBtn">
 🐎
@@ -58,119 +55,105 @@
 
 </div>
 
-</div>
+<!-- OBCHOD -->
 
-<!-- LINE -->
-
-<div class="middleLine"></div>
-
-<!-- RIGHT -->
-
-<div class="rightSide">
+<div class="shopBox">
 
 <h2>Obchod u Ládycha</h2>
 
 <div class="shopPanel">
 
-<!-- STATS -->
-
-<div id="stats">
-Výdělek za sekundu: 0
-</div>
-
-<!-- UPGRADES -->
-
 <button onclick="buyUpgrade('horse')">
-🐴 Kůň
-<br>
-+1/sec
-<br>
+🐴 Kůň<br>
++1/sec<br>
 Cena:
 <span id="horsePrice">50</span>
 </button>
 
 <button onclick="buyUpgrade('stable')">
-🏠 Stáj
-<br>
-+5/sec
-<br>
+🏠 Stáj<br>
++5/sec<br>
 Cena:
 <span id="stablePrice">200</span>
 </button>
 
 <button onclick="buyUpgrade('farm')">
-🌾 Farma
-<br>
-+20/sec
-<br>
+🌾 Farma<br>
++20/sec<br>
 Cena:
 <span id="farmPrice">1000</span>
 </button>
 
 <button onclick="buyUpgrade('workshop')">
-🔧 Ládychova dílna
-<br>
-+25 000/sec
-<br>
+🔧 Ládychova dílna<br>
++25 000/sec<br>
 Cena:
 <span id="workshopPrice">5000000</span>
 </button>
 
 <button onclick="buyUpgrade('garage')">
-🚗 Garáž u Kotlise
-<br>
-+125 000/sec
-<br>
+🚗 Garáž u Kotlise<br>
++125 000/sec<br>
 Cena:
 <span id="garagePrice">25000000</span>
 </button>
 
 <button onclick="buyUpgrade('pedigree')">
-📜 Rodokmeny
-<br>
-+500 000/sec
-<br>
+📜 Rodokmeny<br>
++500 000/sec<br>
 Cena:
 <span id="pedigreePrice">100000000</span>
 </button>
 
-<!-- ENCHANT -->
+</div>
+
+</div>
+
+<!-- SPECIÁLKY -->
+
+<div class="specialBox">
+
+<h2>Kotlisovi speciality</h2>
+
+<div class="specialPanel">
 
 <button onclick="buyDoubleCoins()">
-✨ 2x Pep Coins (30 sec)
+✨ 2x Pep Coins (30s)
 <br>
-Cena: 40 000
+40 000
 </button>
-
-<!-- TICKET -->
 
 <button onclick="buyTicket()">
 🎟 Ticket do točky
 <br>
-Cena: 250 000
+250 000
 </button>
-
-<!-- SLOT -->
 
 <button onclick="slotMachine()">
 🎰 Automaty
-<br>
-Max vklad: 30M
 </button>
-
-<!-- UFO -->
 
 <button onclick="buyUFO()">
 🛸 UFO RESET
 <br>
-Cena: 10 000 000 000
+10 000 000 000
 </button>
 
 </div>
 
 </div>
 
-</div>
+<!-- PEP BUTTON -->
+
+<button id="pepSoundBtn">
+PEP
+</button>
+
+<!-- AUDIO -->
+
+<audio id="pepSound">
+<source src="horse.mp3" type="audio/mpeg">
+</audio>
 
 </div>
 

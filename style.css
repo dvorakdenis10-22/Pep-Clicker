@@ -181,46 +181,6 @@ padding-top: 70px;
 font-size: 55px;
 }
 
-/* SHOP */
-
-.shopPanel {
-width: 550px;
-height: 550px;
-
-border: 18px solid black;
-
-padding: 20px;
-
-display: flex;
-flex-direction: column;
-
-gap: 20px;
-
-background: rgba(255,255,255,0.2);
-}
-
-.shopPanel button {
-height: 110px;
-
-font-size: 28px;
-font-weight: bold;
-
-border: none;
-border-radius: 18px;
-
-cursor: pointer;
-
-background: #ffd84d;
-
-transition: 0.2s;
-}
-
-.shopPanel button:hover {
-transform: scale(1.03);
-
-background: #ffc400;
-}
-
 /* STATS */
 
 #stats {

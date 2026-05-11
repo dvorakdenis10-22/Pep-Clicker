@@ -3,8 +3,6 @@ let perSec = 0;
 
 let userKey = "";
 
-// ENCHANT
-
 let doubleCoins = false;
 
 // UI
@@ -17,21 +15,24 @@ const statsText = document.getElementById("stats");
 
 function login() {
 
-const username = document.getElementById("username").value;
-const password = document.getElementById("password").value;
+const username =
+document.getElementById("username").value;
+
+const password =
+document.getElementById("password").value;
 
 if (!username || !password) return;
 
 userKey = username + "_" + password;
 
 document.getElementById("loginBox").style.display = "none";
-document.getElementById("game").style.display = "flex";
+document.getElementById("game").style.display = "block";
 
 loadGame();
 update();
 }
 
-// CLICK
+// HORSE CLICK
 
 horseBtn.addEventListener("click", () => {
 
@@ -43,6 +44,17 @@ coins += gain;
 
 update();
 saveGame();
+});
+
+// PEP SOUND
+
+document
+.getElementById("pepSoundBtn")
+.addEventListener("click", () => {
+
+document
+.getElementById("pepSound")
+.play();
 
 });
 
@@ -82,7 +94,7 @@ income: 500000
 
 };
 
-// BUY FUNCTION
+// BUY
 
 function buyUpgrade(name) {
 
@@ -98,7 +110,6 @@ upg.cost = Math.floor(upg.cost * 1.5);
 
 update();
 saveGame();
-
 renderPrices();
 }
 }
@@ -159,7 +170,8 @@ saveGame();
 
 function slotMachine() {
 
-const bet = Number(prompt("Kolik chceš vsadit?"));
+const bet =
+Number(prompt("Kolik chceš vsadit?"));
 
 if (bet > coins || bet <= 0 || bet > 30000000) return;
 
@@ -194,7 +206,7 @@ update();
 saveGame();
 }
 
-// UFO RESET
+// UFO
 
 function buyUFO() {
 
@@ -202,10 +214,10 @@ if (coins >= 10000000000) {
 
 alert("DOHRÁL JSI HRU 🚀");
 
+localStorage.clear();
+
 coins = 0;
 perSec = 0;
-
-localStorage.clear();
 
 update();
 }
@@ -226,11 +238,11 @@ saveGame();
 
 function update() {
 
-coinsText.innerText = Math.floor(coins);
+coinsText.innerText =
+Math.floor(coins);
 
 statsText.innerText =
 "Výdělek za sekundu: " + perSec;
-
 }
 
 // SAVE
@@ -276,7 +288,7 @@ JSON.parse(savedUpgrades)
 renderPrices();
 }
 
-// RENDER PRICES
+// RENDER
 
 function renderPrices() {
 

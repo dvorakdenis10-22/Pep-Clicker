@@ -129,20 +129,14 @@ saveGame();
 }
 }
 
-// PRESTIGE
-let prestigeCost = 10_000_000_000; // 10B
-
+// PRESTIGE (ORIGINÁL)
 function prestige() {
-if (coins >= prestigeCost) {
-
+if (coins >= 1000000000) {
 prestigeLevel++;
 coins = 0;
 perSec = 0;
 
-// 💰 zvyšování ceny každým prestigem
-prestigeCost = Math.floor(prestigeCost * 1.5);
-
-// reset upgradů
+Object.keys(upgrades).forEach(key => {
 const defaults = {
 horse: 50,
 stable: 200,
@@ -152,26 +146,7 @@ garage: 25000000,
 rodokmeny: 100000000
 };
 
-Object.keys(defaults).forEach(key => {
 upgrades[key].cost = defaults[key];
-});
-
-renderPrices();
-update();
-saveGame();
-}
-}
-Object.keys(upgrades).forEach(k => {
-const base = {
-horse: 50,
-stable: 200,
-farm: 1000,
-workshop: 5000000,
-garage: 25000000,
-rodokmeny: 100000000
-};
-
-upgrades[k].cost = base[k];
 });
 
 renderPrices();
@@ -191,10 +166,10 @@ update();
 saveGame();
 }, 1000);
 
-// UPDATE UI
+// UPDATE
 function update() {
-if (coinsText) coinsText.innerText = format(coins);
-if (statsText) statsText.innerText = "Výdělek: " + perSec + "/s";
+coinsText.innerText = format(coins);
+statsText.innerText = "Výdělek za sekundu: " + perSec;
 
 document.getElementById("prestigeLevel").innerText =
 "Level: " + prestigeLevel;
@@ -208,7 +183,7 @@ if (n >= 1e3) return (n / 1e3).toFixed(1) + "K";
 return n;
 }
 
-// SAVE (LOCAL)
+// SAVE
 function saveGame() {
 if (!userKey) return;
 
@@ -218,7 +193,7 @@ localStorage.setItem(userKey + "_prestige", prestigeLevel);
 localStorage.setItem(userKey + "_upgrades", JSON.stringify(upgrades));
 }
 
-// LOAD (LOCAL)
+// LOAD
 function loadGame() {
 coins = Number(localStorage.getItem(userKey + "_coins")) || 0;
 perSec = Number(localStorage.getItem(userKey + "_perSec")) || 0;

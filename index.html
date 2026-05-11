@@ -149,14 +149,18 @@ PEP
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
 import { getFirestore, doc, setDoc, getDoc }
 from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc }
+from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
 const firebaseConfig = {
-apiKey: "AIzaSyAosUfOirXSOLSRTKFIOPpbfQX05G4TL3o",
-authDomain: "pep-clicker.firebaseapp.com",
-projectId: "pep-clicker",
-storageBucket: "pep-clicker.firebasestorage.app",
-messagingSenderId: "59444977629",
-appId: "1:59444977629:web:6488b64792ab6f42e8a034"
+apiKey: "AIzaSyBJ6IiKH7UvNx7bBlL3xLaHtGpql1SKL4w",
+authDomain: "pep-clicker-ef884.firebaseapp.com",
+projectId: "pep-clicker-ef884",
+storageBucket: "pep-clicker-ef884.firebasestorage.app",
+messagingSenderId: "832249568301",
+appId: "1:832249568301:web:73379583425bff5e912ca4"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -164,14 +168,15 @@ const db = getFirestore(app);
 
 let currentUser = "";
 
-/* 🔐 LOGIN */
+/* LOGIN */
 window.login = async function () {
+
 const username = document.getElementById("username").value;
 const password = document.getElementById("password").value;
 
 if (!username || !password) return;
 
-currentUser = username + "_" + password;
+currentUser = username;
 
 document.getElementById("loginBox").style.display = "none";
 document.getElementById("game").style.display = "block";
@@ -179,8 +184,9 @@ document.getElementById("game").style.display = "block";
 loadGame();
 };
 
-/* 💾 SAVE */
+/* SAVE */
 window.saveGame = async function () {
+
 if (!currentUser) return;
 
 await setDoc(doc(db, "players", currentUser), {
@@ -191,11 +197,13 @@ upgrades
 });
 };
 
-/* 📥 LOAD */
+/* LOAD */
 async function loadGame() {
+
 const snap = await getDoc(doc(db, "players", currentUser));
 
 if (snap.exists()) {
+
 const data = snap.data();
 
 coins = data.coins || 0;
@@ -211,7 +219,7 @@ update();
 }
 }
 
-/* 🔄 AUTO SAVE */
+/* AUTO SAVE */
 setInterval(() => {
 if (currentUser) saveGame();
 }, 5000);

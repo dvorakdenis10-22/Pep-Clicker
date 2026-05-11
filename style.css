@@ -1,40 +1,24 @@
 body {
+
 margin: 0;
 overflow: hidden;
+
 font-family: Arial;
 
 background:
-repeating-linear-gradient(
-45deg,
-#fff6a3 0px,
-#fff6a3 40px,
-#fffce0 40px,
-#fffce0 80px
+linear-gradient(
+135deg,
+#fff7b1,
+#ffe066
 );
 
 height: 100vh;
 }
 
-body::before {
-content: "";
+/* GAME */
 
-position: fixed;
-inset: 0;
-
-background-image:
-linear-gradient(
-rgba(255, 221, 0, 0.18) 50%,
-transparent 50%
-),
-linear-gradient(
-90deg,
-rgba(255, 221, 0, 0.18) 50%,
-transparent 50%
-);
-
-background-size: 160px 160px;
-
-pointer-events: none;
+#game {
+display: none;
 }
 
 /* LOGIN */
@@ -52,74 +36,139 @@ background: white;
 
 padding: 40px;
 
-border-radius: 20px;
+border-radius: 25px;
+
+box-shadow: 0 0 30px rgba(0,0,0,0.3);
 
 text-align: center;
-
-z-index: 10;
 }
 
-#game {
-display: none;
+#loginBox input {
+
+padding: 12px;
+
+font-size: 18px;
+
+border-radius: 10px;
+
+border: none;
+}
+
+#loginBox button {
+
+padding: 12px 25px;
+
+border: none;
+
+border-radius: 15px;
+
+background: #ffd84d;
+
+font-size: 20px;
+
+cursor: pointer;
+}
+
+/* TOP */
+
+.topBar {
+
+display: flex;
+
+justify-content: space-between;
+
+padding: 20px 40px;
 }
 
 /* COINS */
 
-.coinsBox {
-
-position: absolute;
-
-left: 40px;
-top: 20px;
-
-text-align: center;
-}
-
 #coins {
 
-font-size: 45px;
+font-size: 55px;
+
 font-weight: bold;
 }
-
-/* STATS */
 
 #stats {
 
 margin-top: 10px;
 
-background: rgba(0,0,0,0.15);
+font-size: 20px;
+}
 
-padding: 10px;
+/* PRESTIGE */
 
-border-radius: 10px;
+.prestigeBox {
+
+background: rgba(255,255,255,0.4);
+
+padding: 20px;
+
+border-radius: 20px;
+
+text-align: center;
+}
+
+.prestigeBox button {
+
+margin-top: 10px;
+
+padding: 10px 20px;
+
+border: none;
+
+border-radius: 12px;
+
+background: #ff7b00;
+
+color: white;
+
+font-weight: bold;
+
+cursor: pointer;
+}
+
+/* MAIN */
+
+.mainArea {
+
+display: flex;
+
+justify-content: space-around;
+
+margin-top: 30px;
 }
 
 /* HORSE */
 
-.horseArea {
+.horseContainer {
 
-position: absolute;
-
-left: 40px;
-top: 300px;
+text-align: center;
 }
 
 #horseBtn {
 
-width: 220px;
-height: 220px;
-
-font-size: 120px;
+width: 260px;
+height: 260px;
 
 border: none;
 
-border-radius: 20px;
+border-radius: 30px;
 
-background: rgba(139,90,43,0.5);
+font-size: 140px;
 
 cursor: pointer;
 
+background: rgba(255,255,255,0.4);
+
 transition: 0.1s;
+
+box-shadow: 0 0 30px rgba(0,0,0,0.2);
+}
+
+#horseBtn:hover {
+
+transform: scale(1.03);
 }
 
 #horseBtn:active {
@@ -127,102 +176,124 @@ transition: 0.1s;
 transform: scale(0.9);
 }
 
-/* SHOP */
+/* RARITY */
 
-.shopBox {
+#horseRarity {
 
-position: absolute;
+margin-top: 20px;
 
-left: 320px;
-top: 90px;
-}
-
-.shopPanel {
-
-width: 260px;
-height: 500px;
-
-display: flex;
-flex-direction: column;
-
-gap: 10px;
-
-overflow-y: auto;
-}
-
-.shopPanel button {
-
-min-height: 90px;
-
-border: none;
-
-border-radius: 15px;
-
-background: #ffe04d;
+font-size: 28px;
 
 font-weight: bold;
 
-cursor: pointer;
+color: #444;
 }
 
-/* SPECIAL */
-
-.specialBox {
-
-position: absolute;
-
-left: 700px;
-top: 450px;
-}
-
-.specialPanel {
-
-width: 300px;
-
-display: flex;
-flex-direction: column;
-
-gap: 10px;
-}
-
-.specialPanel button {
-
-min-height: 80px;
-
-border: none;
-
-border-radius: 15px;
-
-background: #9cff8d;
-
-font-weight: bold;
-
-cursor: pointer;
-}
-
-/* PEP BUTTON */
+/* PEP */
 
 #pepBtn {
 
-position: absolute;
-
-right: 120px;
-top: 180px;
+margin-top: 25px;
 
 width: 180px;
-height: 180px;
+height: 80px;
 
-border: 8px solid purple;
-
-border-radius: 20px;
+border: 5px solid purple;
 
 background: white;
 
 color: purple;
 
-font-size: 60px;
+border-radius: 20px;
+
+font-size: 40px;
 
 font-weight: bold;
 
 cursor: pointer;
+
+transition: 0.2s;
+}
+
+#pepBtn:hover {
+
+transform: scale(1.05);
+}
+
+/* SHOP */
+
+.shopContainer,
+.specialContainer {
+
+background: rgba(255,255,255,0.35);
+
+padding: 20px;
+
+border-radius: 25px;
+
+width: 280px;
+
+box-shadow: 0 0 20px rgba(0,0,0,0.15);
+}
+
+.shopPanel,
+.specialPanel {
+
+display: flex;
+
+flex-direction: column;
+
+gap: 12px;
+}
+
+.shopPanel button,
+.specialPanel button {
+
+min-height: 90px;
+
+border: none;
+
+border-radius: 18px;
+
+font-size: 18px;
+
+font-weight: bold;
+
+cursor: pointer;
+
+transition: 0.2s;
+}
+
+.shopPanel button {
+
+background: #ffe04d;
+}
+
+.specialPanel button {
+
+background: #9cff8d;
+}
+
+.shopPanel button:hover,
+.specialPanel button:hover {
+
+transform: scale(1.03);
+}
+
+/* ACHIEVEMENTS */
+
+.achievementBox {
+
+position: absolute;
+
+bottom: 20px;
+left: 20px;
+
+width: 350px;
+
+background: rgba(255,255,255,0.4);
+
+padding: 20px;
+
+border-radius: 20px;
 }

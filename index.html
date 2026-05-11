@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="cs">
-
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Pep Clicker</title>
+<title>Pep Clicker 2.0</title>
 
 <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
@@ -16,7 +17,7 @@
 
 <div id="loginBox">
 
-<h1>Pep Clicker Login</h1>
+<h1>Pep Clicker 2.0</h1>
 
 <input id="username" placeholder="Jméno">
 <br><br>
@@ -34,9 +35,11 @@ Hrát
 
 <div id="game">
 
-<!-- COINS -->
+<!-- TOP -->
 
-<div class="coinsBox">
+<div class="topBar">
+
+<div class="coinsArea">
 
 <h1>Pep Coins</h1>
 
@@ -48,19 +51,47 @@ Výdělek za sekundu: 0
 
 </div>
 
-<!-- KŮŇ -->
+<div class="prestigeBox">
 
-<div class="horseArea">
+<h2>🔥 Prestige</h2>
+
+<div id="prestigeLevel">
+Level: 0
+</div>
+
+<button onclick="prestige()">
+RESET + BOOST
+</button>
+
+</div>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="mainArea">
+
+<!-- HORSE -->
+
+<div class="horseContainer">
 
 <button id="horseBtn">
 🐎
 </button>
 
+<div id="horseRarity">
+Common Horse
 </div>
 
-<!-- OBCHOD -->
+<button id="pepBtn">
+PEP
+</button>
 
-<div class="shopBox">
+</div>
+
+<!-- SHOP -->
+
+<div class="shopContainer">
 
 <h2>Obchod u Ládycha</h2>
 
@@ -71,7 +102,6 @@ Výdělek za sekundu: 0
 <br>
 +1/sec
 <br>
-Cena:
 <span id="horsePrice">50</span>
 </button>
 
@@ -80,7 +110,6 @@ Cena:
 <br>
 +5/sec
 <br>
-Cena:
 <span id="stablePrice">200</span>
 </button>
 
@@ -89,80 +118,64 @@ Cena:
 <br>
 +20/sec
 <br>
-Cena:
 <span id="farmPrice">1000</span>
 </button>
 
 <button onclick="buyUpgrade('workshop')">
 🔧 Ládychova dílna
 <br>
-+25 000/sec
++25k/sec
 <br>
-Cena:
 <span id="workshopPrice">5000000</span>
 </button>
 
-<button onclick="buyUpgrade('garage')">
-🚗 Garáž u Kotlise
-<br>
-+125 000/sec
-<br>
-Cena:
-<span id="garagePrice">25000000</span>
-</button>
-
-<button onclick="buyUpgrade('pedigree')">
-📜 Rodokmeny
-<br>
-+500 000/sec
-<br>
-Cena:
-<span id="pedigreePrice">100000000</span>
-</button>
-
 </div>
 
 </div>
 
-<!-- KOTLISOVI SPECIALITY -->
+<!-- SPECIAL -->
 
-<div class="specialBox">
+<div class="specialContainer">
 
 <h2>Kotlisovi speciality</h2>
 
 <div class="specialPanel">
 
 <button onclick="buyDoubleCoins()">
-✨ 2x Pep Coins (30 sec)
-<br>
-Cena: 40 000
+✨ 2x Pep Coins
 </button>
 
 <button onclick="buyTicket()">
-🎟 Ticket do točky
-<br>
-Cena: 250 000
+🎟 Ticket
 </button>
 
 <button onclick="slotMachine()">
 🎰 Automaty
 </button>
 
-<button onclick="buyUFO()">
-🛸 UFO RESET
+<button onclick="openLootbox()">
+🥚 Lootbox
 <br>
-Cena: 10 000 000 000
+500k
 </button>
 
 </div>
 
 </div>
 
-<!-- PEP BUTTON -->
+</div>
 
-<button id="pepBtn">
-PEP
-</button>
+<!-- ACHIEVEMENTS -->
+
+<div class="achievementBox">
+
+<h2>🏆 Achievementy</h2>
+
+<div id="achievementList">
+
+</div>
+
+</div>
 
 <!-- AUDIO -->
 

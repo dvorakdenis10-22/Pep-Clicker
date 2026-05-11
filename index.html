@@ -154,8 +154,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/fireba
 import { getFirestore, doc, setDoc, getDoc }
 from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc }
+from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+
 const firebaseConfig = {
-apiKey: "AIzaSyBJ6IiKH7UvNx7bBlL3xLaHtGpql1SKL4w",
+apiKey: "TVŮJ_KEY",
 authDomain: "pep-clicker-ef884.firebaseapp.com",
 projectId: "pep-clicker-ef884",
 storageBucket: "pep-clicker-ef884.firebasestorage.app",
@@ -168,25 +173,14 @@ const db = getFirestore(app);
 
 let currentUser = "";
 
-/* LOGIN */
-window.login = async function () {
-
-const username = document.getElementById("username").value;
-const password = document.getElementById("password").value;
-
-if (!username || !password) return;
-
-currentUser = username;
-
-document.getElementById("loginBox").style.display = "none";
-document.getElementById("game").style.display = "block";
-
+/* LOGIN HOOK (napojení na tvůj login) */
+window.setUser = function(name) {
+currentUser = name;
 loadGame();
 };
 
 /* SAVE */
-window.saveGame = async function () {
-
+window.saveGameCloud = async function () {
 if (!currentUser) return;
 
 await setDoc(doc(db, "players", currentUser), {
@@ -199,20 +193,16 @@ upgrades
 
 /* LOAD */
 async function loadGame() {
-
 const snap = await getDoc(doc(db, "players", currentUser));
 
 if (snap.exists()) {
-
 const data = snap.data();
 
 coins = data.coins || 0;
 perSec = data.perSec || 0;
 prestigeLevel = data.prestigeLevel || 0;
 
-if (data.upgrades) {
-Object.assign(upgrades, data.upgrades);
-}
+if (data.upgrades) Object.assign(upgrades, data.upgrades);
 
 renderPrices();
 update();
@@ -221,7 +211,7 @@ update();
 
 /* AUTO SAVE */
 setInterval(() => {
-if (currentUser) saveGame();
+if (currentUser) saveGameCloud();
 }, 5000);
 
 </script>

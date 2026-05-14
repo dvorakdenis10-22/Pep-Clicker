@@ -32,22 +32,9 @@ body::before {
   animation: bgPulse 10s ease-in-out infinite alternate;
   pointer-events: none;
 }
-
 @keyframes bgPulse {
   0%   { opacity: 0.7; }
   100% { opacity: 1; }
-}
-
-.star {
-  position: fixed; border-radius: 50%;
-  background: #fff; pointer-events: none; z-index: 0;
-  animation: floatUp linear infinite;
-}
-@keyframes floatUp {
-  0%   { transform: translateY(100vh); opacity: 0; }
-  10%  { opacity: 0.8; }
-  90%  { opacity: 0.4; }
-  100% { transform: translateY(-5vh); opacity: 0; }
 }
 
 /* ════════ LOGIN ════════ */
@@ -56,7 +43,6 @@ body::before {
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
 }
-
 .login-horse {
   font-size: 100px;
   animation: horseFloat 3s ease-in-out infinite;
@@ -68,7 +54,6 @@ body::before {
   0%, 100% { transform: translateY(0px) rotate(-2deg); }
   50%       { transform: translateY(-16px) rotate(2deg); }
 }
-
 .login-title {
   font-family: 'Fredoka One', cursive;
   font-size: 56px; letter-spacing: 2px;
@@ -77,7 +62,6 @@ body::before {
   filter: drop-shadow(0 0 20px rgba(255,180,0,0.35));
   margin-bottom: 32px;
 }
-
 .login-card {
   background: rgba(255,255,255,0.07);
   backdrop-filter: blur(28px);
@@ -88,7 +72,6 @@ body::before {
   min-width: 360px;
   box-shadow: 0 0 80px rgba(124,58,237,0.15), 0 24px 64px rgba(0,0,0,0.5);
 }
-
 #loginBox input {
   padding: 15px 20px;
   font-size: 16px; font-family: 'Outfit', sans-serif; font-weight: 600;
@@ -103,7 +86,6 @@ body::before {
   border-color: rgba(245,200,66,0.6);
   background: rgba(255,255,255,0.13);
 }
-
 #loginBox button {
   margin-top: 6px; padding: 16px;
   border: none; border-radius: 16px;
@@ -117,14 +99,6 @@ body::before {
 #loginBox button:hover  { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(255,180,0,0.5); }
 #loginBox button:active { transform: scale(0.97); }
 
-@keyframes fadeOutLogin {
-  to { opacity: 0; transform: scale(0.95); }
-}
-#loginBox.hide {
-  animation: fadeOutLogin 0.45s forwards;
-  pointer-events: none;
-}
-
 /* ════════ GAME ════════ */
 #game {
   display: none;
@@ -133,13 +107,25 @@ body::before {
   flex-direction: column;
   overflow: hidden;
 }
-@keyframes fadeInGame {
-  from { opacity: 0; transform: scale(1.03); }
-  to   { opacity: 1; transform: scale(1); }
-}
-#game.show {
-  display: flex;
-  animation: fadeInGame 0.5s 0.3s ease both;
+
+/* VZDUCHOLOD */
+#airship {
+  display: none;
+  position: fixed;
+  top: 60px;
+  left: -300px;
+  z-index: 200;
+  font-size: 18px;
+  font-family: 'Fredoka One', cursive;
+  color: #ffe566;
+  background: rgba(0,0,0,0.55);
+  border: 1px solid rgba(255,220,100,0.3);
+  border-radius: 40px;
+  padding: 8px 22px;
+  pointer-events: none;
+  white-space: nowrap;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 24px rgba(255,200,0,0.18);
 }
 
 /* TOP BAR */
@@ -151,7 +137,6 @@ body::before {
   backdrop-filter: blur(20px);
   flex-shrink: 0;
 }
-
 .coinsArea h1 {
   font-family: 'Fredoka One', cursive;
   font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
@@ -162,25 +147,27 @@ body::before {
   background: linear-gradient(135deg, #ffe566, #ffb700);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
-#stats { font-size: 13px; font-weight: 600; color: var(--muted); margin-top: 3px; }
+#stats { font-size: 13px; font-weight: 700; color: var(--muted); margin-top: 3px; }
 
-.prestigeBox {
-  background: rgba(255,100,0,0.1);
-  border: 1px solid rgba(255,120,0,0.25);
-  padding: 12px 22px; border-radius: 18px; text-align: center;
+.topButtons {
+  display: flex; gap: 10px;
 }
-.prestigeBox h2 {
-  font-family: 'Fredoka One', cursive; font-size: 16px; color: #ff9f50; margin-bottom: 3px;
-}
-#prestigeLevel { font-size: 12px; font-weight: 700; color: rgba(255,200,100,0.65); margin-bottom: 8px; }
-.prestigeBox button {
-  padding: 8px 18px; border: none; border-radius: 11px;
-  background: linear-gradient(135deg, #ff7b00, #ff3a00);
-  color: #fff; font-family: 'Fredoka One', cursive; font-size: 14px;
+.infoBtn, .nemovitostiBtn {
+  padding: 10px 18px; border: none; border-radius: 14px;
+  font-family: 'Fredoka One', cursive; font-size: 15px;
   cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
-  box-shadow: 0 4px 14px rgba(255,80,0,0.3);
 }
-.prestigeBox button:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(255,80,0,0.45); }
+.infoBtn {
+  background: linear-gradient(135deg, rgba(100,180,255,0.2), rgba(50,100,200,0.15));
+  color: #a8d4ff;
+  border: 1px solid rgba(100,180,255,0.25);
+}
+.nemovitostiBtn {
+  background: linear-gradient(135deg, rgba(100,255,150,0.18), rgba(0,180,80,0.1));
+  color: #86efac;
+  border: 1px solid rgba(80,220,120,0.2);
+}
+.infoBtn:hover, .nemovitostiBtn:hover { transform: translateY(-2px); filter: brightness(1.2); }
 
 /* MAIN */
 .mainArea {
@@ -194,7 +181,6 @@ body::before {
   display: flex; flex-direction: column; align-items: center; gap: 12px;
   flex-shrink: 0;
 }
-
 #horseBtn {
   width: 310px; height: 310px;
   border: none; border-radius: 40px;
@@ -204,32 +190,17 @@ body::before {
   border: 1px solid rgba(255,255,255,0.13);
   backdrop-filter: blur(14px);
   transition: transform 0.13s cubic-bezier(.34,1.56,.64,1), box-shadow 0.15s;
-  box-shadow:
-    0 0 70px rgba(245,200,66,0.1),
-    0 16px 50px rgba(0,0,0,0.45),
-    inset 0 1px 0 rgba(255,255,255,0.09);
+  box-shadow: 0 0 70px rgba(245,200,66,0.1), 0 16px 50px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.09);
   display: flex; align-items: center; justify-content: center;
   position: relative;
 }
-#horseBtn::before {
-  content: '';
-  position: absolute; inset: -3px; border-radius: 43px;
-  background: linear-gradient(135deg, rgba(245,200,66,0.4), rgba(168,85,247,0.3), transparent 60%);
-  opacity: 0; transition: opacity 0.25s;
-  pointer-events: none; z-index: -1;
-}
-#horseBtn:hover {
-  transform: scale(1.07);
-  box-shadow: 0 0 90px rgba(245,200,66,0.2), 0 20px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.12);
-}
-#horseBtn:hover::before { opacity: 1; }
+#horseBtn:hover { transform: scale(1.07); }
 #horseBtn:active { transform: scale(0.85) rotate(-3deg); }
 
 #horseRarity {
   font-family: 'Fredoka One', cursive; font-size: 20px;
   color: rgba(255,255,255,0.65); letter-spacing: 1px;
 }
-
 #pepBtn {
   width: 148px; height: 56px;
   border: 2px solid rgba(168,85,247,0.5);
@@ -237,12 +208,10 @@ body::before {
   color: #c084fc; border-radius: 18px;
   font-family: 'Fredoka One', cursive; font-size: 30px;
   cursor: pointer; transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
-  box-shadow: 0 0 18px rgba(168,85,247,0.14);
 }
 #pepBtn:hover {
   transform: scale(1.07);
   background: rgba(124,58,237,0.27);
-  box-shadow: 0 0 34px rgba(168,85,247,0.3);
 }
 
 /* SHOP / SPECIAL */
@@ -265,7 +234,7 @@ body::before {
 .shopPanel button, .specialPanel button {
   min-height: 64px; border-radius: 14px;
   border: 1px solid rgba(255,255,255,0.1);
-  font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700;
+  font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 700;
   cursor: pointer; transition: transform 0.14s, filter 0.14s;
   padding: 10px 12px; line-height: 1.5;
 }
@@ -279,8 +248,11 @@ body::before {
 }
 .shopPanel button:hover, .specialPanel button:hover { transform: scale(1.04); filter: brightness(1.2); }
 .shopPanel button:active, .specialPanel button:active { transform: scale(0.97); }
+.shopPanel button small, .specialPanel button small {
+  display: block; font-size: 10px; color: rgba(255,255,255,0.5); font-weight: 400;
+}
 
-/* ════════ UFO PRESTIGE SHOP ════════ */
+/* UFO / NEMOVITOSTI SEKCE */
 .ufoPrestigeShop {
   margin-top: 16px;
   padding-top: 14px;
@@ -290,68 +262,31 @@ body::before {
   font-family: 'Fredoka One', cursive; font-size: 17px;
   color: rgba(130,200,255,0.9); margin-bottom: 10px; text-align: center;
 }
-
-#ufoPrestigeBtn {
-  width: 100%;
-  min-height: 80px;
-  border-radius: 16px;
+#ufoPrestigeBtn, #garageKotliseBtn {
+  width: 100%; min-height: 72px; border-radius: 14px;
   border: 1px solid rgba(80,180,255,0.3);
   background: linear-gradient(135deg, rgba(0,100,255,0.18), rgba(100,0,255,0.12));
   color: #a8d4ff;
-  font-family: 'Fredoka One', cursive; font-size: 18px;
-  cursor: pointer;
-  padding: 12px 14px;
-  line-height: 1.6;
-  transition: transform 0.15s, filter 0.15s, box-shadow 0.2s;
-  box-shadow: 0 0 20px rgba(0,120,255,0.15);
-  position: relative;
-  overflow: hidden;
+  font-family: 'Fredoka One', cursive; font-size: 15px;
+  cursor: pointer; padding: 10px 12px; line-height: 1.6;
+  transition: transform 0.15s, filter 0.15s;
+  margin-bottom: 8px;
 }
-
-#ufoPrestigeBtn::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%);
-  transform: translateX(-100%);
-  transition: transform 0.6s ease;
+#garageKotliseBtn {
+  background: linear-gradient(135deg, rgba(255,140,0,0.18), rgba(200,80,0,0.12));
+  border-color: rgba(255,160,60,0.3);
+  color: #ffd580;
 }
-
-#ufoPrestigeBtn:hover::before {
-  transform: translateX(100%);
-}
-
-#ufoPrestigeBtn:hover {
-  transform: scale(1.04);
-  filter: brightness(1.25);
-  box-shadow: 0 0 40px rgba(80,160,255,0.35), 0 0 80px rgba(100,0,255,0.15);
-}
-
-#ufoPrestigeBtn:active { transform: scale(0.97); }
-
-#ufoPrestigeBtn.canAfford {
-  border-color: rgba(80,220,255,0.6);
-  background: linear-gradient(135deg, rgba(0,150,255,0.28), rgba(120,0,255,0.22));
-  box-shadow: 0 0 30px rgba(0,180,255,0.35), 0 0 60px rgba(100,0,255,0.2);
+#ufoPrestigeBtn:hover, #garageKotliseBtn:hover { transform: scale(1.04); filter: brightness(1.2); }
+#ufoPrestigeBtn.canAfford, #garageKotliseBtn.canAfford {
   animation: ufoGlow 2s ease-in-out infinite alternate;
 }
-
 @keyframes ufoGlow {
-  0%   { box-shadow: 0 0 20px rgba(0,180,255,0.3), 0 0 40px rgba(100,0,255,0.15); }
-  100% { box-shadow: 0 0 50px rgba(0,220,255,0.6), 0 0 100px rgba(120,0,255,0.3); }
+  0%   { box-shadow: 0 0 20px rgba(0,180,255,0.3); }
+  100% { box-shadow: 0 0 50px rgba(0,220,255,0.6); }
 }
-
-.ufoSub {
-  font-family: 'Outfit', sans-serif;
-  font-size: 11px; font-weight: 700;
-  color: rgba(180,220,255,0.7);
-  letter-spacing: 0.5px;
-}
-
-.ufoPrice {
-  font-family: 'Fredoka One', cursive;
-  font-size: 13px;
-  color: rgba(120,200,255,0.9);
-}
+.ufoSub { font-family: 'Outfit', sans-serif; font-size: 11px; font-weight: 700; color: rgba(180,220,255,0.7); }
+.ufoPrice { font-family: 'Fredoka One', cursive; font-size: 13px; color: rgba(120,200,255,0.9); }
 
 /* ACHIEVEMENTS */
 .achievementBox {
@@ -378,4 +313,86 @@ body::before {
 @keyframes coinRise {
   0%   { transform: translate(-50%, 0) scale(1); opacity: 1; }
   100% { transform: translate(-50%, -80px) scale(0.5); opacity: 0; }
+}
+
+/* ════════ MODALY ════════ */
+.modal {
+  position: fixed; inset: 0; z-index: 500;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(6px);
+}
+.modalBox {
+  background: #0d0d24;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 24px;
+  padding: 32px 36px;
+  min-width: 360px;
+  max-width: 500px;
+  text-align: center;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.7);
+  animation: modalIn 0.25s ease;
+}
+@keyframes modalIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+.modalBox h2 {
+  font-family: 'Fredoka One', cursive; font-size: 28px; margin-bottom: 10px;
+  background: linear-gradient(135deg, #ffe566, #ff9f1c);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.modalBox p { color: #ccc; font-size: 14px; }
+
+.betButtons {
+  display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 12px 0;
+}
+.betButtons button {
+  padding: 8px 16px; border: none; border-radius: 10px;
+  background: linear-gradient(135deg, rgba(255,210,60,0.25), rgba(255,150,0,0.15));
+  color: #ffe066; font-family: 'Fredoka One', cursive; font-size: 15px;
+  cursor: pointer; transition: transform 0.12s, filter 0.12s;
+  border: 1px solid rgba(255,200,60,0.2);
+}
+.betButtons button:hover { transform: scale(1.07); filter: brightness(1.3); }
+
+/* ULTIMATE SLOT REELS */
+.slotMachine {
+  display: flex; gap: 12px; justify-content: center; margin: 20px 0;
+}
+.reel {
+  width: 80px; height: 80px;
+  background: rgba(0,0,0,0.5);
+  border: 2px solid rgba(255,215,0,0.4);
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px;
+  box-shadow: 0 0 20px rgba(255,200,0,0.15);
+  transition: transform 0.05s;
+}
+.ultimateBox { min-width: 420px; }
+
+/* INFO SEKCE */
+.infoSection {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+.infoSection h3 {
+  font-family: 'Fredoka One', cursive; font-size: 16px; color: #ffe066; margin-bottom: 6px;
+}
+.infoSection p { font-size: 13px; color: #bbb; line-height: 1.6; }
+
+/* NEMOVITOSTI LIST */
+.nemItem {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 16px;
+  color: #a8d4ff;
 }

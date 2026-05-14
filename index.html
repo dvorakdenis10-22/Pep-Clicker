@@ -21,7 +21,6 @@
 
 <!-- GAME -->
 <div id="game">
-  <!-- VZDUCHOLOD -->
   <div id="airship">🚀 <span id="airshipText">KUNYS</span></div>
 
   <!-- TOP BAR -->
@@ -51,47 +50,24 @@
     <!-- SHOP -->
     <div class="shopContainer">
       <h2>Obchod u Ládycha</h2>
-
-      <!-- BUY MULTIPLIER -->
       <div class="buyMultRow">
-        <button class="buyMultBtn active" data-mul="1"  onclick="setBuyMultiplier(1)">x1</button>
-        <button class="buyMultBtn"        data-mul="5"  onclick="setBuyMultiplier(5)">x5</button>
-        <button class="buyMultBtn"        data-mul="10" onclick="setBuyMultiplier(10)">x10</button>
-        <button class="buyMultBtn"        data-mul="20" onclick="setBuyMultiplier(20)">x20</button>
-        <button class="buyMultBtn"        data-mul="50" onclick="setBuyMultiplier(50)">x50</button>
+        <button class="buyMultBtn active" data-mul="1"  onclick="setBuyMultiplier(1)">×1</button>
+        <button class="buyMultBtn"        data-mul="5"  onclick="setBuyMultiplier(5)">×5</button>
+        <button class="buyMultBtn"        data-mul="10" onclick="setBuyMultiplier(10)">×10</button>
+        <button class="buyMultBtn"        data-mul="20" onclick="setBuyMultiplier(20)">×20</button>
+        <button class="buyMultBtn"        data-mul="50" onclick="setBuyMultiplier(50)">×50</button>
       </div>
-
       <div class="shopPanel">
-        <button onclick="buyUpgrade('horse')">
-          🐴 Kůň<br>+1/sec<br><span id="horsePrice">50</span>
-        </button>
-        <button onclick="buyUpgrade('stable')">
-          🏠 Stáj<br>+5/sec<br><span id="stablePrice">200</span>
-        </button>
-        <button onclick="buyUpgrade('farm')">
-          🌾 Sláma<br>+20/sec<br><span id="farmPrice">1 000</span>
-        </button>
-        <button onclick="buyUpgrade('naraz1')">
-          💥 Náraz 1<br><small>by Matylda</small><br>+500/sec<br><span id="naraz1Price">50 000</span>
-        </button>
-        <button onclick="buyUpgrade('naraz2')">
-          💥 Náraz 2<br><small>by Matylda</small><br>+2 000/sec<br><span id="naraz2Price">250 000</span>
-        </button>
-         <button onclick="buyUpgrade('olga')">
-          👩 Olga Kunysová<br>+3 000/sec<br><span id="olgaPrice">500 000</span>
-        </button>
-        <button onclick="buyUpgrade('kotliseBazeny')">
-          🏊 Kotlisovy Bazény<br>+8 000/sec<br><span id="kotliseBazenPrice">1 000 000</span>
-        </button>
-        <button onclick="buyUpgrade('elektrokotel')">
-          ⚡ Elektrokotel<br>+10 000/sec<br><span id="elektrokotelPrice">2 000 000</span>
-        </button>
-        <button onclick="buyUpgrade('workshop')">
-          🔧 Ládychova Dílna<br>+25K/sec<br><span id="workshopPrice">5M</span>
-        </button>
-        <button onclick="buyUpgrade('rodokmeny')">
-          📜 Shifiny Rodokmeny<br>+500K/sec<br><span id="rodokmenPrice">100M</span>
-        </button>
+        <button onclick="buyUpgrade('horse')" class="shopItem"><span class="shopIcon">🐴</span><span class="shopInfo"><span class="shopName">Kůň</span><span class="shopIncome">+1/sec</span></span><span class="shopPrice" id="horsePrice">50</span></button>
+        <button onclick="buyUpgrade('stable')" class="shopItem"><span class="shopIcon">🏠</span><span class="shopInfo"><span class="shopName">Stáj</span><span class="shopIncome">+5/sec</span></span><span class="shopPrice" id="stablePrice">200</span></button>
+        <button onclick="buyUpgrade('farm')" class="shopItem"><span class="shopIcon">🌾</span><span class="shopInfo"><span class="shopName">Sláma</span><span class="shopIncome">+20/sec</span></span><span class="shopPrice" id="farmPrice">1 000</span></button>
+        <button onclick="buyUpgrade('naraz1')" class="shopItem"><span class="shopIcon">💥</span><span class="shopInfo"><span class="shopName">Náraz 1 <small>by Matylda</small></span><span class="shopIncome">+500/sec</span></span><span class="shopPrice" id="naraz1Price">50 000</span></button>
+        <button onclick="buyUpgrade('naraz2')" class="shopItem"><span class="shopIcon">💥</span><span class="shopInfo"><span class="shopName">Náraz 2 <small>by Matylda</small></span><span class="shopIncome">+2 000/sec</span></span><span class="shopPrice" id="naraz2Price">250 000</span></button>
+        <button onclick="buyUpgrade('olga')" class="shopItem"><span class="shopIcon">👩</span><span class="shopInfo"><span class="shopName">Olga Kunysová</span><span class="shopIncome">+3 000/sec</span></span><span class="shopPrice" id="olgaPrice">500 000</span></button>
+        <button onclick="buyUpgrade('kotliseBazeny')" class="shopItem"><span class="shopIcon">🏊</span><span class="shopInfo"><span class="shopName">Kotlisovy Bazény</span><span class="shopIncome">+8 000/sec</span></span><span class="shopPrice" id="kotliseBazenPrice">1 000 000</span></button>
+        <button onclick="buyUpgrade('elektrokotel')" class="shopItem"><span class="shopIcon">⚡</span><span class="shopInfo"><span class="shopName">Elektrokotel</span><span class="shopIncome">+10 000/sec</span></span><span class="shopPrice" id="elektrokotelPrice">2 000 000</span></button>
+        <button onclick="buyUpgrade('workshop')" class="shopItem"><span class="shopIcon">🔧</span><span class="shopInfo"><span class="shopName">Ládychova Dílna</span><span class="shopIncome">+25K/sec</span></span><span class="shopPrice" id="workshopPrice">5M</span></button>
+        <button onclick="buyUpgrade('rodokmeny')" class="shopItem"><span class="shopIcon">📜</span><span class="shopInfo"><span class="shopName">Shifiny Rodokmeny</span><span class="shopIncome">+500K/sec</span></span><span class="shopPrice" id="rodokmenPrice">100M</span></button>
       </div>
     </div>
 
@@ -99,40 +75,53 @@
     <div class="specialContainer">
       <h2>Kotlisovy Speciality</h2>
       <div class="specialPanel">
-        <button onclick="buyDoubleCoins()">
-          ✨ 2x Pep Coins<br><small>40 000 coins / 30 sec</small>
+        <button onclick="buyDoubleCoins()" class="specialItem">
+          <span class="specialIcon">✨</span>
+          <span class="specialInfo"><span class="specialName">2× Pep Coins</span><span class="specialSub">40 000 coins / 30 sec</span></span>
         </button>
-        <button onclick="buyTicket()">
-          🎟 Ticket<br><small>250 000 coins</small>
+        <button onclick="buyTicket()" class="specialItem">
+          <span class="specialIcon">🎟</span>
+          <span class="specialInfo"><span class="specialName">Ticket</span><span class="specialSub">250 000 coins</span></span>
         </button>
-        <button onclick="openSlotMachine()">
-          🎰 Automat
+        <button onclick="openSlotMachine()" class="specialItem">
+          <span class="specialIcon">🎰</span>
+          <span class="specialInfo"><span class="specialName">Automat</span><span class="specialSub">Zkus štěstí!</span></span>
         </button>
-        <button onclick="openUltimateSlot()">
-          👑 Ultimate Automat<br><small>min. vklad 500 000</small>
-        </button>
-        <button onclick="openStable()" class="stableShopBtn">
-          🐎 Shifiny Stáj<br><small>Levluj své koně!</small>
+        <button onclick="openUltimateSlot()" class="specialItem specialUltimate">
+          <span class="specialIcon">👑</span>
+          <span class="specialInfo"><span class="specialName">Ultimate Automat</span><span class="specialSub">min. vklad 500 000</span></span>
         </button>
       </div>
 
-      <!-- Nemovitosti -->
+      <!-- Nemovitosti sekce -->
       <div class="ufoPrestigeShop">
         <h2>🏠 Nemovitosti</h2>
-        <button id="kotliseCarBtn" onclick="buyKotliseCar()">
-          🏎️ Kotlise Auto<br>
-          <span class="ufoSub">+3 000 / 30s</span><br>
+
+        <button id="kotliseCarBtn" onclick="buyKotliseCar()" class="nemovitostBtn carBtn">
+          <span class="nemIcon">🏎️</span>
+          <span class="nemInfo">
+            <span class="nemName">Kotlise Auto</span>
+            <span class="ufoSub">+3 000 / 30s</span>
+          </span>
           <span class="ufoPrice">60 000</span>
         </button>
-        <button id="ufoPrestigeBtn" onclick="buyUFO()">
-          🛸 UFO<br>
-          <span class="ufoSub">+100M / 30s</span><br>
-          <span class="ufoPrice">10 000 000 000</span>
+
+        <button id="garageKotliseBtn" onclick="buyGarageKotlise()" class="nemovitostBtn garageBtn">
+          <span class="nemIcon">🚗</span>
+          <span class="nemInfo">
+            <span class="nemName">Garáž Kotlise</span>
+            <span class="ufoSub">+50M / 30s</span>
+          </span>
+          <span class="ufoPrice">5B</span>
         </button>
-        <button id="garageKotliseBtn" onclick="buyGarageKotlise()">
-          🚗 Garáž Kotlise<br>
-          <span class="ufoSub">+50M / 30s</span><br>
-          <span class="ufoPrice">5 000 000 000</span>
+
+        <button id="ufoPrestigeBtn" onclick="buyUFO()" class="nemovitostBtn ufoBtn">
+          <span class="nemIcon">🛸</span>
+          <span class="nemInfo">
+            <span class="nemName">UFO</span>
+            <span class="ufoSub">+100M / 30s</span>
+          </span>
+          <span class="ufoPrice">10B</span>
         </button>
       </div>
     </div>
@@ -145,13 +134,10 @@
     <div id="achievementList"></div>
   </div>
 
-  <!-- AUDIO -->
   <audio id="horseSound"><source src="horse.mp3" type="audio/mpeg"></audio>
 </div><!-- /game -->
 
-<!-- ===== MODALY ===== -->
-
-<!-- SLOT MACHINE MODAL -->
+<!-- SLOT MODAL -->
 <div id="slotModal" class="modal" style="display:none">
   <div class="modalBox">
     <h2>🎰 Automat</h2>
@@ -166,13 +152,13 @@
     </div>
     <div style="margin:12px 0;display:flex;gap:8px;align-items:center;justify-content:center">
       <input id="customBet" type="number" placeholder="Vlastní částka" style="padding:10px;border-radius:10px;border:1px solid #444;background:#1a1a2e;color:#fff;font-size:16px;width:180px">
-      <button onclick="setCustomBet()">OK</button>
+      <button onclick="setCustomBet()" class="modalSmallBtn">OK</button>
     </div>
     <div id="slotBetDisplay" style="font-size:22px;font-weight:bold;color:#ffe066;margin:8px 0">Vsazeno: 0</div>
     <div id="slotSpinInfo" style="font-size:15px;font-weight:bold;margin:6px 0;color:#86efac">🎲 Zbývá spinů: 10 / 10</div>
-    <button onclick="runSlot()" style="background:linear-gradient(135deg,#ffe566,#ff9f1c);color:#1a0a00;font-size:20px;padding:12px 32px;border:none;border-radius:14px;cursor:pointer;font-weight:bold">TOČIT 🎲</button>
+    <button onclick="runSlot()" class="modalActionBtn">TOČIT 🎲</button>
     <div id="slotResult" style="margin-top:14px;font-size:18px;min-height:30px"></div>
-    <button onclick="closeModal('slotModal')" style="margin-top:14px;background:rgba(255,255,255,0.1);color:#fff;border:none;border-radius:10px;padding:8px 22px;cursor:pointer">Zavřít</button>
+    <button onclick="closeModal('slotModal')" class="modalCloseBtn">Zavřít</button>
   </div>
 </div>
 
@@ -190,7 +176,7 @@
     </div>
     <div style="margin:10px 0;display:flex;gap:8px;align-items:center;justify-content:center">
       <input id="ultimateCustomBet" type="number" placeholder="Vlastní (min 500K)" style="padding:10px;border-radius:10px;border:1px solid #555;background:#1a1a2e;color:#fff;font-size:15px;width:200px">
-      <button onclick="setUltimateCustomBet()">OK</button>
+      <button onclick="setUltimateCustomBet()" class="modalSmallBtn">OK</button>
     </div>
     <div id="ultimateBetDisplay" style="font-size:20px;color:#ffd700;margin:8px 0">Vsazeno: 0</div>
     <div class="slotMachine">
@@ -198,12 +184,12 @@
       <div class="reel" id="reel2">❓</div>
       <div class="reel" id="reel3">❓</div>
     </div>
-    <button onclick="spinUltimate()" id="spinBtn" style="background:linear-gradient(135deg,#ffd700,#ff8c00);color:#1a0a00;font-size:20px;padding:12px 36px;border:none;border-radius:14px;cursor:pointer;font-weight:bold;margin-top:12px">TOČIT 🎰</button>
+    <button onclick="spinUltimate()" id="spinBtn" class="modalActionBtn ultimateSpinBtn">TOČIT 🎰</button>
     <div id="ultimateResult" style="margin-top:14px;font-size:20px;min-height:30px;font-weight:bold"></div>
     <div style="margin-top:10px;font-size:12px;color:#888;text-align:left">
       🔴 0x = Prohra &nbsp;|&nbsp; 🟡 2x &nbsp;|&nbsp; 🟠 5x &nbsp;|&nbsp; 🟢 10x &nbsp;|&nbsp; 💎 25x &nbsp;|&nbsp; 👑 50x
     </div>
-    <button onclick="closeModal('ultimateModal')" style="margin-top:14px;background:rgba(255,255,255,0.1);color:#fff;border:none;border-radius:10px;padding:8px 22px;cursor:pointer">Zavřít</button>
+    <button onclick="closeModal('ultimateModal')" class="modalCloseBtn">Zavřít</button>
   </div>
 </div>
 
@@ -213,9 +199,9 @@
     <h2>🎟 Ticket</h2>
     <p style="margin:10px 0;color:#aaa">Cena: <strong style="color:#ffe066">250 000 coins</strong></p>
     <p style="color:#bbb;font-size:13px">15% šance na 5M výhru<br>35% šance na 500K výhru<br>50% šance na ztrátu vsázky</p>
-    <button onclick="confirmTicket()" style="margin-top:16px;background:linear-gradient(135deg,#ffe566,#ff9f1c);color:#1a0a00;font-size:18px;padding:12px 28px;border:none;border-radius:14px;cursor:pointer;font-weight:bold">Koupit Ticket</button>
+    <button onclick="confirmTicket()" class="modalActionBtn" style="margin-top:16px">Koupit Ticket</button>
     <div id="ticketResult" style="margin-top:14px;font-size:18px;min-height:30px"></div>
-    <button onclick="closeModal('ticketModal')" style="margin-top:14px;background:rgba(255,255,255,0.1);color:#fff;border:none;border-radius:10px;padding:8px 22px;cursor:pointer">Zavřít</button>
+    <button onclick="closeModal('ticketModal')" class="modalCloseBtn">Zavřít</button>
   </div>
 </div>
 
@@ -223,43 +209,15 @@
 <div id="infoModal" class="modal" style="display:none">
   <div class="modalBox" style="max-height:80vh;overflow-y:auto;text-align:left">
     <h2 style="text-align:center;margin-bottom:16px">ℹ️ Jak hrát</h2>
-    <div class="infoSection">
-      <h3>🐎 Klikání</h3>
-      <p>Klikej na koně pro +1 Pep Coin za klik. PEP tlačítko přehraje zvuk.</p>
-    </div>
-    <div class="infoSection">
-      <h3>🛒 Obchod (x1/x5/x10/x20/x50)</h3>
-      <p>Kupuj upgrady hromadně! Cena se s každým nákupem zvyšuje o 15%, proto hromadné nákupy stojí více než součet jednotlivých.</p>
-    </div>
-    <div class="infoSection">
-      <h3>👩 Olga Kunysová & ⚡ Elektrokotel</h3>
-      <p>Nové upgrady v obchodě – Olga přidává +3 000/sec, Elektrokotel +10 000/sec.</p>
-    </div>
-    <div class="infoSection">
-      <h3>🎟 Ticket (250 000 coins)</h3>
-      <p>15% šance na 5M výhru, 35% šance na 500K výhru, 50% šance na ztrátu.</p>
-    </div>
-    <div class="infoSection">
-      <h3>🎰 Automat</h3>
-      <p>Max 10 spinů, pak čekáš 10 minut. Výhry: 2x (25%), 3x (15%), 10x (10%). Jinak prohra.</p>
-    </div>
-    <div class="infoSection">
-      <h3>👑 Ultimate Automat</h3>
-      <p>Min. vklad 500K. Tři stejné symboly = výhra! 0x, 2x, 5x, 10x, 25x, 50x.</p>
-    </div>
-    <div class="infoSection">
-      <h3>🐎 Shifiny Stáj</h3>
-      <p>Sbírej koně (max 6). Každý kůň vydělává coins každých 30 sekund. Levluj je u Shifiny (max level 50) – každý level zvyšuje příjem o 10% a cena doučka roste.</p>
-    </div>
-    <div class="infoSection">
-      <h3>🏠 Nemovitosti</h3>
-      <p>🏎️ Kotlise Auto (60K) – +3 000/30s<br>🛸 UFO (10B) – +100M/30s<br>🚗 Garáž Kotlise (5B) – +50M/30s</p>
-    </div>
-    <div class="infoSection">
-      <h3>💾 Uložení</h3>
-      <p>Hra se automaticky ukládá lokálně každých 5 sekund.</p>
-    </div>
-    <button onclick="closeModal('infoModal')" style="margin-top:16px;width:100%;background:rgba(255,255,255,0.1);color:#fff;border:none;border-radius:10px;padding:10px;cursor:pointer">Zavřít</button>
+    <div class="infoSection"><h3>🐎 Klikání</h3><p>Klikej na koně pro +1 Pep Coin. PEP tlačítko přehraje zvuk.</p></div>
+    <div class="infoSection"><h3>🛒 Obchod (×1/×5/×10/×20/×50)</h3><p>Kupuj upgrady hromadně! Cena roste o 15% za každý nákup.</p></div>
+    <div class="infoSection"><h3>🎟 Ticket</h3><p>15% šance na 5M, 35% na 500K, 50% ztráta.</p></div>
+    <div class="infoSection"><h3>🎰 Automat</h3><p>Max 10 spinů, pak 10 minut čekání. 2x/3x/10x výhry.</p></div>
+    <div class="infoSection"><h3>👑 Ultimate Automat</h3><p>Min. vklad 500K. Tři stejné = výhra 0x–50x.</p></div>
+    <div class="infoSection"><h3>🐎 Shifiny Stáj</h3><p>Max 6 koní, max level 50. Každý level +10% příjmu.</p></div>
+    <div class="infoSection"><h3>🏠 Nemovitosti</h3><p>🏎️ Kotlise Auto (60K) +3K/30s | 🚗 Garáž (5B) +50M/30s | 🛸 UFO (10B) +100M/30s</p></div>
+    <div class="infoSection"><h3>🏆 Achievementy</h3><p>Odemčené achievementy zůstávají navždy – ani utracením coinů je neztratíš!</p></div>
+    <button onclick="closeModal('infoModal')" class="modalCloseBtn" style="width:100%;margin-top:16px">Zavřít</button>
   </div>
 </div>
 
@@ -268,18 +226,19 @@
   <div class="modalBox">
     <h2>🏠 Moje Nemovitosti</h2>
     <div id="nemovitostiList" style="margin:16px 0;text-align:left"></div>
-    <button onclick="closeModal('nemovitostiModal')" style="margin-top:8px;background:rgba(255,255,255,0.1);color:#fff;border:none;border-radius:10px;padding:8px 22px;cursor:pointer">Zavřít</button>
+    <button onclick="closeModal('nemovitostiModal')" class="modalCloseBtn">Zavřít</button>
   </div>
 </div>
 
 <!-- STÁJ MODAL -->
 <div id="stableModal" class="modal" style="display:none">
   <div class="modalBox stableBox">
-    <h2>🐎 Shifiny Stáj – Doučko</h2>
-    <p style="color:#aaa;font-size:13px;margin-bottom:14px">Levluj koně a zvyšuj jejich příjem! Max 6 koní, max level 50.</p>
+    <div class="stableHeader">
+      <h2>🐎 Shifiny Stáj</h2>
+      <p class="stableSubtitle">Levluj koně a zvyšuj jejich příjem! Max 6 koní, max level 50.</p>
+    </div>
     <div id="stableHorseList"></div>
-    <div id="stableTutoringArea"></div>
-    <button onclick="closeModal('stableModal')" style="margin-top:14px;background:rgba(255,255,255,0.1);color:#fff;border:none;border-radius:10px;padding:8px 22px;cursor:pointer">Zavřít</button>
+    <button onclick="closeModal('stableModal')" class="modalCloseBtn" style="margin-top:18px;width:100%">Zavřít</button>
   </div>
 </div>
 

@@ -7,215 +7,258 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
 <!-- LOGIN -->
 <div id="loginBox">
-<h1>Pep Clicker 2.0</h1>
-<input id="username" placeholder="Jméno">
-<br><br>
-<input id="password" type="password" placeholder="Heslo">
-<br><br>
-<button onclick="login()">
-Hrát
-</button>
+  <div class="login-horse">🐎</div>
+  <div class="login-title">Pep Clicker 2.0</div>
+  <div class="login-card">
+    <input id="username" placeholder="Jméno">
+    <input id="password" type="password" placeholder="Heslo">
+    <button onclick="login()">Hrát</button>
+  </div>
 </div>
+
 <!-- GAME -->
 <div id="game">
-<!-- TOP -->
-<div class="topBar">
-<div class="coinsArea">
-<h1>Pep Coins</h1>
-<div id="coins">0</div>
-<div id="stats">
-Výdělek za sekundu: 0
+
+  <!-- VZDUCHOLOD -->
+  <div id="airship">🚀 <span id="airshipText">KUNYS</span></div>
+
+  <!-- TOP BAR -->
+  <div class="topBar">
+    <div class="coinsArea">
+      <h1>Pep Coins</h1>
+      <div id="coins">0</div>
+      <div id="stats">Výdělek za sekundu: 0</div>
+    </div>
+    <div class="topButtons">
+      <button class="infoBtn" onclick="openInfo()">ℹ️ Info</button>
+      <button class="nemovitostiBtn" onclick="openNemovitosti()">🏠 Nemovitosti</button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="mainArea">
+
+    <!-- HORSE -->
+    <div class="horseContainer">
+      <button id="horseBtn">🐎</button>
+      <div id="horseRarity">Common Horse</div>
+      <button id="pepBtn">PEP</button>
+    </div>
+
+    <!-- SHOP -->
+    <div class="shopContainer">
+      <h2>Obchod u Ládycha</h2>
+      <div class="shopPanel">
+
+        <button onclick="buyUpgrade('horse')">
+          🐴 Kůň<br>+1/sec<br><span id="horsePrice">50</span>
+        </button>
+
+        <button onclick="buyUpgrade('stable')">
+          🏠 Stáj<br>+5/sec<br><span id="stablePrice">200</span>
+        </button>
+
+        <button onclick="buyUpgrade('farm')">
+          🌾 Sláma<br>+20/sec<br><span id="farmPrice">1 000</span>
+        </button>
+
+        <button onclick="buyUpgrade('naraz1')">
+          💥 Náraz 1<br><small>by Matylda</small><br>+500/sec<br><span id="naraz1Price">50 000</span>
+        </button>
+
+        <button onclick="buyUpgrade('naraz2')">
+          💥 Náraz 2<br><small>by Matylda</small><br>+2 000/sec<br><span id="naraz2Price">250 000</span>
+        </button>
+
+        <button onclick="buyUpgrade('kotliseBazeny')">
+          🏊 Kotlisovy Bazény<br>+8 000/sec<br><span id="kotliseBazenPrice">1 000 000</span>
+        </button>
+
+        <button onclick="buyUpgrade('workshop')">
+          🔧 Ládychova Dílna<br>+25K/sec<br><span id="workshopPrice">5M</span>
+        </button>
+
+        <button onclick="buyUpgrade('rodokmeny')">
+          📜 Shifini Rodokmeny<br>+500K/sec<br><span id="rodokmenPrice">100M</span>
+        </button>
+
+      </div>
+    </div>
+
+    <!-- SPECIAL -->
+    <div class="specialContainer">
+      <h2>Kotlisovy Speciality</h2>
+      <div class="specialPanel">
+
+        <button onclick="buyDoubleCoins()">
+          ✨ 2x Pep Coins<br><small>40 000 coins / 30 sec</small>
+        </button>
+
+        <button onclick="buyTicket()">
+          🎟 Ticket<br><small>250 000 coins</small>
+        </button>
+
+        <button onclick="openSlotMachine()">
+          🎰 Automat
+        </button>
+
+        <button onclick="openUltimateSlot()">
+          👑 Ultimate Automat<br><small>min. vklad 500 000</small>
+        </button>
+
+      </div>
+
+      <!-- UFO Nemovitost -->
+      <div class="ufoPrestigeShop">
+        <h2>🏠 Nemovitosti</h2>
+        <button id="ufoPrestigeBtn" onclick="buyUFO()">
+          🛸 UFO<br>
+          <span class="ufoSub">+100M / min</span><br>
+          <span class="ufoPrice">10 000 000 000</span>
+        </button>
+        <button id="garageKotliseBtn" onclick="buyGarageKotlise()">
+          🚗 Garáž Kotlise<br>
+          <span class="ufoSub">+50M / min</span><br>
+          <span class="ufoPrice">5 000 000 000</span>
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /mainArea -->
+
+  <!-- ACHIEVEMENTS -->
+  <div class="achievementBox">
+    <h2>🏆 Achievementy</h2>
+    <div id="achievementList"></div>
+  </div>
+
+  <!-- AUDIO -->
+  <audio id="horseSound"><source src="horse.mp3" type="audio/mpeg"></audio>
+
+</div><!-- /game -->
+
+<!-- ===== MODALY ===== -->
+
+<!-- SLOT MACHINE MODAL -->
+<div id="slotModal" class="modal" style="display:none">
+  <div class="modalBox">
+    <h2>🎰 Automat</h2>
+    <p>Zadej kolik chceš vsadit:</p>
+    <div class="betButtons">
+      <button onclick="setBet(1000)">1K</button>
+      <button onclick="setBet(5000)">5K</button>
+      <button onclick="setBet(10000)">10K</button>
+      <button onclick="setBet(50000)">50K</button>
+      <button onclick="setBet(100000)">100K</button>
+      <button onclick="setBet(500000)">500K</button>
+    </div>
+    <div style="margin:12px 0; display:flex; gap:8px; align-items:center; justify-content:center">
+      <input id="customBet" type="number" placeholder="Vlastní částka" style="padding:10px;border-radius:10px;border:1px solid #444;background:#1a1a2e;color:#fff;font-size:16px;width:180px">
+      <button onclick="setCustomBet()">OK</button>
+    </div>
+    <div id="slotBetDisplay" style="font-size:22px;font-weight:bold;color:#ffe066;margin:8px 0">Vsazeno: 0</div>
+    <button onclick="runSlot()" style="background:linear-gradient(135deg,#ffe566,#ff9f1c);color:#1a0a00;font-size:20px;padding:12px 32px;border:none;border-radius:14px;cursor:pointer;font-weight:bold">TOČIT 🎲</button>
+    <div id="slotResult" style="margin-top:14px;font-size:18px;min-height:30px"></div>
+    <button onclick="closeModal('slotModal')" style="margin-top:14px;background:rgba(255,255,255,0.1);color:#fff;border:none;border-radius:10px;padding:8px 22px;cursor:pointer">Zavřít</button>
+  </div>
 </div>
+
+<!-- ULTIMATE SLOT MODAL -->
+<div id="ultimateModal" class="modal" style="display:none">
+  <div class="modalBox ultimateBox">
+    <h2 style="color:#ffd700;font-size:26px">👑 Ultimate Automat</h2>
+    <p style="color:#aaa;font-size:13px">Min. vklad: 500 000 | Tři stejné = výhra!</p>
+    <div class="betButtons">
+      <button onclick="setUltimateBet(500000)">500K</button>
+      <button onclick="setUltimateBet(1000000)">1M</button>
+      <button onclick="setUltimateBet(5000000)">5M</button>
+      <button onclick="setUltimateBet(10000000)">10M</button>
+      <button onclick="setUltimateBet(50000000)">50M</button>
+    </div>
+    <div style="margin:10px 0;display:flex;gap:8px;align-items:center;justify-content:center">
+      <input id="ultimateCustomBet" type="number" placeholder="Vlastní (min 500K)" style="padding:10px;border-radius:10px;border:1px solid #555;background:#1a1a2e;color:#fff;font-size:15px;width:200px">
+      <button onclick="setUltimateCustomBet()">OK</button>
+    </div>
+    <div id="ultimateBetDisplay" style="font-size:20px;color:#ffd700;margin:8px 0">Vsazeno: 0</div>
+    <!-- SLOT REELS -->
+    <div class="slotMachine">
+      <div class="reel" id="reel1">❓</div>
+      <div class="reel" id="reel2">❓</div>
+      <div class="reel" id="reel3">❓</div>
+    </div>
+    <button onclick="spinUltimate()" id="spinBtn" style="background:linear-gradient(135deg,#ffd700,#ff8c00);color:#1a0a00;font-size:20px;padding:12px 36px;border:none;border-radius:14px;cursor:pointer;font-weight:bold;margin-top:12px">TOČIT 🎰</button>
+    <div id="ultimateResult" style="margin-top:14px;font-size:20px;min-height:30px;font-weight:bold"></div>
+    <div style="margin-top:10px;font-size:12px;color:#888;text-align:left">
+      🔴 0 = Prohra &nbsp;|&nbsp; 🟡 2x &nbsp;|&nbsp; 🟠 5x &nbsp;|&nbsp; 🟢 10x &nbsp;|&nbsp; 💎 25x &nbsp;|&nbsp; 👑 50x
+    </div>
+    <button onclick="closeModal('ultimateModal')" style="margin-top:14px;background:rgba(255,255,255,0.1);color:#fff;border:none;border-radius:10px;padding:8px 22px;cursor:pointer">Zavřít</button>
+  </div>
 </div>
-<div class="prestigeBox">
-<h2>🔥 Prestige </h2>
-<div id="prestigeLevel">
-Level: 0
+
+<!-- TICKET MODAL -->
+<div id="ticketModal" class="modal" style="display:none">
+  <div class="modalBox">
+    <h2>🎟 Ticket</h2>
+    <p style="margin:10px 0;color:#aaa">Cena: <strong style="color:#ffe066">250 000 coins</strong></p>
+    <p style="color:#bbb;font-size:13px">33% šance na 5M výhru<br>33% šance na nic<br>34% šance na ztrátu 0 coinů (nic se nestane)</p>
+    <button onclick="confirmTicket()" style="margin-top:16px;background:linear-gradient(135deg,#ffe566,#ff9f1c);color:#1a0a00;font-size:18px;padding:12px 28px;border:none;border-radius:14px;cursor:pointer;font-weight:bold">Koupit Ticket</button>
+    <div id="ticketResult" style="margin-top:14px;font-size:18px;min-height:30px"></div>
+    <button onclick="closeModal('ticketModal')" style="margin-top:14px;background:rgba(255,255,255,0.1);color:#fff;border:none;border-radius:10px;padding:8px 22px;cursor:pointer">Zavřít</button>
+  </div>
 </div>
-<button onclick="prestige()">
-RESET + BOOST
-</button>
+
+<!-- INFO MODAL -->
+<div id="infoModal" class="modal" style="display:none">
+  <div class="modalBox" style="max-height:80vh;overflow-y:auto;text-align:left">
+    <h2 style="text-align:center;margin-bottom:16px">ℹ️ Jak hrát</h2>
+    <div class="infoSection">
+      <h3>🐎 Klikání</h3>
+      <p>Klikej na koně pro +1 Pep Coin za klik. PEP tlačítko přehraje zvuk.</p>
+    </div>
+    <div class="infoSection">
+      <h3>🛒 Obchod</h3>
+      <p>Kupuj upgrady které ti přidávají coins za sekundu automaticky. Čím dražší, tím více vydělá.</p>
+    </div>
+    <div class="infoSection">
+      <h3>🎟 Ticket (250 000 coins)</h3>
+      <p>Loterie: 33% šance na <strong>5M výhru</strong>, 33% šance na nic, 34% šance že se nic nestane.</p>
+    </div>
+    <div class="infoSection">
+      <h3>🎰 Automat</h3>
+      <p>Vyber kolik vsadíš a toč! Výhry: 2x (30%), 3x (20%), 10x (10%). Jinak prohra.</p>
+    </div>
+    <div class="infoSection">
+      <h3>👑 Ultimate Automat</h3>
+      <p>Min. vklad 500K. Tři stejné symboly v reelech = výhra! Možné násobky: 0x, 2x, 5x, 10x, 25x, 50x.</p>
+    </div>
+    <div class="infoSection">
+      <h3>✨ 2x Pep Coins (40 000)</h3>
+      <p>Na 30 sekund zdvojnásobí tvůj příjem za sekundu. Odpočet se zobrazí u výdělku.</p>
+    </div>
+    <div class="infoSection">
+      <h3>🏠 Nemovitosti</h3>
+      <p>🛸 UFO (10B) – přidává 100M coins za minutu.<br>🚗 Garáž Kotlise (5B) – přidává 50M coins za minutu.</p>
+    </div>
+    <div class="infoSection">
+      <h3>💾 Uložení</h3>
+      <p>Hra se automaticky ukládá lokálně každých 5 sekund. Přihlas se stejným jménem a heslem pro načtení.</p>
+    </div>
+    <button onclick="closeModal('infoModal')" style="margin-top:16px;width:100%;background:rgba(255,255,255,0.1);color:#fff;border:none;border-radius:10px;padding:10px;cursor:pointer">Zavřít</button>
+  </div>
 </div>
+
+<!-- NEMOVITOSTI MODAL -->
+<div id="nemovitostiModal" class="modal" style="display:none">
+  <div class="modalBox">
+    <h2>🏠 Moje Nemovitosti</h2>
+    <div id="nemovitostiList" style="margin:16px 0;text-align:left"></div>
+    <button onclick="closeModal('nemovitostiModal')" style="margin-top:8px;background:rgba(255,255,255,0.1);color:#fff;border:none;border-radius:10px;padding:8px 22px;cursor:pointer">Zavřít</button>
+  </div>
 </div>
-<!-- MAIN -->
-<div class="mainArea">
-<!-- HORSE -->
-<div class="horseContainer">
-<button id="horseBtn">
-🐎
-</button>
-<div id="horseRarity">
-Common Horse
-</div>
-<button id="pepBtn">
-PEP
-</button>
-</div>
-<!-- SHOP -->
-<div class="shopContainer">
-<h2>Obchod u Ládycha</h2>
-<div class="shopPanel">
-<button onclick="buyUpgrade('horse')">
-🐴 Kůň
-<br>
-+1/sec
-<br>
-<span id="horsePrice">50</span>
-</button>
-<button onclick="buyUpgrade('stable')">
-🏠 Stáj
-<br>
-+5/sec
-<br>
-<span id="stablePrice">200</span>
-</button>
-<button onclick="buyUpgrade('farm')">
-🌾 Sláma
-<br>
-+20/sec
-<br>
-<span id="farmPrice">1 000</span>
-</button>
-<button onclick="buyUpgrade('workshop')">
-🔧 Ládychova dílna
-<br>
-+25K/sec
-<br>
-<span id="workshopPrice">5M</span>
-</button>
-<button onclick="buyUpgrade('garage')">
-🚗 Garáž u Kotlise
-<br>
-+125K/sec
-<br>
-<span id="garagePrice">25M</span>
-</button>
-<button onclick="buyUpgrade('rodokmeny')">
-📜 Rodokmeny
-<br>
-+500K/sec
-<br>
-<span id="rodokmenPrice">100M</span>
-</button>
-</div>
-</div>
-<!-- SPECIAL -->
-<div class="specialContainer">
-<h2>Kotlisovy speciality</h2>
-<div class="specialPanel">
-<button onclick="buyDoubleCoins()">
-✨ 2x Pep Coins
-</button>
-<button onclick="buyTicket()">
-🎟 Ticket
-</button>
-<button onclick="slotMachine()">
-🎰 Automaty
-</button>
-<button onclick="openLootbox()">
-🥚 Lootbox
-<br>
-500K
-</button>
-</div>
-<!-- UFO PRESTIGE SHOP -->
-<div class="ufoPrestigeShop">
-<h2>🛸 Prestige Shop</h2>
-<button id="ufoPrestigeBtn" onclick="buyUFOPrestige()">
-🛸 UFO Prestige
-<br>
-<span class="ufoSub">+1 Prestige levelů</span>
-<br>
-<span class="ufoPrice">10 000 000 000</span>
-</button>
-</div>
-</div>
-</div>
-<!-- ACHIEVEMENTS -->
-<div class="achievementBox">
-<h2>🏆 Achievementy</h2>
-<div id="achievementList">
-</div>
-</div>
-<!-- AUDIO -->
-<audio id="horseSound">
-<source src="horse.mp3" type="audio/mpeg">
-</audio>
-</div>
+
 <script src="script.js"></script>
-  <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-import { getFirestore, doc, setDoc, getDoc }
-from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
-
-const firebaseConfig = {
-apiKey: "AIzaSyAosUfOirXSOLSRTKFIOPpbfQX05G4TL3o",
-authDomain: "pep-clicker.firebaseapp.com",
-projectId: "pep-clicker",
-storageBucket: "pep-clicker.firebasestorage.app",
-messagingSenderId: "59444977629",
-appId: "1:59444977629:web:6488b64792ab6f42e8a034"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-let currentUser = "";
-
-/* 🔐 LOGIN */
-window.login = async function () {
-const username = document.getElementById("username").value;
-const password = document.getElementById("password").value;
-
-if (!username || !password) return;
-
-currentUser = username + "_" + password;
-
-document.getElementById("loginBox").style.display = "none";
-document.getElementById("game").style.display = "block";
-
-loadGame();
-};
-
-/* 💾 SAVE */
-window.saveGame = async function () {
-if (!currentUser) return;
-
-await setDoc(doc(db, "players", currentUser), {
-coins,
-perSec,
-prestigeLevel,
-upgrades
-});
-};
-
-/* 📥 LOAD */
-async function loadGame() {
-const snap = await getDoc(doc(db, "players", currentUser));
-
-if (snap.exists()) {
-const data = snap.data();
-
-coins = data.coins || 0;
-perSec = data.perSec || 0;
-prestigeLevel = data.prestigeLevel || 0;
-
-if (data.upgrades) {
-Object.assign(upgrades, data.upgrades);
-}
-
-renderPrices();
-update();
-}
-}
-
-/* 🔄 AUTO SAVE */
-setInterval(() => {
-if (currentUser) saveGame();
-}, 5000);
-
-</script>
 </body>
 </html>

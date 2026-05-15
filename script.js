@@ -8,49 +8,129 @@ let doubleCoins = false;
 let doubleCoinsTimer = 0;
 let userKey = "";
 
-// Nemovitosti
 let hasUFO = false;
 let hasGarageKotlise = false;
 let hasKotliseCar = false;
 let hasElectroBoiler = false;
 
-// Stáj – koně (income je /sec)
 let stableHorses = [];
 const MAX_HORSES = 6;
 const MAX_HORSE_LEVEL = 50;
 
-// Slot machine
 let slotSpinsLeft = 10;
 let slotCooldownActive = false;
 let slotCooldownSeconds = 0;
 
-// Nákupní množství
 let buyMultiplier = 1;
 
-// Achievements – permanentní set
 let unlockedAchievements = new Set();
-// Tracking pro achievementy (total earned, ne aktuální coins)
 let totalCoinsEarned = 0;
 let bossesDefeated = 0;
 
-// ─── KUKUŘIČNÝ DÉMON BOSS ───────────────
+// ═══════════════════════════════════════
+//  BOSS SYSTÉM – 3 bossové
+// ═══════════════════════════════════════
+
+const BOSS_TYPES = {
+  corn: {
+    id: "corn",
+    name: "Kukuřičný Démon",
+    emoji: "🌽",
+    warning: "⚠️ KUKUŘIČNÝ DÉMON ÚTOČÍ! ⚠️",
+    subtitle: "Klikej na démona než uteče!",
+    tip: "Výhra: ~60s příjmu | Prohra: ztratíš 8% coinů",
+    bgGrad: "linear-gradient(145deg,rgba(80,20,0,0.97),rgba(30,0,0,0.99))",
+    borderColor: "rgba(255,100,0,0.6)",
+    glowColor: "rgba(255,80,0,0.4)",
+    hpBarColor: "linear-gradient(90deg,#ff4400,#ffaa00,#ffe566)",
+    timerColor: "#ffe066",
+    hitParticles: ["💥","🌽","✨","⚡"],
+    hpMult: 3,
+    rewardMult: 60,
+    stealPct: 0.08,
+    defeatMsg: (r) => `🌽 DÉMON PORAŽEN! +${formatCoins(r)} coinů!`,
+    escapeMsg: (s) => `🌽 Démon utekl a ukradl ${formatCoins(s)} coinů!`,
+  },
+  ladych: {
+    id: "ladych",
+    name: "Ládychův Traktor",
+    emoji: "🚜",
+    warning: "🚜 LÁDYCHŮV TRAKTOR PŘIJÍŽDÍ! 🚜",
+    subtitle: "Zastav traktor dřív než tě přejede!",
+    tip: "Výhra: +80s příjmu | Prohra: ztratíš 12% coinů",
+    bgGrad: "linear-gradient(145deg,rgba(10,40,10,0.97),rgba(0,20,0,0.99))",
+    borderColor: "rgba(80,200,80,0.6)",
+    glowColor: "rgba(50,200,50,0.4)",
+    hpBarColor: "linear-gradient(90deg,#1a7a00,#5dcc00,#aaff44)",
+    timerColor: "#aaff66",
+    hitParticles: ["🔧","💨","🌾","💥"],
+    hpMult: 4,
+    rewardMult: 80,
+    stealPct: 0.12,
+    defeatMsg: (r) => `🚜 TRAKTOR ZASTAVEN! +${formatCoins(r)} coinů!`,
+    escapeMsg: (s) => `🚜 Ládych tě přejel a vzal ${formatCoins(s)} coinů!`,
+  },
+  shifi: {
+    id: "shifi",
+    name: "Shifin Duch",
+    emoji: "👻",
+    warning: "👻 SHIFIN DUCH SE ZJEVUJE! 👻",
+    subtitle: "Exorcizuj ducha dřív než zmizí!",
+    tip: "Výhra: +100s příjmu | Prohra: ztratíš 15% coinů",
+    bgGrad: "linear-gradient(145deg,rgba(20,0,50,0.97),rgba(5,0,30,0.99))",
+    borderColor: "rgba(180,80,255,0.6)",
+    glowColor: "rgba(150,50,255,0.4)",
+    hpBarColor: "linear-gradient(90deg,#6600cc,#aa44ff,#dd99ff)",
+    timerColor: "#cc88ff",
+    hitParticles: ["👻","💜","✨","🔮"],
+    hpMult: 5,
+    rewardMult: 100,
+    stealPct: 0.15,
+    defeatMsg: (r) => `👻 DUCH VYHNÁN! +${formatCoins(r)} coinů!`,
+    escapeMsg: (s) => `👻 Shifin duch ukradl ${formatCoins(s)} coinů z druhé dimenze!`,
+  },
+};
+
 let bossActive = false;
+let currentBossType = null;
 let bossHP = 0;
 let bossMaxHP = 0;
-let bossTimer = 0;       // čas do útěku v sekundách
-let bossNextIn = 0;      // čas do dalšího spawnu
+let bossTimer = 0;
 let bossInterval = null;
 
-function spawnBoss() {
+function spawnBoss(typeId) {
   if (bossActive) return;
+  const boss = BOSS_TYPES[typeId];
+  if (!boss) return;
+
   bossActive = true;
-  bossMaxHP = Math.max(20, Math.floor(perSec * 3 + stableHorses.reduce((a,h)=>a+h.income,0) * 3 + 30));
+  currentBossType = boss;
+
+  bossMaxHP = Math.max(20, Math.floor(
+    perSec * boss.hpMult +
+    stableHorses.reduce((a,h) => a + h.income, 0) * boss.hpMult + 30
+  ));
   bossHP = bossMaxHP;
-  bossTimer = 30; // 30 sekund na poražení
+  bossTimer = 30;
+
+  // Nastav vizuál podle bosse
+  const overlay = document.getElementById("bossOverlay");
+  const box = overlay.querySelector(".bossBox");
+  box.style.background = boss.bgGrad;
+  box.style.borderColor = boss.borderColor;
+  document.getElementById("bossWarningText").innerText = boss.warning;
+  document.getElementById("bossWarningText").style.color = boss.timerColor;
+  document.getElementById("bossEmojiEl").innerText = boss.emoji;
+  document.getElementById("bossEmojiEl").style.filter = `drop-shadow(0 0 24px ${boss.glowColor})`;
+  document.getElementById("bossSubtitleEl").innerText = boss.subtitle;
+  document.getElementById("bossTipEl").innerText = boss.tip;
+  document.getElementById("bossHPBar").style.background = boss.hpBarColor;
+  document.getElementById("bossNameEl").innerText = boss.name;
+
   renderBoss();
-  document.getElementById("bossOverlay").style.display = "flex";
-  document.getElementById("bossOverlay").classList.add("bossAppear");
-  setTimeout(() => document.getElementById("bossOverlay").classList.remove("bossAppear"), 600);
+  overlay.style.display = "flex";
+  overlay.classList.add("bossAppear");
+  setTimeout(() => overlay.classList.remove("bossAppear"), 600);
 
   if (bossInterval) clearInterval(bossInterval);
   bossInterval = setInterval(() => {
@@ -61,11 +141,12 @@ function spawnBoss() {
 }
 
 function clickBoss() {
-  if (!bossActive) return;
+  if (!bossActive || !currentBossType) return;
   bossHP -= Math.max(1, Math.floor(bossMaxHP / 25));
   spawnBossHitParticle();
-  document.getElementById("bossEmoji").classList.add("bossHit");
-  setTimeout(() => document.getElementById("bossEmoji").classList.remove("bossHit"), 150);
+  const emojiEl = document.getElementById("bossEmojiEl");
+  emojiEl.classList.add("bossHit");
+  setTimeout(() => emojiEl.classList.remove("bossHit"), 150);
   renderBoss();
   if (bossHP <= 0) bossDefeat();
 }
@@ -74,11 +155,15 @@ function bossDefeat() {
   clearInterval(bossInterval);
   bossActive = false;
   bossesDefeated++;
-  const reward = Math.floor(perSec * 60 + stableHorses.reduce((a,h)=>a+h.income,0) * 60 + 5000);
+  const boss = currentBossType;
+  const reward = Math.floor(
+    perSec * boss.rewardMult +
+    stableHorses.reduce((a,h) => a + h.income, 0) * boss.rewardMult + 5000
+  );
   coins += reward;
   totalCoinsEarned += reward;
   document.getElementById("bossOverlay").style.display = "none";
-  showFloatingText("🌽 DÉMON PORAŽEN! +" + formatCoins(reward) + " coinů!", "#ffe066", true);
+  showFloatingText(boss.defeatMsg(reward), boss.timerColor);
   checkAchievements();
   scheduleBoss();
   update();
@@ -88,10 +173,11 @@ function bossDefeat() {
 function bossEscape() {
   clearInterval(bossInterval);
   bossActive = false;
-  const stolen = Math.floor(coins * 0.08 + 1000);
+  const boss = currentBossType;
+  const stolen = Math.floor(coins * boss.stealPct + 1000);
   coins = Math.max(0, coins - stolen);
   document.getElementById("bossOverlay").style.display = "none";
-  showFloatingText("🌽 Démon utekl a ukradl " + formatCoins(stolen) + " coinů!", "#ff4444", false);
+  showFloatingText(boss.escapeMsg(stolen), "#ff4444");
   scheduleBoss();
   update();
   saveGame();
@@ -100,34 +186,38 @@ function bossEscape() {
 function renderBoss() {
   const pct = Math.max(0, bossHP / bossMaxHP);
   document.getElementById("bossHPBar").style.width = (pct * 100) + "%";
-  document.getElementById("bossHPText").innerText = formatCoins(Math.max(0,bossHP)) + " / " + formatCoins(bossMaxHP);
+  document.getElementById("bossHPText").innerText = formatCoins(Math.max(0, bossHP)) + " / " + formatCoins(bossMaxHP);
   document.getElementById("bossTimerText").innerText = "⏱ " + bossTimer + "s";
-  const timerEl = document.getElementById("bossTimerText");
-  timerEl.style.color = bossTimer <= 10 ? "#ff4444" : "#ffe066";
+  const col = currentBossType ? currentBossType.timerColor : "#ffe066";
+  document.getElementById("bossTimerText").style.color = bossTimer <= 10 ? "#ff4444" : col;
 }
 
 function scheduleBoss() {
-  const delay = (120 + Math.floor(Math.random() * 120)) * 1000; // 2–4 minuty
-  bossNextIn = Math.floor(delay / 1000);
-  setTimeout(spawnBoss, delay);
+  const delay = (120 + Math.floor(Math.random() * 120)) * 1000;
+  setTimeout(() => {
+    const types = Object.keys(BOSS_TYPES);
+    const pick = types[Math.floor(Math.random() * types.length)];
+    spawnBoss(pick);
+  }, delay);
 }
 
 function spawnBossHitParticle() {
-  const el = document.getElementById("bossEmoji");
+  if (!currentBossType) return;
+  const el = document.getElementById("bossEmojiEl");
   const rect = el.getBoundingClientRect();
-  const emojis = ["💥","🌽","✨","⚡"];
-  for (let i = 0; i < 3; i++) {
+  const emojis = currentBossType.hitParticles;
+  for (let i = 0; i < 4; i++) {
     const p = document.createElement("div");
     p.className = "bossParticle";
-    p.innerText = emojis[Math.floor(Math.random()*emojis.length)];
-    p.style.left = (rect.left + rect.width/2 + (Math.random()-0.5)*80) + "px";
-    p.style.top  = (rect.top  + rect.height/2 + (Math.random()-0.5)*60) + "px";
+    p.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+    p.style.left = (rect.left + rect.width/2 + (Math.random()-0.5)*100) + "px";
+    p.style.top  = (rect.top  + rect.height/2 + (Math.random()-0.5)*80) + "px";
     document.body.appendChild(p);
     setTimeout(() => p.remove(), 700);
   }
 }
 
-function showFloatingText(msg, color, positive) {
+function showFloatingText(msg, color) {
   const el = document.createElement("div");
   el.className = "floatingText";
   el.innerText = msg;
@@ -135,7 +225,7 @@ function showFloatingText(msg, color, positive) {
   el.style.top = (window.innerHeight / 2 - 60) + "px";
   el.style.left = "50%";
   document.body.appendChild(el);
-  setTimeout(() => el.remove(), 2200);
+  setTimeout(() => el.remove(), 2400);
 }
 
 // ─── UI refs ─────────────────────────────
@@ -172,7 +262,11 @@ function login() {
   loadGame();
   update();
   startAirship();
-  setTimeout(scheduleBoss, 15000); // první boss za 15 sekund od startu
+  // První boss za 20s, náhodný
+  setTimeout(() => {
+    const types = Object.keys(BOSS_TYPES);
+    spawnBoss(types[Math.floor(Math.random() * types.length)]);
+  }, 20000);
 }
 
 // ─── CLICK ───────────────────────────────
@@ -228,7 +322,6 @@ function buyUpgrade(name) {
   const count = buyMultiplier;
   const totalCost = calcBulkCost(name, count);
   if (coins < totalCost) {
-    // Shake animace
     const btn = document.getElementById("shopBtn-" + name);
     if (btn) { btn.classList.add("cantAffordShake"); setTimeout(()=>btn.classList.remove("cantAffordShake"),400); }
     return;
@@ -239,7 +332,6 @@ function buyUpgrade(name) {
     upgrades[name].cost = Math.floor(upgrades[name].cost * 1.15);
     upgradeCounts[name] = (upgradeCounts[name] || 0) + 1;
   }
-  // Nákup animace
   const btn = document.getElementById("shopBtn-" + name);
   if (btn) { btn.classList.add("buyFlash"); setTimeout(()=>btn.classList.remove("buyFlash"),400); }
   renderPrices();
@@ -479,17 +571,13 @@ function openStable() {
 
 function renderStableModal() {
   const listEl = document.getElementById("stableHorseList");
-
   let addHtml = "";
   if (stableHorses.length < MAX_HORSES) {
     const newHorseCost = 10000 * Math.pow(2, stableHorses.length);
-    addHtml = `<button class="stableAddBtn" onclick="addHorse()">
-      ➕ Přidat koně &nbsp;<span class="stableAddCost">${formatCoins(newHorseCost)} coins</span>
-    </button>`;
+    addHtml = `<button class="stableAddBtn" onclick="addHorse()">➕ Přidat koně &nbsp;<span class="stableAddCost">${formatCoins(newHorseCost)} coins</span></button>`;
   } else {
     addHtml = `<div class="stableFullMsg">🏠 Stáj je plná! (max ${MAX_HORSES})</div>`;
   }
-
   const horsesHtml = stableHorses.map((h, i) => {
     const lvl = h.level;
     const maxed = lvl >= MAX_HORSE_LEVEL;
@@ -503,19 +591,14 @@ function renderStableModal() {
       <div class="stableHorseInfo">
         <div class="stableHorseName">${h.name}</div>
         <div class="stableHorseIncome">+${formatCoins(h.income)}/sec</div>
-        <div class="stableHorseLvlBar">
-          <div class="stableHorseLvlFill" style="width:${pct}%"></div>
-        </div>
+        <div class="stableHorseLvlBar"><div class="stableHorseLvlFill" style="width:${pct}%"></div></div>
         <div class="stableHorseLvlText">${lvl} / ${MAX_HORSE_LEVEL}</div>
       </div>
       ${maxed
         ? `<div class="stableLvlBtn maxed">✨ MAX</div>`
-        : `<button class="stableLvlBtn" onclick="levelHorse(${i})">
-             Doučko<br><span class="lvlCost">${formatCoins(levelCost)}</span>
-           </button>`}
+        : `<button class="stableLvlBtn" onclick="levelHorse(${i})">Doučko<br><span class="lvlCost">${formatCoins(levelCost)}</span></button>`}
     </div>`;
   }).join("");
-
   listEl.innerHTML = addHtml + (horsesHtml || `<div class="stableEmptyMsg">🐴 Zatím nemáš žádného koně.<br>Kup prvního výše!</div>`);
 }
 
@@ -526,8 +609,7 @@ function addHorse() {
   coins -= cost;
   const idx = stableHorses.length;
   stableHorses.push({ name: HORSE_NAMES[idx]||"Kůň "+(idx+1), emoji: HORSE_EMOJIS[idx]||"🐎", level: 1, income: 100*(idx+1) });
-  renderStableModal();
-  update(); saveGame();
+  renderStableModal(); update(); saveGame();
 }
 
 function levelHorse(idx) {
@@ -538,11 +620,9 @@ function levelHorse(idx) {
   coins -= cost;
   h.level++;
   h.income = Math.floor(h.income * 1.10);
-  // Animace karty
   const card = document.getElementById("horseCard-" + idx);
   if (card) { card.classList.add("levelUpFlash"); setTimeout(()=>card.classList.remove("levelUpFlash"), 600); }
-  renderStableModal();
-  update(); saveGame();
+  renderStableModal(); update(); saveGame();
 }
 
 // ─── INFO ────────────────────────────────
@@ -560,7 +640,7 @@ function startAirship() {
   const container = document.getElementById("airship");
   container.style.display = "block";
 
-  const messages = ["KUNYS", "PEP CLICKER 2.0", "KLIKEJ KONĚ", "KOTLISE AUTO", "SHIFINY STÁJ"];
+  const messages = ["KUNYS", "PEP CLICKER 2.0", "KLIKEJ KONĚ", "KOTLISE AUTO", "SHIFINY STÁJ", "POZOR NA BOSSE!"];
   let msgIdx = 0;
 
   const BLIMP_W = 340;
@@ -568,54 +648,32 @@ function startAirship() {
   const TOTAL_W = BLIMP_W + BANNER_W + 60;
 
   container.innerHTML = `
-    <svg id="blimpSvg" xmlns="http://www.w3.org/2000/svg" width="${TOTAL_W}" height="130" viewBox="0 0 ${TOTAL_W} 130">
-      <!-- Baner lano -->
+    <svg xmlns="http://www.w3.org/2000/svg" width="${TOTAL_W}" height="130" viewBox="0 0 ${TOTAL_W} 130">
       <line x1="${BLIMP_W - 10}" y1="90" x2="${BLIMP_W + 55}" y2="75" stroke="#aaa" stroke-width="1.5" opacity="0.7"/>
-      <!-- Baner -->
-      <rect x="${BLIMP_W + 55}" y="58" width="${BANNER_W}" height="36" rx="5"
-        fill="#fffbe6" stroke="#e0b800" stroke-width="2"/>
-      <text id="blimpBannerText" x="${BLIMP_W + 55 + BANNER_W/2}" y="81"
-        font-family="'Fredoka One',cursive" font-size="17" font-weight="bold"
-        fill="#b8860b" text-anchor="middle" letter-spacing="2">KUNYS</text>
-      <!-- Vlajky na baneru -->
+      <rect x="${BLIMP_W + 55}" y="58" width="${BANNER_W}" height="36" rx="5" fill="#fffbe6" stroke="#e0b800" stroke-width="2"/>
+      <text id="blimpBannerText" x="${BLIMP_W + 55 + BANNER_W/2}" y="81" font-family="'Fredoka One',cursive" font-size="17" font-weight="bold" fill="#b8860b" text-anchor="middle" letter-spacing="2">KUNYS</text>
       <polygon points="${BLIMP_W+55},58 ${BLIMP_W+55},68 ${BLIMP_W+65},63" fill="#e0b800"/>
       <polygon points="${BLIMP_W+55+BANNER_W},58 ${BLIMP_W+55+BANNER_W},68 ${BLIMP_W+45+BANNER_W},63" fill="#e0b800"/>
-
-      <!-- Trup vzducholodi -->
       <ellipse cx="155" cy="62" rx="145" ry="52" fill="url(#blimpGrad)"/>
-      <!-- Highlight -->
       <ellipse cx="120" cy="42" rx="80" ry="22" fill="rgba(255,255,255,0.18)" transform="rotate(-8,120,42)"/>
-      <!-- Spodní část -->
       <ellipse cx="155" cy="62" rx="145" ry="52" fill="none" stroke="rgba(0,0,0,0.15)" stroke-width="2"/>
-
-      <!-- Pruhy na trupu -->
-      <clipPath id="blimpClip">
-        <ellipse cx="155" cy="62" rx="145" ry="52"/>
-      </clipPath>
+      <clipPath id="blimpClip"><ellipse cx="155" cy="62" rx="145" ry="52"/></clipPath>
       <rect x="40" y="10" width="18" height="104" fill="rgba(255,0,0,0.25)" clip-path="url(#blimpClip)"/>
       <rect x="88" y="10" width="18" height="104" fill="rgba(255,0,0,0.25)" clip-path="url(#blimpClip)"/>
       <rect x="200" y="10" width="18" height="104" fill="rgba(255,0,0,0.25)" clip-path="url(#blimpClip)"/>
       <rect x="248" y="10" width="18" height="104" fill="rgba(255,0,0,0.25)" clip-path="url(#blimpClip)"/>
-
-      <!-- Kabina / gondola -->
       <rect x="110" y="108" width="90" height="22" rx="11" fill="#2a2a4a" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
-      <!-- Okénka -->
       <circle cx="128" cy="119" r="6" fill="#87ceeb" stroke="rgba(255,255,255,0.5)" stroke-width="1"/>
       <circle cx="148" cy="119" r="6" fill="#87ceeb" stroke="rgba(255,255,255,0.5)" stroke-width="1"/>
       <circle cx="168" cy="119" r="6" fill="#87ceeb" stroke="rgba(255,255,255,0.5)" stroke-width="1"/>
       <circle cx="188" cy="119" r="6" fill="#87ceeb" stroke="rgba(255,255,255,0.5)" stroke-width="1"/>
-      <!-- Gondola laná -->
       <line x1="130" y1="108" x2="130" y2="114" stroke="#888" stroke-width="1.5"/>
       <line x1="155" y1="108" x2="155" y2="114" stroke="#888" stroke-width="1.5"/>
       <line x1="180" y1="108" x2="180" y2="114" stroke="#888" stroke-width="1.5"/>
-
-      <!-- Ocasní ploutve -->
       <polygon points="10,62 35,42 35,82" fill="#c0392b" opacity="0.85"/>
       <polygon points="10,62 35,48 8,30" fill="#e74c3c" opacity="0.7"/>
       <polygon points="10,62 35,76 8,94" fill="#e74c3c" opacity="0.7"/>
-
-      <!-- Vrtule -->
-      <g transform="translate(295,62)">
+      <g>
         <animateTransform attributeName="transform" type="rotate" from="0 295 62" to="360 295 62" dur="0.6s" repeatCount="indefinite"/>
         <ellipse cx="295" cy="50" rx="4" ry="10" fill="#555" opacity="0.8"/>
         <ellipse cx="295" cy="74" rx="4" ry="10" fill="#555" opacity="0.8"/>
@@ -623,27 +681,19 @@ function startAirship() {
         <ellipse cx="307" cy="62" rx="10" ry="4" fill="#555" opacity="0.8"/>
       </g>
       <circle cx="295" cy="62" r="5" fill="#333"/>
-
-      <!-- Nápis na trupu -->
-      <text x="155" y="68" font-family="'Fredoka One',cursive" font-size="22" font-weight="bold"
-        fill="rgba(255,255,255,0.9)" text-anchor="middle" letter-spacing="3"
-        stroke="rgba(0,0,0,0.2)" stroke-width="1">PEP CLICKER</text>
-
+      <text x="155" y="68" font-family="'Fredoka One',cursive" font-size="22" font-weight="bold" fill="rgba(255,255,255,0.9)" text-anchor="middle" letter-spacing="3" stroke="rgba(0,0,0,0.2)" stroke-width="1">PEP CLICKER</text>
       <defs>
         <linearGradient id="blimpGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%"   stop-color="#e8e8e8"/>
-          <stop offset="35%"  stop-color="#c0c0c0"/>
+          <stop offset="0%" stop-color="#e8e8e8"/>
+          <stop offset="35%" stop-color="#c0c0c0"/>
           <stop offset="100%" stop-color="#888"/>
         </linearGradient>
       </defs>
-    </svg>
-  `;
+    </svg>`;
 
   let x = -TOTAL_W - 50;
-  const TOP = 55 + Math.random() * 40;
-  container.style.top = TOP + "px";
+  container.style.top = (55 + Math.random() * 40) + "px";
 
-  // Střídání nápisů na baneru
   setInterval(() => {
     msgIdx = (msgIdx + 1) % messages.length;
     const el = document.getElementById("blimpBannerText");
@@ -666,14 +716,12 @@ function startAirship() {
 setInterval(() => {
   let income = perSec;
   if (doubleCoins) income *= 2;
-  // Koně přidávají /sec přímo
   stableHorses.forEach(h => { income += h.income; });
   coins += income;
   totalCoinsEarned += income;
   update();
 }, 1000);
 
-// Nemovitosti – každých 30s
 setInterval(() => {
   let bonus = 0;
   if (hasUFO)           bonus += 100000000;
@@ -682,26 +730,20 @@ setInterval(() => {
   if (bonus > 0) { coins += bonus; totalCoinsEarned += bonus; update(); }
 }, 30000);
 
-// Auto-save
 setInterval(() => { saveGame(); }, 5000);
 
 // ─── UPDATE ──────────────────────────────
 function update() {
   coinsText.innerText = formatCoins(Math.floor(coins));
-
   let effectivePerSec = perSec;
   stableHorses.forEach(h => { effectivePerSec += h.income; });
   if (doubleCoins) effectivePerSec *= 2;
-
   let statsStr = "Výdělek za sekundu: " + formatCoins(Math.floor(effectivePerSec));
   if (doubleCoins) statsStr += " (2× – " + doubleCoinsTimer + "s)";
   statsText.innerText = statsStr;
-
-  // Nemovitosti – canAfford + owned
   updateNemBtn("ufoPrestigeBtn",    !hasUFO,           coins >= 10000000000);
   updateNemBtn("garageKotliseBtn",  !hasGarageKotlise, coins >= 5000000000);
   updateNemBtn("kotliseCarBtn",     !hasKotliseCar,    coins >= 60000);
-
   checkAchievements();
   renderPrices();
 }
@@ -709,15 +751,8 @@ function update() {
 function updateNemBtn(id, notOwned, canAfford) {
   const btn = document.getElementById(id);
   if (!btn) return;
-  if (!notOwned) {
-    btn.style.opacity = "0.45";
-    btn.style.cursor = "default";
-    btn.classList.remove("canAfford");
-  } else {
-    btn.style.opacity = "1";
-    btn.style.cursor = "pointer";
-    btn.classList.toggle("canAfford", canAfford);
-  }
+  if (!notOwned) { btn.style.opacity = "0.45"; btn.style.cursor = "default"; btn.classList.remove("canAfford"); }
+  else { btn.style.opacity = "1"; btn.style.cursor = "pointer"; btn.classList.toggle("canAfford", canAfford); }
 }
 
 // ─── FORMAT ──────────────────────────────
@@ -731,18 +766,21 @@ function formatCoins(n) {
 
 // ─── ACHIEVEMENTS ────────────────────────
 const ACHIEVEMENT_DEFS = [
-  { id:"coins1k",    label:"💰 1K Coins",         check: ()=> totalCoinsEarned >= 1000 },
-  { id:"coins100k",  label:"💵 100K Coins",        check: ()=> totalCoinsEarned >= 100000 },
-  { id:"coins1m",    label:"🔥 1M Coins",          check: ()=> totalCoinsEarned >= 1000000 },
-  { id:"coins1b",    label:"💎 1B Coins",          check: ()=> totalCoinsEarned >= 1000000000 },
-  { id:"ufo",        label:"🛸 UFO Vlastník",      check: ()=> hasUFO },
-  { id:"garage",     label:"🚗 Garáž Kotlise",     check: ()=> hasGarageKotlise },
-  { id:"car",        label:"🏎️ Kotlise Auto",      check: ()=> hasKotliseCar },
-  { id:"stajnik",    label:"🐎 Stájník",           check: ()=> stableHorses.length > 0 },
-  { id:"horse6",     label:"🐴 Plná Stáj",         check: ()=> stableHorses.length >= 6 },
-  { id:"boss1",      label:"🌽 Démon Přemožen",    check: ()=> bossesDefeated >= 1 },
-  { id:"boss5",      label:"👹 Démon Poražen 5×",  check: ()=> bossesDefeated >= 5 },
-  { id:"lvl50",      label:"⭐ Kůň Max Level",     check: ()=> stableHorses.some(h=>h.level>=50) },
+  { id:"coins1k",    label:"💰 1K Coins",              check: ()=> totalCoinsEarned >= 1000 },
+  { id:"coins100k",  label:"💵 100K Coins",             check: ()=> totalCoinsEarned >= 100000 },
+  { id:"coins1m",    label:"🔥 1M Coins",               check: ()=> totalCoinsEarned >= 1000000 },
+  { id:"coins1b",    label:"💎 1B Coins",               check: ()=> totalCoinsEarned >= 1000000000 },
+  { id:"ufo",        label:"🛸 UFO Vlastník",           check: ()=> hasUFO },
+  { id:"garage",     label:"🚗 Garáž Kotlise",          check: ()=> hasGarageKotlise },
+  { id:"car",        label:"🏎️ Kotlise Auto",           check: ()=> hasKotliseCar },
+  { id:"stajnik",    label:"🐎 Stájník",                check: ()=> stableHorses.length > 0 },
+  { id:"horse6",     label:"🐴 Plná Stáj",              check: ()=> stableHorses.length >= 6 },
+  { id:"boss1",      label:"🌽 Démon Přemožen",         check: ()=> bossesDefeated >= 1 },
+  { id:"boss5",      label:"👹 Bossů Poraženo 5×",      check: ()=> bossesDefeated >= 5 },
+  { id:"boss10",     label:"💀 Bossů Poraženo 10×",     check: ()=> bossesDefeated >= 10 },
+  { id:"ladych1",    label:"🚜 Ládychův Traktor Zastaven", check: ()=> bossesDefeated >= 1 },
+  { id:"shifi1",     label:"👻 Shifin Duch Vyhnán",     check: ()=> bossesDefeated >= 1 },
+  { id:"lvl50",      label:"⭐ Kůň Max Level",          check: ()=> stableHorses.some(h=>h.level>=50) },
 ];
 
 function checkAchievements() {
@@ -751,7 +789,6 @@ function checkAchievements() {
     if (!unlockedAchievements.has(def.id) && def.check()) {
       unlockedAchievements.add(def.id);
       changed = true;
-      // Popup notifikace
       showAchievementPopup(def.label);
     }
   });
@@ -790,7 +827,6 @@ function renderPrices() {
     const total = calcBulkCost(key, buyMultiplier);
     const canAfford = coins >= total;
     el.innerText = formatCoins(total) + (buyMultiplier > 1 ? " (×"+buyMultiplier+")" : "");
-    // Zbarví cenu
     el.style.color = canAfford ? "#86efac" : "#ff6666";
     const btn = document.getElementById("shopBtn-"+key);
     if (btn) btn.classList.toggle("shopAffordable", canAfford);
@@ -833,3 +869,4 @@ function loadGame() {
     if (slotCooldownActive && slotCooldownSeconds > 0) startSlotCooldown();
   } catch(e) { console.error("Load error:", e); }
 }
+JSEOF

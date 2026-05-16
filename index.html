@@ -31,9 +31,10 @@
       <div id="stats">Výdělek za sekundu: 0</div>
     </div>
     <div class="topButtons">
-      <button class="infoBtn" onclick="openInfo()">ℹ️ Info</button>
+      <button class="infoBtn"        onclick="openInfo()">ℹ️ Info</button>
+      <button class="bossInfoBtn"    onclick="openBossInfo()">👾 Bossové</button>
       <button class="nemovitostiBtn" onclick="openNemovitosti()">🏠 Nemovitosti</button>
-      <button class="stableBtn" onclick="openStable()">🐎 Stáj</button>
+      <button class="stableBtn"      onclick="openStable()">🐎 Stáj</button>
     </div>
   </div>
 
@@ -58,16 +59,16 @@
         <button class="buyMultBtn"        data-mul="50" onclick="setBuyMultiplier(50)">×50</button>
       </div>
       <div class="shopPanel">
-        <button id="shopBtn-horse"        onclick="buyUpgrade('horse')"        class="shopItem"><span class="shopIcon">🐴</span><span class="shopInfo"><span class="shopName">Kůň</span><span class="shopIncome">+1/sec</span></span><span class="shopPrice" id="horsePrice">50</span></button>
-        <button id="shopBtn-stable"       onclick="buyUpgrade('stable')"       class="shopItem"><span class="shopIcon">🏠</span><span class="shopInfo"><span class="shopName">Stáj</span><span class="shopIncome">+5/sec</span></span><span class="shopPrice" id="stablePrice">200</span></button>
-        <button id="shopBtn-farm"         onclick="buyUpgrade('farm')"         class="shopItem"><span class="shopIcon">🌾</span><span class="shopInfo"><span class="shopName">Sláma</span><span class="shopIncome">+20/sec</span></span><span class="shopPrice" id="farmPrice">1 000</span></button>
-        <button id="shopBtn-naraz1"       onclick="buyUpgrade('naraz1')"       class="shopItem"><span class="shopIcon">💥</span><span class="shopInfo"><span class="shopName">Náraz 1 <small>by Matylda</small></span><span class="shopIncome">+500/sec</span></span><span class="shopPrice" id="naraz1Price">50 000</span></button>
-        <button id="shopBtn-naraz2"       onclick="buyUpgrade('naraz2')"       class="shopItem"><span class="shopIcon">💥</span><span class="shopInfo"><span class="shopName">Náraz 2 <small>by Matylda</small></span><span class="shopIncome">+2 000/sec</span></span><span class="shopPrice" id="naraz2Price">250 000</span></button>
-        <button id="shopBtn-olga"         onclick="buyUpgrade('olga')"         class="shopItem"><span class="shopIcon">👩</span><span class="shopInfo"><span class="shopName">Olga Kunysová</span><span class="shopIncome">+3 000/sec</span></span><span class="shopPrice" id="olgaPrice">500 000</span></button>
+        <button id="shopBtn-horse"         onclick="buyUpgrade('horse')"         class="shopItem"><span class="shopIcon">🐴</span><span class="shopInfo"><span class="shopName">Kůň</span><span class="shopIncome">+1/sec</span></span><span class="shopPrice" id="horsePrice">50</span></button>
+        <button id="shopBtn-stable"        onclick="buyUpgrade('stable')"        class="shopItem"><span class="shopIcon">🏠</span><span class="shopInfo"><span class="shopName">Stáj</span><span class="shopIncome">+5/sec</span></span><span class="shopPrice" id="stablePrice">200</span></button>
+        <button id="shopBtn-farm"          onclick="buyUpgrade('farm')"          class="shopItem"><span class="shopIcon">🌾</span><span class="shopInfo"><span class="shopName">Sláma</span><span class="shopIncome">+20/sec</span></span><span class="shopPrice" id="farmPrice">1 000</span></button>
+        <button id="shopBtn-naraz1"        onclick="buyUpgrade('naraz1')"        class="shopItem"><span class="shopIcon">💥</span><span class="shopInfo"><span class="shopName">Náraz 1 <small>by Matylda</small></span><span class="shopIncome">+500/sec</span></span><span class="shopPrice" id="naraz1Price">50 000</span></button>
+        <button id="shopBtn-naraz2"        onclick="buyUpgrade('naraz2')"        class="shopItem"><span class="shopIcon">💥</span><span class="shopInfo"><span class="shopName">Náraz 2 <small>by Matylda</small></span><span class="shopIncome">+2 000/sec</span></span><span class="shopPrice" id="naraz2Price">250 000</span></button>
+        <button id="shopBtn-olga"          onclick="buyUpgrade('olga')"          class="shopItem"><span class="shopIcon">👩</span><span class="shopInfo"><span class="shopName">Olga Kunysová</span><span class="shopIncome">+3 000/sec</span></span><span class="shopPrice" id="olgaPrice">500 000</span></button>
         <button id="shopBtn-kotliseBazeny" onclick="buyUpgrade('kotliseBazeny')" class="shopItem"><span class="shopIcon">🏊</span><span class="shopInfo"><span class="shopName">Kotlisovy Bazény</span><span class="shopIncome">+8 000/sec</span></span><span class="shopPrice" id="kotliseBazenPrice">1 000 000</span></button>
-        <button id="shopBtn-elektrokotel" onclick="buyUpgrade('elektrokotel')" class="shopItem"><span class="shopIcon">⚡</span><span class="shopInfo"><span class="shopName">Elektrokotel</span><span class="shopIncome">+10 000/sec</span></span><span class="shopPrice" id="elektrokotelPrice">2 000 000</span></button>
-        <button id="shopBtn-workshop"     onclick="buyUpgrade('workshop')"     class="shopItem"><span class="shopIcon">🔧</span><span class="shopInfo"><span class="shopName">Ládychova Dílna</span><span class="shopIncome">+25K/sec</span></span><span class="shopPrice" id="workshopPrice">5M</span></button>
-        <button id="shopBtn-rodokmeny"    onclick="buyUpgrade('rodokmeny')"    class="shopItem"><span class="shopIcon">📜</span><span class="shopInfo"><span class="shopName">Shifiny Rodokmeny</span><span class="shopIncome">+500K/sec</span></span><span class="shopPrice" id="rodokmenPrice">100M</span></button>
+        <button id="shopBtn-elektrokotel"  onclick="buyUpgrade('elektrokotel')"  class="shopItem"><span class="shopIcon">⚡</span><span class="shopInfo"><span class="shopName">Elektrokotel</span><span class="shopIncome">+10 000/sec</span></span><span class="shopPrice" id="elektrokotelPrice">2 000 000</span></button>
+        <button id="shopBtn-workshop"      onclick="buyUpgrade('workshop')"      class="shopItem"><span class="shopIcon">🔧</span><span class="shopInfo"><span class="shopName">Ládychova Dílna</span><span class="shopIncome">+25K/sec</span></span><span class="shopPrice" id="workshopPrice">5M</span></button>
+        <button id="shopBtn-rodokmeny"     onclick="buyUpgrade('rodokmeny')"     class="shopItem"><span class="shopIcon">📜</span><span class="shopInfo"><span class="shopName">Shifiny Rodokmeny</span><span class="shopIncome">+500K/sec</span></span><span class="shopPrice" id="rodokmenPrice">100M</span></button>
       </div>
     </div>
 
@@ -96,19 +97,16 @@
       <!-- Nemovitosti -->
       <div class="ufoPrestigeShop">
         <h2>🏠 Nemovitosti</h2>
-
         <button id="kotliseCarBtn" onclick="buyKotliseCar()" class="nemovitostBtn carBtn">
           <span class="nemIcon">🏎️</span>
           <span class="nemInfo"><span class="nemName">Kotlise Auto</span><span class="ufoSub">+3 000 / 30s</span></span>
           <span class="ufoPrice">60K</span>
         </button>
-
         <button id="garageKotliseBtn" onclick="buyGarageKotlise()" class="nemovitostBtn garageBtn">
           <span class="nemIcon">🚗</span>
           <span class="nemInfo"><span class="nemName">Garáž Kotlise</span><span class="ufoSub">+50M / 30s</span></span>
           <span class="ufoPrice">5B</span>
         </button>
-
         <button id="ufoPrestigeBtn" onclick="buyUFO()" class="nemovitostBtn ufoBtn">
           <span class="nemIcon">🛸</span>
           <span class="nemInfo"><span class="nemName">UFO</span><span class="ufoSub">+100M / 30s</span></span>
@@ -125,25 +123,28 @@
     <div id="achievementList"></div>
   </div>
 
-  <!-- 🌽 BOSS OVERLAY -->
+  <!-- BOSS OVERLAY -->
   <div id="bossOverlay" style="display:none">
     <div class="bossBox">
-      <div class="bossWarning">⚠️ KUKUŘIČNÝ DÉMON ÚTOČÍ! ⚠️</div>
-      <div id="bossEmoji" class="bossEmoji" onclick="clickBoss()">🌽</div>
-      <div class="bossSubtitle">Klikej na démona než uteče!</div>
+      <div id="bossWarningText" class="bossWarning">⚠️ BOSS ÚTOČÍ! ⚠️</div>
+      <div id="bossNameEl" class="bossName">Boss</div>
+      <div id="bossEmojiEl" class="bossEmoji" onclick="clickBoss()">🌽</div>
+      <div id="bossSubtitleEl" class="bossSubtitle">Klikej!</div>
       <div class="bossHPWrap">
         <div class="bossHPTrack"><div id="bossHPBar" class="bossHPBar"></div></div>
         <div id="bossHPText" class="bossHPText">0 / 0</div>
       </div>
       <div id="bossTimerText" class="bossTimer">⏱ 30s</div>
-      <div class="bossTip">Výhra: ~60s příjmu &nbsp;|&nbsp; Prohra: ztratíš 8% coinů</div>
+      <div id="bossTipEl" class="bossTip">Výhra: odměna | Prohra: ztráta</div>
     </div>
   </div>
 
   <audio id="horseSound"><source src="horse.mp3" type="audio/mpeg"></audio>
 </div><!-- /game -->
 
-<!-- SLOT MODAL -->
+<!-- ══════ MODALY ══════ -->
+
+<!-- SLOT -->
 <div id="slotModal" class="modal" style="display:none">
   <div class="modalBox">
     <h2>🎰 Automat</h2>
@@ -165,7 +166,7 @@
   </div>
 </div>
 
-<!-- ULTIMATE SLOT MODAL -->
+<!-- ULTIMATE SLOT -->
 <div id="ultimateModal" class="modal" style="display:none">
   <div class="modalBox ultimateBox">
     <h2 style="color:#ffd700;font-size:26px">👑 Ultimate Automat</h2>
@@ -190,7 +191,7 @@
   </div>
 </div>
 
-<!-- TICKET MODAL -->
+<!-- TICKET -->
 <div id="ticketModal" class="modal" style="display:none">
   <div class="modalBox">
     <h2>🎟 Ticket</h2>
@@ -202,21 +203,106 @@
   </div>
 </div>
 
-<!-- INFO MODAL -->
+<!-- INFO -->
 <div id="infoModal" class="modal" style="display:none">
   <div class="modalBox" style="max-height:80vh;overflow-y:auto;text-align:left">
     <h2 style="text-align:center;margin-bottom:16px">ℹ️ Jak hrát</h2>
     <div class="infoSection"><h3>🐎 Klikání</h3><p>Klikej na koně pro +1 Pep Coin. PEP přehraje zvuk.</p></div>
-    <div class="infoSection"><h3>🛒 Obchod</h3><p>Kupuj upgrady hromadně (×1–×50). Cena roste o 15% za nákup. Zelená cena = můžeš si dovolit.</p></div>
-    <div class="infoSection"><h3>🐎 Shifiny Stáj</h3><p>Max 6 koní. Koně přidávají příjem přímo za sekundu! Max level 50, každý level +10%.</p></div>
-    <div class="infoSection"><h3>🏠 Nemovitosti</h3><p>🏎️ Kotlise Auto (60K) +3K/30s | 🚗 Garáž (5B) +50M/30s | 🛸 UFO (10B) +100M/30s</p></div>
-    <div class="infoSection"><h3>🌽 Kukuřičný Démon</h3><p>Každé 2–4 minuty zaútočí Boss! Klikej na něj co nejrychleji – máš 30 sekund. Výhra: ~60s příjmu navíc. Prohra: ztratíš 8% coinů.</p></div>
-    <div class="infoSection"><h3>🏆 Achievementy</h3><p>Permanentní – jednou odemčené, zůstanou navždy!</p></div>
+    <div class="infoSection"><h3>🛒 Obchod</h3><p>Kupuj upgrady hromadně (×1–×50). Zelená cena = můžeš si dovolit.</p></div>
+    <div class="infoSection"><h3>🐎 Shifiny Stáj</h3><p>Max 6 koní, příjem /sec. Max level 50, každý level +10%.</p></div>
+    <div class="infoSection"><h3>🏠 Nemovitosti</h3><p>🏎️ Auto (60K) | 🚗 Garáž (5B) | 🛸 UFO (10B) – pasivní příjem každých 30s.</p></div>
+    <div class="infoSection"><h3>👾 Bossové</h3><p>Každé 2–4 minuty zaútočí náhodný boss. Klikej na něj co nejrychleji! Více info v tlačítku Bossové.</p></div>
+    <div class="infoSection"><h3>🏆 Achievementy</h3><p>Permanentní – jednou odemčené zůstanou navždy!</p></div>
     <button onclick="closeModal('infoModal')" class="modalCloseBtn" style="width:100%;margin-top:16px">Zavřít</button>
   </div>
 </div>
 
-<!-- NEMOVITOSTI MODAL -->
+<!-- BOSS INFO MODAL -->
+<div id="bossInfoModal" class="modal" style="display:none">
+  <div class="modalBox bossInfoBox">
+    <h2 style="margin-bottom:20px">👾 Bossové</h2>
+
+    <!-- Kukuřičný Démon -->
+    <div class="bossInfoCard cornCard">
+      <div class="bossInfoTop">
+        <span class="bossInfoEmoji">🌽</span>
+        <div class="bossInfoMeta">
+          <div class="bossInfoName">Kukuřičný Démon</div>
+          <div class="bossInfoDiff diffEasy">⚔️ Lehký</div>
+        </div>
+        <div class="bossInfoKills" id="killsCorn">0× poražen</div>
+      </div>
+      <div class="bossInfoStats">
+        <div class="biStat"><span class="biLabel">HP násobič</span><span class="biVal">3×</span></div>
+        <div class="biStat"><span class="biLabel">Čas</span><span class="biVal">30s</span></div>
+        <div class="biStat biGreen"><span class="biLabel">Výhra</span><span class="biVal">~60s příjmu</span></div>
+        <div class="biStat biRed"><span class="biLabel">Prohra</span><span class="biVal">−8% coinů</span></div>
+      </div>
+      <div class="bossInfoDesc">Nejslabší boss. Vylézá z kukuřičného pole a chce tvoje coiny. Klikej rychle – útočí každé 2–4 minuty.</div>
+    </div>
+
+    <!-- Ládychův Traktor -->
+    <div class="bossInfoCard ladychCard">
+      <div class="bossInfoTop">
+        <span class="bossInfoEmoji">🚜</span>
+        <div class="bossInfoMeta">
+          <div class="bossInfoName">Ládychův Traktor</div>
+          <div class="bossInfoDiff diffMed">⚔️⚔️ Střední</div>
+        </div>
+        <div class="bossInfoKills" id="killsLadych">0× poražen</div>
+      </div>
+      <div class="bossInfoStats">
+        <div class="biStat"><span class="biLabel">HP násobič</span><span class="biVal">4×</span></div>
+        <div class="biStat"><span class="biLabel">Čas</span><span class="biVal">30s</span></div>
+        <div class="biStat biGreen"><span class="biLabel">Výhra</span><span class="biVal">~80s příjmu</span></div>
+        <div class="biStat biRed"><span class="biLabel">Prohra</span><span class="biVal">−12% coinů</span></div>
+      </div>
+      <div class="bossInfoDesc">Ládych přijíždí na traktoru plném slámy. Víc HP, ale lepší odměna. Zastav ho dřív než tě přejede!</div>
+    </div>
+
+    <!-- Shifin Duch -->
+    <div class="bossInfoCard shifiCard">
+      <div class="bossInfoTop">
+        <span class="bossInfoEmoji">👻</span>
+        <div class="bossInfoMeta">
+          <div class="bossInfoName">Shifin Duch</div>
+          <div class="bossInfoDiff diffHard">⚔️⚔️⚔️ Těžký</div>
+        </div>
+        <div class="bossInfoKills" id="killsShifi">0× poražen</div>
+      </div>
+      <div class="bossInfoStats">
+        <div class="biStat"><span class="biLabel">HP násobič</span><span class="biVal">5×</span></div>
+        <div class="biStat"><span class="biLabel">Čas</span><span class="biVal">30s</span></div>
+        <div class="biStat biGreen"><span class="biLabel">Výhra</span><span class="biVal">~100s příjmu</span></div>
+        <div class="biStat biRed"><span class="biLabel">Prohra</span><span class="biVal">−15% coinů</span></div>
+      </div>
+      <div class="bossInfoDesc">Shifin duch se zjevuje z druhé dimenze. Nejvíc HP ze všech bossů, ale nejvyšší odměna. Exorcizuj ho dřív než zmizí!</div>
+    </div>
+
+    <!-- Olga Berserker -->
+    <div class="bossInfoCard olgaCard">
+      <div class="bossInfoTop">
+        <span class="bossInfoEmoji">👩‍🦳</span>
+        <div class="bossInfoMeta">
+          <div class="bossInfoName">Olga Kunysová</div>
+          <div class="bossInfoDiff diffLegend">💀 Legendární</div>
+        </div>
+        <div class="bossInfoKills" id="killsOlga">0× poražen</div>
+      </div>
+      <div class="bossInfoStats">
+        <div class="biStat"><span class="biLabel">HP násobič</span><span class="biVal">8×</span></div>
+        <div class="biStat"><span class="biLabel">Čas</span><span class="biVal">25s</span></div>
+        <div class="biStat biGreen"><span class="biLabel">Výhra</span><span class="biVal">~150s příjmu</span></div>
+        <div class="biStat biRed"><span class="biLabel">Prohra</span><span class="biVal">−25% coinů</span></div>
+      </div>
+      <div class="bossInfoDesc">Olga Kunysová se zbláznila! Legendární boss s obrovským HP a krátkým časem. Vyplatí se jen silným hráčům!</div>
+    </div>
+
+    <button onclick="closeModal('bossInfoModal')" class="modalCloseBtn" style="width:100%;margin-top:4px">Zavřít</button>
+  </div>
+</div>
+
+<!-- NEMOVITOSTI -->
 <div id="nemovitostiModal" class="modal" style="display:none">
   <div class="modalBox">
     <h2>🏠 Moje Nemovitosti</h2>
@@ -225,7 +311,7 @@
   </div>
 </div>
 
-<!-- STÁJ MODAL -->
+<!-- STÁJ -->
 <div id="stableModal" class="modal" style="display:none">
   <div class="modalBox stableBox">
     <div class="stableHeader">

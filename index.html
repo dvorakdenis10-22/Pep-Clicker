@@ -7,6 +7,317 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Bungee+Inline&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+
+<style>
+/* ── KOLONKY POZADÍ ── */
+.shopContainer {
+  background: rgba(20, 10, 40, 0.85);
+  border: 1px solid rgba(255, 200, 0, 0.18);
+  border-radius: 16px;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.5), inset 0 0 40px rgba(255,200,0,0.03);
+}
+.horseContainer {
+  background: rgba(10, 25, 10, 0.85);
+  border: 1px solid rgba(57, 255, 107, 0.18);
+  border-radius: 16px;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.5), inset 0 0 40px rgba(57,255,107,0.03);
+}
+.specialContainer {
+  background: rgba(30, 10, 40, 0.85);
+  border: 1px solid rgba(191, 95, 255, 0.18);
+  border-radius: 16px;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.5), inset 0 0 40px rgba(191,95,255,0.03);
+}
+
+/* ── ACHIEVEMENT BOX (vlevo dole) ── */
+.achievementBox {
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  width: 220px;
+  max-height: 260px;
+  overflow-y: auto;
+  background: rgba(12, 8, 25, 0.92);
+  border: 1px solid rgba(255,215,0,0.25);
+  border-radius: 14px;
+  padding: 12px 14px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.6), 0 0 20px rgba(255,200,0,0.05);
+  z-index: 50;
+}
+.achievementBox h2 {
+  font-family: 'Bungee', cursive;
+  font-size: 13px;
+  color: #ffd700;
+  margin: 0 0 8px 0;
+  letter-spacing: 1px;
+}
+.achievItem {
+  font-size: 11px;
+  color: #ccc;
+  padding: 4px 6px;
+  background: rgba(255,215,0,0.06);
+  border-radius: 6px;
+  margin-bottom: 3px;
+  border-left: 2px solid rgba(255,215,0,0.3);
+}
+
+/* ── TAJNÝ OBCHOD NOTIFIKACE ── */
+.secretShopNotif {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.7);
+  background: linear-gradient(135deg, rgba(20,5,40,0.98), rgba(40,0,60,0.99));
+  border: 2px solid rgba(255,80,200,0.7);
+  border-radius: 20px;
+  padding: 30px 36px;
+  text-align: center;
+  z-index: 9999;
+  box-shadow: 0 0 80px rgba(200,0,255,0.5), 0 20px 60px rgba(0,0,0,0.9);
+  transition: transform 0.35s cubic-bezier(.34,1.56,.64,1), opacity 0.35s;
+  opacity: 0;
+  max-width: 340px;
+  width: 90%;
+}
+.secretShopNotif.secretNotifVisible {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+.secretShopNotif h2 {
+  font-family: 'Bungee', cursive;
+  color: #ff66ff;
+  font-size: 22px;
+  margin: 8px 0;
+  text-shadow: 0 0 20px rgba(255,100,255,0.8);
+}
+.secretShopNotif p {
+  color: #dda0dd;
+  font-size: 14px;
+  margin: 6px 0 16px;
+  line-height: 1.5;
+}
+.secretCountdownBadge {
+  display: inline-block;
+  background: rgba(255,80,200,0.2);
+  border: 1px solid rgba(255,80,200,0.5);
+  border-radius: 8px;
+  padding: 4px 12px;
+  color: #ff99ee;
+  font-size: 13px;
+  font-weight: 800;
+  margin-bottom: 14px;
+}
+.secretShopNotifBtn {
+  background: linear-gradient(135deg, #cc00aa, #7700cc);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 28px;
+  font-family: 'Bungee', cursive;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 20px rgba(200,0,255,0.4);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.secretShopNotifBtn:hover {
+  transform: scale(1.04);
+  box-shadow: 0 6px 28px rgba(200,0,255,0.6);
+}
+.secretNotifDismissBtn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.4);
+  border-radius: 8px;
+  padding: 7px 18px;
+  font-size: 12px;
+  cursor: pointer;
+  margin-top: 10px;
+  width: 100%;
+}
+.secretNotifDismissBtn:hover { color: rgba(255,255,255,0.6); }
+
+/* ── RYBNÍK ── */
+.fishingBox { max-width: 560px; width: 95%; }
+.fishSubtitle { color: #888; font-size: 12px; margin: 4px 0 12px; }
+.fishingPondArea {
+  width: 100%;
+  height: 100px;
+  background: linear-gradient(180deg, #0a1a3a 0%, #0d2b5a 50%, #0a1a3a 100%);
+  border-radius: 12px;
+  border: 1px solid rgba(57,150,255,0.3);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  user-select: none;
+  transition: box-shadow 0.2s;
+}
+.fishingPondArea:hover { box-shadow: 0 0 20px rgba(57,150,255,0.4); }
+.fishingPondArea:active { transform: scale(0.99); }
+.pondLabel {
+  font-family: 'Bungee', cursive;
+  color: #39aaff;
+  font-size: 14px;
+  letter-spacing: 1px;
+  z-index: 2;
+  text-shadow: 0 0 10px rgba(57,170,255,0.6);
+}
+.fishingCoolbar {
+  width: 100%; height: 6px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 3px; margin: 8px 0 2px;
+  overflow: hidden;
+}
+.fishingCoolbarFill {
+  height: 100%;
+  background: linear-gradient(90deg, #39aaff, #39ff6b);
+  border-radius: 3px;
+  transition: width 1s linear;
+}
+.fishingCoolText { font-size: 11px; color: #666; text-align: center; margin-bottom: 10px; }
+.fishingGear { display: flex; gap: 12px; margin: 10px 0; }
+.fishingGearSection { flex: 1; }
+.fishingGearSection h4 { font-size: 13px; color: #aaa; margin: 0 0 6px; }
+.fishGearBtn {
+  display: block; width: 100%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px; color: #ccc;
+  font-size: 12px; padding: 6px 8px;
+  cursor: pointer; margin-bottom: 4px;
+  text-align: left; line-height: 1.4;
+  transition: background 0.15s, border-color 0.15s;
+}
+.fishGearBtn:hover { background: rgba(255,255,255,0.1); }
+.fishGearBtn.fishGearSelected {
+  background: rgba(57,255,107,0.1);
+  border-color: rgba(57,255,107,0.5);
+  color: #39ff6b;
+}
+.fishInventory { margin: 10px 0; }
+.fishInventory h4 { font-size: 13px; color: #aaa; margin: 0 0 6px; }
+.fishInventoryGrid {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  max-height: 160px; overflow-y: auto;
+}
+.fishItem {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid;
+  border-radius: 8px;
+  padding: 6px 8px;
+  text-align: center;
+  min-width: 80px;
+  font-size: 11px;
+}
+.fishEmoji { font-size: 22px; }
+.fishName { color: #ddd; font-weight: 700; font-size: 10px; }
+.fishRarity { font-size: 9px; font-weight: 800; text-transform: uppercase; }
+.fishValue { color: #ffd700; font-size: 10px; }
+.fishCount { color: #aaa; font-size: 10px; }
+.fishSellBtn {
+  width: 100%;
+  background: linear-gradient(135deg, #1a6b00, #2d9e00);
+  border: none; border-radius: 10px;
+  color: #fff; font-family: 'Bungee', cursive;
+  font-size: 14px; padding: 12px;
+  cursor: pointer; margin-bottom: 8px;
+  box-shadow: 0 3px 12px rgba(57,200,0,0.3);
+  transition: transform 0.15s;
+}
+.fishSellBtn:hover { transform: scale(1.02); }
+
+/* ── INVESTICE ── */
+.investBox { max-width: 560px; width: 95%; }
+.investSubtitle { color: #888; font-size: 12px; margin: 4px 0 12px; }
+.investPortfolio {
+  background: rgba(0,20,50,0.7);
+  border: 1px solid rgba(57,150,255,0.3);
+  border-radius: 10px; padding: 10px 14px; margin-bottom: 12px;
+}
+.investPortfolioTitle { font-size: 12px; color: #39aaff; font-weight: 800; margin-bottom: 6px; }
+.investActiveItem {
+  font-size: 12px; color: #ccc; padding: 5px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.investTimer { color: #ffd700; font-size: 11px; font-weight: 800; }
+.investFinishedItem {
+  font-size: 12px; padding: 6px 8px;
+  border-radius: 6px; margin: 4px 0; font-weight: 700;
+}
+.investWin { background: rgba(57,255,107,0.12); color: #39ff6b; }
+.investLose { background: rgba(255,50,50,0.12); color: #ff5555; }
+.investClearBtn {
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+  color: #aaa; border-radius: 7px; padding: 5px 12px;
+  font-size: 11px; cursor: pointer; margin-top: 6px;
+}
+.investGrid { display: flex; flex-direction: column; gap: 8px; }
+.investCard {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px; padding: 12px 14px;
+  display: flex; align-items: center; gap: 12px;
+  transition: border-color 0.2s;
+}
+.investCard:hover { border-color: rgba(255,200,0,0.3); }
+.investCard.investActive { border-color: rgba(57,255,107,0.4); background: rgba(57,255,107,0.04); }
+.investCardIcon { font-size: 28px; flex-shrink: 0; }
+.investCardInfo { flex: 1; }
+.investCardName { font-family: 'Bungee', cursive; font-size: 13px; color: #eee; }
+.investCardDesc { font-size: 11px; color: #777; margin: 2px 0 5px; }
+.investCardStats { display: flex; flex-wrap: wrap; gap: 6px; }
+.investCardStats span { font-size: 10px; color: #999; background: rgba(255,255,255,0.05); border-radius: 4px; padding: 2px 5px; }
+.investBtn {
+  background: rgba(255,200,0,0.1);
+  border: 1px solid rgba(255,200,0,0.3);
+  color: #ffd700; border-radius: 9px;
+  font-family: 'Bungee', cursive; font-size: 11px;
+  padding: 8px 12px; cursor: pointer;
+  text-align: center; min-width: 70px;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+.investBtn.investCanAfford { background: rgba(255,200,0,0.18); }
+.investBtn:hover:not(:disabled) { background: rgba(255,200,0,0.28); }
+.investBtn:disabled { opacity: 0.5; cursor: default; }
+
+/* ── KABINET ── */
+.peptalkBox { max-width: 440px; width: 95%; text-align: center; }
+.peptalkNPC { font-size: 56px; display: block; margin: 0 auto 8px; }
+.peptalkProgress {
+  font-family: 'Bungee', cursive; color: #ff9900;
+  font-size: 13px; margin: 4px 0; min-height: 18px;
+}
+.peptalkQuestion {
+  font-size: 17px; font-weight: 800; color: #eee;
+  margin: 10px 0 4px; line-height: 1.4;
+}
+.peptalkSubtext { font-size: 12px; color: #888; margin-bottom: 14px; }
+.peptalkAnswers { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; }
+.peptalkAnswerBtn {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #ddd; border-radius: 10px;
+  padding: 12px 10px; font-size: 14px;
+  font-weight: 700; cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+}
+.peptalkAnswerBtn:hover:not(:disabled) {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.3);
+  transform: scale(1.02);
+}
+.peptalkAnswerBtn:disabled { cursor: default; }
+.peptalkResult {
+  font-size: 16px; font-weight: 800;
+  padding: 10px; border-radius: 8px;
+  margin: 8px 0; background: rgba(255,255,255,0.05);
+}
+</style>
 </head>
 <body>
 
@@ -95,7 +406,7 @@
       </button>
       <button onclick="openUltimateSlot()" class="specialItem specialUltimate">
         <span class="specialIcon">👑</span>
-        <span class="specialInfo"><span class="specialName">Ultimate Automat</span><span class="specialSub">min. 500K | 10 spinů / 10min</span></span>
+        <span class="specialInfo"><span class="specialName">Ultimate Automat</span><span class="specialSub">min. 500K | 10 spinů / 10 min</span></span>
       </button>
 
       <div class="ufoPrestigeShop">
@@ -120,10 +431,10 @@
 
   </div>
 
-  <!-- ACHIEVEMENTS -->
+  <!-- ACHIEVEMENTS (vlevo dole) -->
   <div class="achievementBox">
     <h2>🏆 Achievementy</h2>
-    <div id="achievementList"></div>
+    <div id="achievementList"><span style="color:#444;font-size:11px">Zatím žádné...</span></div>
   </div>
 
   <!-- BOSS OVERLAY -->
@@ -142,13 +453,15 @@
     </div>
   </div>
 
-  <!-- SECRET SHOP NOTIFICATION -->
+  <!-- TAJNÝ OBCHOD NOTIFIKACE (vyskakovací) -->
   <div id="secretShopNotif" class="secretShopNotif">
-    <div style="font-size:48px;margin-bottom:8px">🤫</div>
+    <div style="font-size:52px;margin-bottom:4px">🤫</div>
     <h2>Tajný Obchod!</h2>
-    <p>Speciální nabídky jen na 3 minuty!<br>Nevynechej to!</p>
-    <button class="secretShopNotifBtn" onclick="dismissSecretNotif()">OTEVŘÍT OBCHOD</button>
-    <br><button class="modalCloseBtn" style="margin-top:10px" onclick="closeSecretNotif()">Zavřít</button>
+    <p>Speciální nabídky jen na <strong style="color:#ff99ee">3 minuty</strong>!<br>Nevynechej to!</p>
+    <div class="secretCountdownBadge">Zavírá za <span id="secretNotifCountdown">180</span>s</div>
+    <button class="secretShopNotifBtn" onclick="dismissSecretNotif()">🛒 OTEVŘÍT OBCHOD</button>
+    <br>
+    <button class="secretNotifDismissBtn" onclick="closeSecretNotif()">Zavřít upozornění</button>
   </div>
 
   <audio id="horseSound" preload="none"><source src="horse.mp3" type="audio/mpeg"></audio>
@@ -232,9 +545,9 @@
     <div class="infoSection"><h3>🔬 Výzkum</h3><p>Odemykej permanentní bonusy. Výzkum trvá čas a stojí coins.</p></div>
     <div class="infoSection"><h3>🤫 Tajný Obchod</h3><p>Každých 10–15 minut se otevře na 3 minuty. Upozornění přijde automaticky!</p></div>
     <div class="infoSection"><h3>🐎 Stáj</h3><p>Max 6 koní, příjem /sec. Max level 50, každý level +10%.</p></div>
-    <div class="infoSection"><h3>🎣 Rybník</h3><p>Klikej na rybník, chytej ryby různých rarit. Prodej u Bicáka za coins!</p></div>
-    <div class="infoSection"><h3>📈 Investice</h3><p>Investuj coins do projektů. Různé riziko a čas = různá odměna.</p></div>
-    <div class="infoSection"><h3>🎓 Kabinet</h3><p>Rozmluva s ředitelem. Odpovídej správně a získej odměnu!</p></div>
+    <div class="infoSection"><h3>🎣 Rybník</h3><p>Klikej na rybník, chytej ryby různých rarit. Prodej u Bicáka za coins! Cena ryb roste s tvými coiny.</p></div>
+    <div class="infoSection"><h3>📈 Investice</h3><p>Investuj coins do projektů. Různé riziko a čas = různá odměna. Fungují i offline!</p></div>
+    <div class="infoSection"><h3>🎓 Kabinet</h3><p>Rozmluva s ředitelem. Odpovídej správně a získej coins! 5× za sebou = bonus.</p></div>
     <div class="infoSection"><h3>🏠 Nemovitosti</h3><p>🏎️ Auto (60K) | 🚗 Garáž (5B) | 🛸 UFO (10B)</p></div>
     <div class="infoSection"><h3>👾 Bossové</h3><p>Každé 2–4 min útočí náhodný boss. Klikej co nejrychleji!</p></div>
     <div class="infoSection"><h3>🎰 Automaty</h3><p>Slot: 10 spinů / 5 min. Ultimate: 10 spinů / 10 min. Timer přežije reload!</p></div>
@@ -247,59 +560,23 @@
   <div class="modalBox bossInfoBox">
     <h2 style="margin-bottom:18px">👾 Bossové</h2>
     <div class="bossInfoCard cornCard">
-      <div class="bossInfoTop">
-        <span class="bossInfoEmoji">🌽</span>
-        <div class="bossInfoMeta"><div class="bossInfoName">Kukuřičný Démon</div><div class="bossInfoDiff diffEasy">⚔️ Lehký</div></div>
-        <div class="bossInfoKills" id="killsCorn">0× poražen</div>
-      </div>
-      <div class="bossInfoStats">
-        <div class="biStat"><span class="biLabel">HP</span><span class="biVal">3×</span></div>
-        <div class="biStat"><span class="biLabel">Čas</span><span class="biVal">30s</span></div>
-        <div class="biStat biGreen"><span class="biLabel">Výhra</span><span class="biVal">~60s</span></div>
-        <div class="biStat biRed"><span class="biLabel">Prohra</span><span class="biVal">−8%</span></div>
-      </div>
+      <div class="bossInfoTop"><span class="bossInfoEmoji">🌽</span><div class="bossInfoMeta"><div class="bossInfoName">Kukuřičný Démon</div><div class="bossInfoDiff diffEasy">⚔️ Lehký</div></div><div class="bossInfoKills" id="killsCorn">0× poražen</div></div>
+      <div class="bossInfoStats"><div class="biStat"><span class="biLabel">HP</span><span class="biVal">3×</span></div><div class="biStat"><span class="biLabel">Čas</span><span class="biVal">30s</span></div><div class="biStat biGreen"><span class="biLabel">Výhra</span><span class="biVal">~60s</span></div><div class="biStat biRed"><span class="biLabel">Prohra</span><span class="biVal">−8%</span></div></div>
       <div class="bossInfoDesc">Nejslabší boss z kukuřičného pole. Klikej rychle!</div>
     </div>
     <div class="bossInfoCard ladychCard">
-      <div class="bossInfoTop">
-        <span class="bossInfoEmoji">🚜</span>
-        <div class="bossInfoMeta"><div class="bossInfoName">Ládychův Traktor</div><div class="bossInfoDiff diffMed">⚔️⚔️ Střední</div></div>
-        <div class="bossInfoKills" id="killsLadych">0× poražen</div>
-      </div>
-      <div class="bossInfoStats">
-        <div class="biStat"><span class="biLabel">HP</span><span class="biVal">4×</span></div>
-        <div class="biStat"><span class="biLabel">Čas</span><span class="biVal">30s</span></div>
-        <div class="biStat biGreen"><span class="biLabel">Výhra</span><span class="biVal">~80s</span></div>
-        <div class="biStat biRed"><span class="biLabel">Prohra</span><span class="biVal">−12%</span></div>
-      </div>
+      <div class="bossInfoTop"><span class="bossInfoEmoji">🚜</span><div class="bossInfoMeta"><div class="bossInfoName">Ládychův Traktor</div><div class="bossInfoDiff diffMed">⚔️⚔️ Střední</div></div><div class="bossInfoKills" id="killsLadych">0× poražen</div></div>
+      <div class="bossInfoStats"><div class="biStat"><span class="biLabel">HP</span><span class="biVal">4×</span></div><div class="biStat"><span class="biLabel">Čas</span><span class="biVal">30s</span></div><div class="biStat biGreen"><span class="biLabel">Výhra</span><span class="biVal">~80s</span></div><div class="biStat biRed"><span class="biLabel">Prohra</span><span class="biVal">−12%</span></div></div>
       <div class="bossInfoDesc">Ládych přijíždí na traktoru plném slámy!</div>
     </div>
     <div class="bossInfoCard shifiCard">
-      <div class="bossInfoTop">
-        <span class="bossInfoEmoji">👻</span>
-        <div class="bossInfoMeta"><div class="bossInfoName">Shifin Duch</div><div class="bossInfoDiff diffHard">⚔️⚔️⚔️ Těžký</div></div>
-        <div class="bossInfoKills" id="killsShifi">0× poražen</div>
-      </div>
-      <div class="bossInfoStats">
-        <div class="biStat"><span class="biLabel">HP</span><span class="biVal">5×</span></div>
-        <div class="biStat"><span class="biLabel">Čas</span><span class="biVal">30s</span></div>
-        <div class="biStat biGreen"><span class="biLabel">Výhra</span><span class="biVal">~100s</span></div>
-        <div class="biStat biRed"><span class="biLabel">Prohra</span><span class="biVal">−15%</span></div>
-      </div>
+      <div class="bossInfoTop"><span class="bossInfoEmoji">👻</span><div class="bossInfoMeta"><div class="bossInfoName">Shifin Duch</div><div class="bossInfoDiff diffHard">⚔️⚔️⚔️ Těžký</div></div><div class="bossInfoKills" id="killsShifi">0× poražen</div></div>
+      <div class="bossInfoStats"><div class="biStat"><span class="biLabel">HP</span><span class="biVal">5×</span></div><div class="biStat"><span class="biLabel">Čas</span><span class="biVal">30s</span></div><div class="biStat biGreen"><span class="biLabel">Výhra</span><span class="biVal">~100s</span></div><div class="biStat biRed"><span class="biLabel">Prohra</span><span class="biVal">−15%</span></div></div>
       <div class="bossInfoDesc">Shifin duch z druhé dimenze. Nejvíc HP.</div>
     </div>
     <div class="bossInfoCard olgaCard">
-      <div class="bossInfoTop">
-        <span class="bossInfoEmoji">👩‍🦳</span>
-        <div class="bossInfoMeta"><div class="bossInfoName">Olga Kunysová</div><div class="bossInfoDiff diffLegend">💀 Legendární</div></div>
-        <div class="bossInfoKills" id="killsOlga">0× poražen</div>
-      </div>
-      <div class="bossInfoStats">
-        <div class="biStat"><span class="biLabel">HP</span><span class="biVal">8×</span></div>
-        <div class="biStat"><span class="biLabel">Čas</span><span class="biVal">25s</span></div>
-        <div class="biStat biGreen"><span class="biLabel">Výhra</span><span class="biVal">~150s</span></div>
-        <div class="biStat biRed"><span class="biLabel">Prohra</span><span class="biVal">−25%</span></div>
-      </div>
+      <div class="bossInfoTop"><span class="bossInfoEmoji">👩‍🦳</span><div class="bossInfoMeta"><div class="bossInfoName">Olga Kunysová</div><div class="bossInfoDiff diffLegend">💀 Legendární</div></div><div class="bossInfoKills" id="killsOlga">0× poražen</div></div>
+      <div class="bossInfoStats"><div class="biStat"><span class="biLabel">HP</span><span class="biVal">8×</span></div><div class="biStat"><span class="biLabel">Čas</span><span class="biVal">25s</span></div><div class="biStat biGreen"><span class="biLabel">Výhra</span><span class="biVal">~150s</span></div><div class="biStat biRed"><span class="biLabel">Prohra</span><span class="biVal">−25%</span></div></div>
       <div class="bossInfoDesc">Legendární boss – 10% šance spawnu. Velmi nebezpečná!</div>
     </div>
     <button onclick="closeModal('bossInfoModal')" class="modalCloseBtn" style="width:100%;margin-top:4px">Zavřít</button>
@@ -337,7 +614,7 @@
   </div>
 </div>
 
-<!-- TAJNÝ OBCHOD -->
+<!-- TAJNÝ OBCHOD MODAL -->
 <div id="secretShopModal" class="modal" style="display:none">
   <div class="modalBox secretShopBox">
     <h2>🤫 Tajný Obchod</h2>
@@ -389,7 +666,7 @@
 <div id="investModal" class="modal" style="display:none">
   <div class="modalBox investBox">
     <h2>📈 Investice</h2>
-    <p class="investSubtitle">Investuj coins do projektů a čekej na výsledek. Riziko = větší odměna!</p>
+    <p class="investSubtitle">Investuj coins do projektů a čekej na výsledek. Riziko = větší odměna! Fungují i offline.</p>
 
     <div class="investPortfolio" id="investPortfolio" style="display:none">
       <div class="investPortfolioTitle">📊 Aktivní investice</div>
@@ -401,11 +678,11 @@
   </div>
 </div>
 
-<!-- PEPTALK / KABINET -->
+<!-- KABINET / PEPTALK -->
 <div id="peptalkModal" class="modal" style="display:none">
   <div class="modalBox peptalkBox">
     <span class="peptalkNPC" id="peptalkNPC">👨‍💼</span>
-    <h2 id="peptalkTitle" style="color:var(--pink)">Kabinet ředitele</h2>
+    <h2 id="peptalkTitle" style="color:#ff66ff">Kabinet ředitele</h2>
     <div class="peptalkProgress" id="peptalkProgress"></div>
     <div class="peptalkQuestion" id="peptalkQuestion">Vstup do kabinetu...</div>
     <p class="peptalkSubtext" id="peptalkSubtext">Odpovídej správně a získej odměnu!</p>

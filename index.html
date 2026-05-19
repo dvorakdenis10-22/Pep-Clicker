@@ -9,7 +9,6 @@
 <link rel="stylesheet" href="style.css">
 
 <style>
-/* ── KOLONKY POZADÍ ── */
 .shopContainer {
   background: rgba(20, 10, 40, 0.85);
   border: 1px solid rgba(255, 200, 0, 0.18);
@@ -29,7 +28,7 @@
   box-shadow: 0 4px 32px rgba(0,0,0,0.5), inset 0 0 40px rgba(191,95,255,0.03);
 }
 
-/* ── ACHIEVEMENT BOX (vlevo dole) ── */
+/* ACHIEVEMENT BOX */
 .achievementBox {
   position: fixed;
   bottom: 16px;
@@ -61,7 +60,44 @@
   border-left: 2px solid rgba(255,215,0,0.3);
 }
 
-/* ── TAJNÝ OBCHOD NOTIFIKACE ── */
+/* TAX NOTIF (vlevo nahoře) */
+.taxNotifBox {
+  position: fixed;
+  top: 80px;
+  right: 16px;
+  width: 230px;
+  background: rgba(20, 5, 5, 0.95);
+  border: 2px solid rgba(255, 60, 60, 0.7);
+  border-radius: 14px;
+  padding: 12px 14px;
+  z-index: 200;
+  display: none;
+  box-shadow: 0 0 30px rgba(255,0,0,0.3);
+}
+.taxNotifBox h3 {
+  font-family: 'Bungee', cursive;
+  color: #ff4444;
+  font-size: 14px;
+  margin: 0 0 6px 0;
+}
+.taxNotifBox p { color: #ffaaaa; font-size: 12px; margin: 3px 0; }
+.taxNotifBox .taxTimer { color: #ff6666; font-size: 22px; font-family: 'Bungee', cursive; text-align: center; margin: 6px 0; }
+.taxEvadeBtn {
+  width: 100%;
+  background: linear-gradient(135deg, #2a0000, #550000);
+  border: 1px solid rgba(255,60,60,0.5);
+  color: #ff9999;
+  border-radius: 8px;
+  padding: 8px;
+  font-family: 'Bungee', cursive;
+  font-size: 12px;
+  cursor: pointer;
+  margin-top: 6px;
+}
+.taxEvadeBtn:disabled { opacity: 0.4; cursor: default; }
+.taxEvadeBtn:not(:disabled):hover { background: linear-gradient(135deg, #550000, #880000); }
+
+/* TAJNÝ OBCHOD NOTIFIKACE */
 .secretShopNotif {
   display: none;
   position: fixed;
@@ -91,12 +127,7 @@
   margin: 8px 0;
   text-shadow: 0 0 20px rgba(255,100,255,0.8);
 }
-.secretShopNotif p {
-  color: #dda0dd;
-  font-size: 14px;
-  margin: 6px 0 16px;
-  line-height: 1.5;
-}
+.secretShopNotif p { color: #dda0dd; font-size: 14px; margin: 6px 0 16px; line-height: 1.5; }
 .secretCountdownBadge {
   display: inline-block;
   background: rgba(255,80,200,0.2);
@@ -122,10 +153,7 @@
   box-shadow: 0 4px 20px rgba(200,0,255,0.4);
   transition: transform 0.15s, box-shadow 0.15s;
 }
-.secretShopNotifBtn:hover {
-  transform: scale(1.04);
-  box-shadow: 0 6px 28px rgba(200,0,255,0.6);
-}
+.secretShopNotifBtn:hover { transform: scale(1.04); box-shadow: 0 6px 28px rgba(200,0,255,0.6); }
 .secretNotifDismissBtn {
   background: transparent;
   border: 1px solid rgba(255,255,255,0.15);
@@ -139,7 +167,7 @@
 }
 .secretNotifDismissBtn:hover { color: rgba(255,255,255,0.6); }
 
-/* ── RYBNÍK ── */
+/* RYBNÍK */
 .fishingBox { max-width: 560px; width: 95%; }
 .fishSubtitle { color: #888; font-size: 12px; margin: 4px 0 12px; }
 .fishingPondArea {
@@ -157,26 +185,9 @@
 }
 .fishingPondArea:hover { box-shadow: 0 0 20px rgba(57,150,255,0.4); }
 .fishingPondArea:active { transform: scale(0.99); }
-.pondLabel {
-  font-family: 'Bungee', cursive;
-  color: #39aaff;
-  font-size: 14px;
-  letter-spacing: 1px;
-  z-index: 2;
-  text-shadow: 0 0 10px rgba(57,170,255,0.6);
-}
-.fishingCoolbar {
-  width: 100%; height: 6px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 3px; margin: 8px 0 2px;
-  overflow: hidden;
-}
-.fishingCoolbarFill {
-  height: 100%;
-  background: linear-gradient(90deg, #39aaff, #39ff6b);
-  border-radius: 3px;
-  transition: width 1s linear;
-}
+.pondLabel { font-family: 'Bungee', cursive; color: #39aaff; font-size: 14px; letter-spacing: 1px; z-index: 2; text-shadow: 0 0 10px rgba(57,170,255,0.6); }
+.fishingCoolbar { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; margin: 8px 0 2px; overflow: hidden; }
+.fishingCoolbarFill { height: 100%; background: linear-gradient(90deg, #39aaff, #39ff6b); border-radius: 3px; transition: width 1s linear; }
 .fishingCoolText { font-size: 11px; color: #666; text-align: center; margin-bottom: 10px; }
 .fishingGear { display: flex; gap: 12px; margin: 10px 0; }
 .fishingGearSection { flex: 1; }
@@ -192,26 +203,11 @@
   transition: background 0.15s, border-color 0.15s;
 }
 .fishGearBtn:hover { background: rgba(255,255,255,0.1); }
-.fishGearBtn.fishGearSelected {
-  background: rgba(57,255,107,0.1);
-  border-color: rgba(57,255,107,0.5);
-  color: #39ff6b;
-}
+.fishGearBtn.fishGearSelected { background: rgba(57,255,107,0.1); border-color: rgba(57,255,107,0.5); color: #39ff6b; }
 .fishInventory { margin: 10px 0; }
 .fishInventory h4 { font-size: 13px; color: #aaa; margin: 0 0 6px; }
-.fishInventoryGrid {
-  display: flex; flex-wrap: wrap; gap: 6px;
-  max-height: 160px; overflow-y: auto;
-}
-.fishItem {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid;
-  border-radius: 8px;
-  padding: 6px 8px;
-  text-align: center;
-  min-width: 80px;
-  font-size: 11px;
-}
+.fishInventoryGrid { display: flex; flex-wrap: wrap; gap: 6px; max-height: 160px; overflow-y: auto; }
+.fishItem { background: rgba(255,255,255,0.05); border: 1px solid; border-radius: 8px; padding: 6px 8px; text-align: center; min-width: 80px; font-size: 11px; }
 .fishEmoji { font-size: 22px; }
 .fishName { color: #ddd; font-weight: 700; font-size: 10px; }
 .fishRarity { font-size: 9px; font-weight: 800; text-transform: uppercase; }
@@ -229,40 +225,19 @@
 }
 .fishSellBtn:hover { transform: scale(1.02); }
 
-/* ── INVESTICE ── */
+/* INVESTICE */
 .investBox { max-width: 560px; width: 95%; }
 .investSubtitle { color: #888; font-size: 12px; margin: 4px 0 12px; }
-.investPortfolio {
-  background: rgba(0,20,50,0.7);
-  border: 1px solid rgba(57,150,255,0.3);
-  border-radius: 10px; padding: 10px 14px; margin-bottom: 12px;
-}
+.investPortfolio { background: rgba(0,20,50,0.7); border: 1px solid rgba(57,150,255,0.3); border-radius: 10px; padding: 10px 14px; margin-bottom: 12px; }
 .investPortfolioTitle { font-size: 12px; color: #39aaff; font-weight: 800; margin-bottom: 6px; }
-.investActiveItem {
-  font-size: 12px; color: #ccc; padding: 5px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  display: flex; justify-content: space-between; align-items: center;
-}
+.investActiveItem { font-size: 12px; color: #ccc; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: center; }
 .investTimer { color: #ffd700; font-size: 11px; font-weight: 800; }
-.investFinishedItem {
-  font-size: 12px; padding: 6px 8px;
-  border-radius: 6px; margin: 4px 0; font-weight: 700;
-}
+.investFinishedItem { font-size: 12px; padding: 6px 8px; border-radius: 6px; margin: 4px 0; font-weight: 700; }
 .investWin { background: rgba(57,255,107,0.12); color: #39ff6b; }
 .investLose { background: rgba(255,50,50,0.12); color: #ff5555; }
-.investClearBtn {
-  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
-  color: #aaa; border-radius: 7px; padding: 5px 12px;
-  font-size: 11px; cursor: pointer; margin-top: 6px;
-}
+.investClearBtn { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); color: #aaa; border-radius: 7px; padding: 5px 12px; font-size: 11px; cursor: pointer; margin-top: 6px; }
 .investGrid { display: flex; flex-direction: column; gap: 8px; }
-.investCard {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 12px; padding: 12px 14px;
-  display: flex; align-items: center; gap: 12px;
-  transition: border-color 0.2s;
-}
+.investCard { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; gap: 12px; transition: border-color 0.2s; }
 .investCard:hover { border-color: rgba(255,200,0,0.3); }
 .investCard.investActive { border-color: rgba(57,255,107,0.4); background: rgba(57,255,107,0.04); }
 .investCardIcon { font-size: 28px; flex-shrink: 0; }
@@ -271,52 +246,95 @@
 .investCardDesc { font-size: 11px; color: #777; margin: 2px 0 5px; }
 .investCardStats { display: flex; flex-wrap: wrap; gap: 6px; }
 .investCardStats span { font-size: 10px; color: #999; background: rgba(255,255,255,0.05); border-radius: 4px; padding: 2px 5px; }
-.investBtn {
-  background: rgba(255,200,0,0.1);
-  border: 1px solid rgba(255,200,0,0.3);
-  color: #ffd700; border-radius: 9px;
-  font-family: 'Bungee', cursive; font-size: 11px;
-  padding: 8px 12px; cursor: pointer;
-  text-align: center; min-width: 70px;
-  transition: background 0.15s;
-  flex-shrink: 0;
-}
+.investBtn { background: rgba(255,200,0,0.1); border: 1px solid rgba(255,200,0,0.3); color: #ffd700; border-radius: 9px; font-family: 'Bungee', cursive; font-size: 11px; padding: 8px 12px; cursor: pointer; text-align: center; min-width: 70px; transition: background 0.15s; flex-shrink: 0; }
 .investBtn.investCanAfford { background: rgba(255,200,0,0.18); }
 .investBtn:hover:not(:disabled) { background: rgba(255,200,0,0.28); }
 .investBtn:disabled { opacity: 0.5; cursor: default; }
 
-/* ── KABINET ── */
+/* PEPTALK */
 .peptalkBox { max-width: 440px; width: 95%; text-align: center; }
 .peptalkNPC { font-size: 56px; display: block; margin: 0 auto 8px; }
-.peptalkProgress {
-  font-family: 'Bungee', cursive; color: #ff9900;
-  font-size: 13px; margin: 4px 0; min-height: 18px;
-}
-.peptalkQuestion {
-  font-size: 17px; font-weight: 800; color: #eee;
-  margin: 10px 0 4px; line-height: 1.4;
-}
+.peptalkProgress { font-family: 'Bungee', cursive; color: #ff9900; font-size: 13px; margin: 4px 0; min-height: 18px; }
+.peptalkQuestion { font-size: 17px; font-weight: 800; color: #eee; margin: 10px 0 4px; line-height: 1.4; }
 .peptalkSubtext { font-size: 12px; color: #888; margin-bottom: 14px; }
 .peptalkAnswers { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; }
-.peptalkAnswerBtn {
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.15);
-  color: #ddd; border-radius: 10px;
-  padding: 12px 10px; font-size: 14px;
-  font-weight: 700; cursor: pointer;
-  transition: background 0.15s, border-color 0.15s, transform 0.1s;
-}
-.peptalkAnswerBtn:hover:not(:disabled) {
-  background: rgba(255,255,255,0.12);
-  border-color: rgba(255,255,255,0.3);
-  transform: scale(1.02);
-}
+.peptalkAnswerBtn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #ddd; border-radius: 10px; padding: 12px 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.15s, border-color 0.15s, transform 0.1s; }
+.peptalkAnswerBtn:hover:not(:disabled) { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.3); transform: scale(1.02); }
 .peptalkAnswerBtn:disabled { cursor: default; }
-.peptalkResult {
-  font-size: 16px; font-weight: 800;
-  padding: 10px; border-radius: 8px;
-  margin: 8px 0; background: rgba(255,255,255,0.05);
+.peptalkResult { font-size: 16px; font-weight: 800; padding: 10px; border-radius: 8px; margin: 8px 0; background: rgba(255,255,255,0.05); }
+
+/* DOSTIHY */
+.dostihyBox { max-width: 560px; width: 95%; }
+.dostihySubtitle { color: #888; font-size: 12px; margin: 4px 0 12px; }
+.dostihyTrack {
+  width: 100%;
+  background: linear-gradient(180deg, #0a1a05 0%, #102a08 50%, #0a1a05 100%);
+  border-radius: 12px;
+  border: 1px solid rgba(57,200,57,0.3);
+  padding: 10px;
+  margin-bottom: 12px;
+  position: relative;
+  overflow: hidden;
 }
+.dostihyLane {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0;
+  height: 36px;
+  position: relative;
+}
+.dostihyLaneTrack {
+  flex: 1;
+  height: 28px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.08);
+  position: relative;
+  overflow: hidden;
+}
+.dostihyHorseEl {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  transition: left 0.15s linear;
+  left: 0%;
+}
+.dostihyHorseName { font-size: 11px; color: #aaa; width: 60px; flex-shrink: 0; text-align: right; }
+.dostihyOdds { font-size: 11px; color: #ffd700; width: 35px; flex-shrink: 0; text-align: center; }
+.dostihyBetSection { margin: 10px 0; }
+.dostihyBetSection h4 { font-size: 13px; color: #aaa; margin: 0 0 8px; }
+.dostihyHorseBtn {
+  display: inline-block;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  color: #ccc;
+  font-size: 12px;
+  padding: 7px 10px;
+  cursor: pointer;
+  margin: 3px;
+  transition: background 0.15s, border-color 0.15s;
+}
+.dostihyHorseBtn.selected { background: rgba(57,255,107,0.15); border-color: rgba(57,255,107,0.6); color: #39ff6b; }
+.dostihyBetRow { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0; }
+.dostihyBetBtn { background: rgba(255,200,0,0.1); border: 1px solid rgba(255,200,0,0.3); color: #ffd700; border-radius: 7px; font-size: 12px; padding: 6px 10px; cursor: pointer; }
+.dostihyBetBtn:hover { background: rgba(255,200,0,0.2); }
+.dostihyStartBtn {
+  width: 100%;
+  background: linear-gradient(135deg, #1a4400, #2d7700);
+  border: none; border-radius: 10px;
+  color: #fff; font-family: 'Bungee', cursive;
+  font-size: 15px; padding: 13px;
+  cursor: pointer; margin-top: 8px;
+  box-shadow: 0 3px 12px rgba(57,200,0,0.3);
+  transition: transform 0.15s;
+}
+.dostihyStartBtn:hover:not(:disabled) { transform: scale(1.02); }
+.dostihyStartBtn:disabled { opacity: 0.5; cursor: default; }
+.dostihyResult { font-size: 15px; font-weight: 800; padding: 10px; border-radius: 8px; margin: 8px 0; background: rgba(255,255,255,0.05); text-align: center; min-height: 20px; }
+.dostihyCoolText { font-size: 11px; color: #666; text-align: center; margin: 4px 0; }
 </style>
 </head>
 <body>
@@ -337,12 +355,22 @@
 <div id="game">
   <div id="airship"></div>
 
+  <!-- TAX NOTIF -->
+  <div class="taxNotifBox" id="taxNotifBox">
+    <h3>💸 DAŇOVÝ ÚŘAD!</h3>
+    <p>Stát chce svůj podíl!</p>
+    <div class="taxTimer" id="taxTimerDisplay">10s</div>
+    <p id="taxAmountDisplay" style="color:#ff8888;font-weight:800;text-align:center">−10% coinů</p>
+    <button class="taxEvadeBtn" id="taxEvadeBtn" onclick="attemptTaxEvasion()">🕵️ DAŇOVÝ ÚNIK (každých 30 min)</button>
+  </div>
+
   <!-- TOP BAR -->
   <div class="topBar">
     <div class="coinsArea">
       <h1>PEP COINS</h1>
       <div id="coins">0</div>
       <div id="stats">Výdělek: 0/sec</div>
+      <div id="taxInfo" style="font-size:11px;color:#ff6666;margin-top:2px"></div>
     </div>
     <div class="topButtons">
       <button class="topBtn infoBtn"        onclick="openInfo()">ℹ️ Info</button>
@@ -352,7 +380,8 @@
       <button class="topBtn researchBtn"    onclick="openResearch()">🔬 Výzkum</button>
       <button class="topBtn fishBtn"        onclick="openFishing()">🎣 Rybník</button>
       <button class="topBtn investBtn"      onclick="openInvest()">📈 Investice</button>
-      <button class="topBtn peptalkBtn"     onclick="openPeptalk()">🎓 Kabinet</button>
+      <button class="topBtn peptalkBtn"     onclick="openPeptalk()">🎓 PepTalk</button>
+      <button class="topBtn dostihyBtn"     onclick="openDostihy()">🏇 Dostihy</button>
       <button id="secretShopTriggerBtn" class="topBtn nemovitostiBtn" onclick="openSecretShop()">🤫 Tajný Obchod</button>
     </div>
   </div>
@@ -431,7 +460,7 @@
 
   </div>
 
-  <!-- ACHIEVEMENTS (vlevo dole) -->
+  <!-- ACHIEVEMENTS -->
   <div class="achievementBox">
     <h2>🏆 Achievementy</h2>
     <div id="achievementList"><span style="color:#444;font-size:11px">Zatím žádné...</span></div>
@@ -453,7 +482,7 @@
     </div>
   </div>
 
-  <!-- TAJNÝ OBCHOD NOTIFIKACE (vyskakovací) -->
+  <!-- TAJNÝ OBCHOD NOTIFIKACE -->
   <div id="secretShopNotif" class="secretShopNotif">
     <div style="font-size:52px;margin-bottom:4px">🤫</div>
     <h2>Tajný Obchod!</h2>
@@ -545,9 +574,11 @@
     <div class="infoSection"><h3>🔬 Výzkum</h3><p>Odemykej permanentní bonusy. Výzkum trvá čas a stojí coins.</p></div>
     <div class="infoSection"><h3>🤫 Tajný Obchod</h3><p>Každých 10–15 minut se otevře na 3 minuty. Upozornění přijde automaticky!</p></div>
     <div class="infoSection"><h3>🐎 Stáj</h3><p>Max 6 koní, příjem /sec. Max level 50, každý level +10%.</p></div>
-    <div class="infoSection"><h3>🎣 Rybník</h3><p>Klikej na rybník, chytej ryby různých rarit. Prodej u Bicáka za coins! Cena ryb roste s tvými coiny.</p></div>
+    <div class="infoSection"><h3>🎣 Rybník</h3><p>Klikej na rybník, chytej ryby různých rarit. Prodej u Bicáka za coins!</p></div>
     <div class="infoSection"><h3>📈 Investice</h3><p>Investuj coins do projektů. Různé riziko a čas = různá odměna. Fungují i offline!</p></div>
-    <div class="infoSection"><h3>🎓 Kabinet</h3><p>Rozmluva s ředitelem. Odpovídej správně a získej coins! 5× za sebou = bonus.</p></div>
+    <div class="infoSection"><h3>🎓 PepTalk</h3><p>Rozmluva s ředitelem. Odpovídej správně a získej coins! 5× za sebou = bonus.</p></div>
+    <div class="infoSection"><h3>🏇 Dostihy</h3><p>Vsaď na koně a sleduj závod! Různé kurzy, různé šance. Cooldown 2 minuty.</p></div>
+    <div class="infoSection"><h3>💸 Daně</h3><p>Každých 10 minut přijde daňový úřad a sebere 10% coinů. Každých 30 minut lze zkusit daňový únik! Timery přežívají reload.</p></div>
     <div class="infoSection"><h3>🏠 Nemovitosti</h3><p>🏎️ Auto (60K) | 🚗 Garáž (5B) | 🛸 UFO (10B)</p></div>
     <div class="infoSection"><h3>👾 Bossové</h3><p>Každé 2–4 min útočí náhodný boss. Klikej co nejrychleji!</p></div>
     <div class="infoSection"><h3>🎰 Automaty</h3><p>Slot: 10 spinů / 5 min. Ultimate: 10 spinů / 10 min. Timer přežije reload!</p></div>
@@ -629,18 +660,15 @@
   <div class="modalBox fishingBox">
     <h2>🎣 Rybník u Bicáka</h2>
     <p class="fishSubtitle">Klikej na rybník a chytej ryby! Prodej je u Bicáka za coins.</p>
-
     <div class="fishingPondArea" id="fishingPond" onclick="castLine()">
       <div class="pondWaves"></div>
       <div id="pondFishContainer"></div>
       <div class="pondLabel" id="pondLabel">🎣 KLIKNI PRO RYBAŘENÍ</div>
     </div>
-
     <div class="fishingCoolbar">
       <div class="fishingCoolbarFill" id="fishingCoolFill" style="width:100%"></div>
     </div>
     <div class="fishingCoolText" id="fishingCoolText">Připraveno k rybaření!</div>
-
     <div class="fishingGear">
       <div class="fishingGearSection">
         <h4>🎣 Pruty</h4>
@@ -651,12 +679,10 @@
         <div id="baitList"></div>
       </div>
     </div>
-
     <div class="fishInventory">
       <h4>🐟 Inventář ryb <span id="fishInvCount" style="color:#39ff6b;font-family:'Bungee',cursive"></span></h4>
       <div class="fishInventoryGrid" id="fishInventoryGrid"></div>
     </div>
-
     <button class="fishSellBtn" onclick="sellAllFish()">💰 Prodat vše u Bicáka (<span id="fishSellTotal">0</span> coins)</button>
     <button onclick="closeModal('fishingModal')" class="modalCloseBtn" style="width:100%">Zavřít</button>
   </div>
@@ -667,28 +693,67 @@
   <div class="modalBox investBox">
     <h2>📈 Investice</h2>
     <p class="investSubtitle">Investuj coins do projektů a čekej na výsledek. Riziko = větší odměna! Fungují i offline.</p>
-
     <div class="investPortfolio" id="investPortfolio" style="display:none">
       <div class="investPortfolioTitle">📊 Aktivní investice</div>
       <div id="investActiveList"></div>
     </div>
-
     <div class="investGrid" id="investGrid"></div>
     <button onclick="closeModal('investModal')" class="modalCloseBtn" style="width:100%;margin-top:14px">Zavřít</button>
   </div>
 </div>
 
-<!-- KABINET / PEPTALK -->
+<!-- PEPTALK (přejmenováno z Kabinet) -->
 <div id="peptalkModal" class="modal" style="display:none">
   <div class="modalBox peptalkBox">
     <span class="peptalkNPC" id="peptalkNPC">👨‍💼</span>
-    <h2 id="peptalkTitle" style="color:#ff66ff">Kabinet ředitele</h2>
+    <h2 id="peptalkTitle" style="color:#ff66ff">🎓 PepTalk</h2>
     <div class="peptalkProgress" id="peptalkProgress"></div>
     <div class="peptalkQuestion" id="peptalkQuestion">Vstup do kabinetu...</div>
     <p class="peptalkSubtext" id="peptalkSubtext">Odpovídej správně a získej odměnu!</p>
     <div class="peptalkAnswers" id="peptalkAnswers"></div>
     <div id="peptalkResult" class="peptalkResult" style="display:none"></div>
     <button onclick="closeModal('peptalkModal')" class="modalCloseBtn" style="width:100%;margin-top:8px">Odejít</button>
+  </div>
+</div>
+
+<!-- DOSTIHY -->
+<div id="dostihyModal" class="modal" style="display:none">
+  <div class="modalBox dostihyBox">
+    <h2>🏇 Dostihy u Kotlise</h2>
+    <p class="dostihySubtitle">Vsaď na koně a sleduj závod! Cooldown 2 minuty mezi závody.</p>
+
+    <div class="dostihyTrack" id="dostihyTrack">
+      <!-- lanes rendered by JS -->
+    </div>
+
+    <div class="dostihyCoolText" id="dostihyCoolText">Připraveno na závod!</div>
+
+    <div class="dostihyBetSection">
+      <h4>🐎 Vsaď na koně:</h4>
+      <div id="dostihyHorseBtns"></div>
+    </div>
+
+    <div class="dostihyBetSection">
+      <h4>💰 Výše sázky:</h4>
+      <div class="dostihyBetRow">
+        <button class="dostihyBetBtn" onclick="setDostihyBet(1000)">1K</button>
+        <button class="dostihyBetBtn" onclick="setDostihyBet(5000)">5K</button>
+        <button class="dostihyBetBtn" onclick="setDostihyBet(10000)">10K</button>
+        <button class="dostihyBetBtn" onclick="setDostihyBet(50000)">50K</button>
+        <button class="dostihyBetBtn" onclick="setDostihyBet(100000)">100K</button>
+        <button class="dostihyBetBtn" onclick="setDostihyBet(500000)">500K</button>
+      </div>
+      <div style="margin:6px 0;display:flex;gap:7px;align-items:center">
+        <input id="dostihyCustomBet" type="number" placeholder="Vlastní sázka" style="padding:8px;border-radius:9px;border:1px solid rgba(255,200,0,0.2);background:rgba(255,200,0,0.05);color:#fff;font-size:14px;flex:1">
+        <button onclick="setDostihyCustomBet()" class="modalSmallBtn">OK</button>
+      </div>
+      <div id="dostihyBetDisplay" style="font-size:16px;font-weight:900;color:#ffd700;margin:6px 0">Sázka: 0 | Kůň: nevybrán</div>
+    </div>
+
+    <button class="dostihyStartBtn" id="dostihyStartBtn" onclick="startDostihy()">🏁 SPUSTIT ZÁVOD</button>
+    <div class="dostihyResult" id="dostihyResult"></div>
+
+    <button onclick="closeModal('dostihyModal')" class="modalCloseBtn" style="width:100%;margin-top:8px">Zavřít</button>
   </div>
 </div>
 

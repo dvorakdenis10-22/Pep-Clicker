@@ -17,12 +17,11 @@ let stableHorses = [];
 const MAX_HORSES = 6;
 const MAX_HORSE_LEVEL = 50;
 
-// ─── SLOT timery – časy uloženy jako timestamps ───────────────
+// ─── SLOT timery ─────────────────────────────────────────────
 let slotSpinsLeft = 10;
-let slotCooldownEnd = 0; // timestamp kdy skončí cooldown
-
+let slotCooldownEnd = 0;
 let ultimateSpinsLeft = 10;
-let ultimateCooldownEnd = 0; // timestamp kdy skončí cooldown
+let ultimateCooldownEnd = 0;
 
 let buyMultiplier = 1;
 
@@ -130,6 +129,293 @@ function renderResearchModal() {
 }
 
 // ═══════════════════════════════════════
+//  DANĚ 💸
+// ═══════════════════════════════════════
+// Tax: every 10 minutes → 10% of coins
+// Tax evasion: usable every 30 minutes → avoids tax
+// Both timers persist across reloads via timestamps
+
+let taxNextAt    = 0;  // timestamp kdy přijde daňový úřad
+let taxEvadeNextAt = 0; // timestamp kdy je dostupný daňový únik
+let taxWarningActive = false;
+let taxCountdown = 0;
+let taxWarningInterval = null;
+
+const TAX_INTERVAL_MS   = 10 * 60 * 1000; // 10 minut
+const EVADE_INTERVAL_MS = 30 * 60 * 1000; // 30 minut
+const TAX_RATE          = 0.10; // 10%
+const TAX_WARNING_SECS  = 15;  // 15 sekund varování před výběrem daně
+
+function initTaxSystem() {
+  // Pokud ještě nebyl nastaven taxNextAt, nastavíme ho
+  if (!taxNextAt || taxNextAt <= Date.now()) {
+    taxNextAt = Date.now() + TAX_INTERVAL_MS;
+    saveGame();
+  }
+  scheduleTaxCheck();
+  updateTaxInfo();
+}
+
+function scheduleTaxCheck() {
+  if (window._taxCheckInterval) clearInterval(window._taxCheckInterval);
+  window._taxCheckInterval = setInterval(() => {
+    updateTaxInfo();
+    // Čas začít varování?
+    const timeUntilTax = taxNextAt - Date.now();
+    if (timeUntilTax <= TAX_WARNING_SECS * 1000 && timeUntilTax > 0 && !taxWarningActive) {
+      startTaxWarning(Math.ceil(timeUntilTax / 1000));
+    }
+    // Čas vybrat daň?
+    if (Date.now() >= taxNextAt && !taxWarningActive) {
+      collectTax();
+    }
+  }, 1000);
+}
+
+function startTaxWarning(secsLeft) {
+  taxWarningActive = true;
+  taxCountdown = secsLeft;
+  const box = document.getElementById("taxNotifBox");
+  if (box) box.style.display = "block";
+  updateTaxWarningUI();
+  if (taxWarningInterval) clearInterval(taxWarningInterval);
+  taxWarningInterval = setInterval(() => {
+    taxCountdown--;
+    updateTaxWarningUI();
+    if (taxCountdown <= 0) {
+      clearInterval(taxWarningInterval);
+      // Tax actually collected when taxNextAt passes
+    }
+  }, 1000);
+}
+
+function updateTaxWarningUI() {
+  const timerEl = document.getElementById("taxTimerDisplay");
+  const amtEl   = document.getElementById("taxAmountDisplay");
+  const evadeBtn = document.getElementById("taxEvadeBtn");
+  if (timerEl) timerEl.innerText = taxCountdown + "s";
+  if (amtEl) amtEl.innerText = "−" + formatCoins(Math.floor(coins * TAX_RATE)) + " coinů (10%)";
+  if (evadeBtn) {
+    const canEvade = Date.now() >= taxEvadeNextAt;
+    evadeBtn.disabled = !canEvade;
+    const evadeSecsLeft = Math.max(0, Math.ceil((taxEvadeNextAt - Date.now()) / 1000));
+    if (!canEvade) {
+      const m = Math.floor(evadeSecsLeft / 60), s = evadeSecsLeft % 60;
+      evadeBtn.innerText = "🕵️ Daňový únik – dostupný za " + m + ":" + String(s).padStart(2, "0");
+    } else {
+      evadeBtn.innerText = "🕵️ DAŇOVÝ ÚNIK! (Zdarma)";
+    }
+  }
+}
+
+function collectTax() {
+  taxWarningActive = false;
+  if (taxWarningInterval) clearInterval(taxWarningInterval);
+  const stolen = Math.floor(coins * TAX_RATE);
+  coins = Math.max(0, coins - stolen);
+  taxNextAt = Date.now() + TAX_INTERVAL_MS;
+  const box = document.getElementById("taxNotifBox");
+  if (box) box.style.display = "none";
+  showFloatingText("💸 Daňový úřad vzal " + formatCoins(stolen) + " coinů!", "#ff6666");
+  update(); saveGame();
+}
+
+function attemptTaxEvasion() {
+  if (Date.now() < taxEvadeNextAt) {
+    showToast("Daňový únik ještě není dostupný!");
+    return;
+  }
+  taxEvadeNextAt = Date.now() + EVADE_INTERVAL_MS;
+  taxWarningActive = false;
+  if (taxWarningInterval) clearInterval(taxWarningInterval);
+  taxNextAt = Date.now() + TAX_INTERVAL_MS;
+  const box = document.getElementById("taxNotifBox");
+  if (box) box.style.display = "none";
+  showFloatingText("🕵️ Daňový únik úspěšný! Příšté za 10 minut.", "#39ff6b");
+  update(); saveGame();
+}
+
+function updateTaxInfo() {
+  const el = document.getElementById("taxInfo"); if (!el) return;
+  const secsLeft = Math.max(0, Math.ceil((taxNextAt - Date.now()) / 1000));
+  const mins = Math.floor(secsLeft / 60), secs = secsLeft % 60;
+  const evadeSecsLeft = Math.max(0, Math.ceil((taxEvadeNextAt - Date.now()) / 1000));
+  const evadeMins = Math.floor(evadeSecsLeft / 60), evadeSecs = evadeSecsLeft % 60;
+  if (secsLeft > TAX_WARNING_SECS) {
+    el.innerText = "💸 Daně za: " + mins + ":" + String(secs).padStart(2,"0") +
+      (evadeSecsLeft > 0 ? " | 🕵️ Únik za: " + evadeMins + ":" + String(evadeSecs).padStart(2,"0") : " | 🕵️ Únik: DOSTUPNÝ");
+  } else {
+    el.innerText = "💸 DAŇOVÝ ÚŘAD PŘICHÁZÍ!";
+    el.style.color = "#ff2222";
+  }
+}
+
+// ═══════════════════════════════════════
+//  DOSTIHY 🏇
+// ═══════════════════════════════════════
+const DOSTIHY_HORSES = [
+  { name:"Blesk",   emoji:"🐎", odds:2.0,  speed:0.95 },
+  { name:"Kunys",   emoji:"🐴", odds:3.5,  speed:0.85 },
+  { name:"Ládych",  emoji:"🐗", odds:5.0,  speed:0.75 },
+  { name:"Šifka",   emoji:"🦄", odds:8.0,  speed:0.65 },
+  { name:"Kotlík",  emoji:"🦓", odds:12.0, speed:0.55 },
+];
+
+let dostihyBet = 0;
+let dostihySelectedHorse = -1;
+let dostihyRunning = false;
+let dostihyCooldownEnd = 0; // timestamp
+const DOSTIHY_COOLDOWN_MS = 2 * 60 * 1000; // 2 minuty
+
+function getDostihyCooldownLeft() {
+  if (!dostihyCooldownEnd) return 0;
+  return Math.max(0, Math.ceil((dostihyCooldownEnd - Date.now()) / 1000));
+}
+
+function openDostihy() {
+  renderDostihyModal();
+  document.getElementById("dostihyModal").style.display = "flex";
+  if (window._dostihyCoolInterval) clearInterval(window._dostihyCoolInterval);
+  window._dostihyCoolInterval = setInterval(() => {
+    updateDostihyCoolText();
+  }, 1000);
+}
+
+function renderDostihyModal() {
+  // Render track lanes
+  const track = document.getElementById("dostihyTrack");
+  track.innerHTML = DOSTIHY_HORSES.map((h, i) => `
+    <div class="dostihyLane">
+      <div class="dostihyHorseName">${h.name}</div>
+      <div class="dostihyLaneTrack">
+        <div class="dostihyHorseEl" id="dostihyHorse${i}">${h.emoji}</div>
+      </div>
+      <div class="dostihyOdds">${h.odds}×</div>
+    </div>
+  `).join("");
+
+  // Render horse bet buttons
+  const btnsEl = document.getElementById("dostihyHorseBtns");
+  btnsEl.innerHTML = DOSTIHY_HORSES.map((h, i) => `
+    <button class="dostihyHorseBtn ${dostihySelectedHorse===i?'selected':''}" onclick="selectDostihyHorse(${i})">
+      ${h.emoji} ${h.name} (${h.odds}×)
+    </button>
+  `).join("");
+
+  updateDostihyCoolText();
+  updateDostihyBetDisplay();
+}
+
+function updateDostihyCoolText() {
+  const el = document.getElementById("dostihyCoolText"); if (!el) return;
+  const secsLeft = getDostihyCooldownLeft();
+  if (dostihyRunning) {
+    el.innerText = "🏃 Závod probíhá...";
+    el.style.color = "#39ff6b";
+  } else if (secsLeft > 0) {
+    const m = Math.floor(secsLeft/60), s = secsLeft%60;
+    el.innerText = "⏳ Další závod za " + m + ":" + String(s).padStart(2,"0");
+    el.style.color = "#ffaa44";
+  } else {
+    el.innerText = "✅ Připraveno na závod!";
+    el.style.color = "#39ff6b";
+  }
+  const startBtn = document.getElementById("dostihyStartBtn");
+  if (startBtn) startBtn.disabled = dostihyRunning || secsLeft > 0;
+}
+
+function selectDostihyHorse(idx) {
+  dostihySelectedHorse = idx;
+  // Update buttons
+  document.querySelectorAll(".dostihyHorseBtn").forEach((btn, i) => {
+    btn.classList.toggle("selected", i === idx);
+  });
+  updateDostihyBetDisplay();
+}
+
+function setDostihyBet(amount) {
+  dostihyBet = amount;
+  updateDostihyBetDisplay();
+}
+function setDostihyCustomBet() {
+  const val = parseInt(document.getElementById("dostihyCustomBet").value);
+  if (isNaN(val) || val <= 0) { document.getElementById("dostihyResult").innerText = "❌ Zadej platné číslo!"; return; }
+  dostihyBet = val;
+  updateDostihyBetDisplay();
+}
+function updateDostihyBetDisplay() {
+  const el = document.getElementById("dostihyBetDisplay"); if (!el) return;
+  const horseName = dostihySelectedHorse >= 0 ? DOSTIHY_HORSES[dostihySelectedHorse].name : "nevybrán";
+  el.innerText = "Sázka: " + formatCoins(dostihyBet) + " | Kůň: " + horseName;
+}
+
+function startDostihy() {
+  if (getDostihyCooldownLeft() > 0) { showToast("Čekej na cooldown!"); return; }
+  if (dostihyRunning) return;
+  if (dostihySelectedHorse < 0) { document.getElementById("dostihyResult").innerText = "❌ Vyber koně!"; return; }
+  if (dostihyBet <= 0) { document.getElementById("dostihyResult").innerText = "❌ Zadej sázku!"; return; }
+  if (dostihyBet > coins) { document.getElementById("dostihyResult").innerText = "❌ Nemáš dost coinů!"; return; }
+
+  coins -= dostihyBet;
+  dostihyRunning = true;
+  document.getElementById("dostihyResult").innerText = "🏁 Závod startuje!";
+  document.getElementById("dostihyStartBtn").disabled = true;
+  update();
+
+  // Reset all horses to start
+  DOSTIHY_HORSES.forEach((h, i) => {
+    const el = document.getElementById("dostihyHorse" + i);
+    if (el) el.style.left = "0%";
+  });
+
+  // Each horse has random progress per tick based on speed + randomness
+  const positions = DOSTIHY_HORSES.map(() => 0);
+  const finished  = DOSTIHY_HORSES.map(() => false);
+  let winner = -1;
+
+  const raceInterval = setInterval(() => {
+    let anyFinished = false;
+    DOSTIHY_HORSES.forEach((h, i) => {
+      if (finished[i]) return;
+      // Speed with randomness — lower odds horse is faster on average
+      const step = h.speed * (0.5 + Math.random() * 1.5);
+      positions[i] = Math.min(100, positions[i] + step);
+      const el = document.getElementById("dostihyHorse" + i);
+      if (el) el.style.left = Math.max(0, positions[i] - 5) + "%";
+      if (positions[i] >= 100 && !finished[i]) {
+        finished[i] = true;
+        if (winner < 0) { winner = i; anyFinished = true; }
+      }
+    });
+
+    if (anyFinished) {
+      clearInterval(raceInterval);
+      dostihyRunning = false;
+      dostihyCooldownEnd = Date.now() + DOSTIHY_COOLDOWN_MS;
+
+      const winnerHorse = DOSTIHY_HORSES[winner];
+      const resultEl = document.getElementById("dostihyResult");
+
+      if (winner === dostihySelectedHorse) {
+        const payout = Math.floor(dostihyBet * winnerHorse.odds);
+        coins += payout;
+        totalCoinsEarned += payout;
+        const profit = payout - dostihyBet;
+        resultEl.innerText = "🏆 " + winnerHorse.emoji + " " + winnerHorse.name + " vyhrál! Získáváš " + formatCoins(payout) + " (zisk +" + formatCoins(profit) + ")!";
+        resultEl.style.color = "#39ff6b";
+        showFloatingText("🏇 VÝHRA! +" + formatCoins(profit), "#39ff6b");
+      } else {
+        resultEl.innerText = "😢 Vyhrál " + winnerHorse.emoji + " " + winnerHorse.name + ". Ztratil jsi " + formatCoins(dostihyBet) + ".";
+        resultEl.style.color = "#ff5555";
+      }
+
+      updateDostihyCoolText();
+      update(); saveGame();
+    }
+  }, 100);
+}
+
+// ═══════════════════════════════════════
 //  TAJNÝ OBCHOD
 // ═══════════════════════════════════════
 let secretShopActive    = false;
@@ -186,7 +472,6 @@ function triggerSecretShop() {
   const btn = document.getElementById("secretShopTriggerBtn");
   if (btn) { btn.classList.add("secretShopPulse"); btn.innerText = "🤫 Tajný Obchod"; }
 
-  // Zobraz výrazné upozornění
   showSecretShopNotification();
 
   if (secretShopInterval) clearInterval(secretShopInterval);
@@ -418,6 +703,7 @@ function login() {
   update();
   startAirship();
   scheduleSecretShop();
+  initTaxSystem();
   setTimeout(()=>{
     const types = ["corn","ladych","shifi"];
     spawnBoss(types[Math.floor(Math.random()*types.length)]);
@@ -505,7 +791,7 @@ function confirmTicket() {
 }
 
 // ═══════════════════════════════════════
-//  SLOT – 10 spinů / 5 MINUT (timer přežije reload)
+//  SLOT – 10 spinů / 5 MINUT
 // ═══════════════════════════════════════
 let currentBet = 0;
 
@@ -561,7 +847,7 @@ function runSlot() {
 }
 
 // ═══════════════════════════════════════
-//  ULTIMATE SLOT – 10 spinů / 10 MINUT (timer přežije reload)
+//  ULTIMATE SLOT – 10 spinů / 10 MINUT
 // ═══════════════════════════════════════
 let ultimateBet = 0;
 const ULTIMATE_SYMBOLS = ["🔴","🟡","🟠","🟢","💎","👑"];
@@ -644,11 +930,7 @@ function spinUltimate() {
   update();
 }
 
-// Tick pro slot timery (aby se UI updatovalo každou sekundu i bez otevřeného modalu)
-setInterval(()=>{
-  updateSlotSpinInfo();
-  updateUltimateSpinInfo();
-}, 1000);
+setInterval(()=>{ updateSlotSpinInfo(); updateUltimateSpinInfo(); }, 1000);
 
 // ─── NEMOVITOSTI ─────────────────────────
 function buyUFO() {
@@ -748,7 +1030,7 @@ document.querySelectorAll(".modal").forEach(m=>{
 function startAirship() {
   const container = document.getElementById("airship");
   container.style.display="block";
-  const messages=["KUNYS","PEP CLICKER 2.0","KLIKEJ KONĚ","KOTLISE AUTO","SHIFINY STÁJ","POZOR NA BOSSE!","OLGA KUNYSOVÁ!","VÝZKUM ODEMČEN!"];
+  const messages=["KUNYS","PEP CLICKER 2.0","KLIKEJ KONĚ","KOTLISE AUTO","SHIFINY STÁJ","POZOR NA BOSSE!","OLGA KUNYSOVÁ!","VÝZKUM ODEMČEN!","DOSTIHY DNES!","POZOR NA DANĚ!"];
   let msgIdx=0;
   const BLIMP_W=340,BANNER_W=220,TOTAL_W=BLIMP_W+BANNER_W+60;
   container.innerHTML=`<svg xmlns="http://www.w3.org/2000/svg" width="${TOTAL_W}" height="130" viewBox="0 0 ${TOTAL_W} 130">
@@ -872,8 +1154,15 @@ const ACHIEVEMENT_DEFS = [
   { id:"fisher1",    label:"🎣 První Ryba Chycena",        check:()=>totalFishCaught>=1 },
   { id:"fisher10",   label:"🐟 10 Ryb Chyceno",            check:()=>totalFishCaught>=10 },
   { id:"invest1",    label:"📈 První Investice",           check:()=>totalInvestments>=1 },
-  { id:"kabinet1",   label:"🎓 Kabinet Navštíven",         check:()=>peptalkVisits>=1 },
+  { id:"peptalk1",   label:"🎓 PepTalk Navštíven",         check:()=>peptalkVisits>=1 },
+  { id:"taxEvade1",  label:"🕵️ Daňový Únik!",             check:()=>taxEvadeCount>=1 },
+  { id:"dostihy1",   label:"🏇 První Dostih",              check:()=>dostihyRaceCount>=1 },
+  { id:"dostihyWin", label:"🏆 Dostih Vyhrán",             check:()=>dostihyWinCount>=1 },
 ];
+
+let taxEvadeCount  = 0;
+let dostihyRaceCount = 0;
+let dostihyWinCount  = 0;
 
 function checkAchievements() {
   let changed=false;
@@ -942,31 +1231,24 @@ const FISHING_BAITS = [
   { id:"bait3", name:"Magická Nástraha", emoji:"💎", cost:50000,  rarityBonus:50, owned:false, count:0 },
 ];
 
-let fishInventory   = []; // { id, name, emoji, rarity, value, count }
-let fishCooldown    = 0;  // seconds remaining
-let fishCooldownMax = 3;  // seconds
+let fishInventory   = [];
+let fishCooldown    = 0;
+let fishCooldownMax = 3;
 let fishCooldownInterval = null;
 let selectedRodIdx  = 0;
 let selectedBaitIdx = 0;
 let totalFishCaught = 0;
 
-function openFishing() {
-  renderFishingModal();
-  document.getElementById("fishingModal").style.display = "flex";
-}
+function openFishing() { renderFishingModal(); document.getElementById("fishingModal").style.display = "flex"; }
 
 function renderFishingModal() {
-  renderRodList();
-  renderBaitList();
-  renderFishInventory();
-  updateFishSellTotal();
+  renderRodList(); renderBaitList(); renderFishInventory(); updateFishSellTotal();
 }
 
 function renderRodList() {
   const el = document.getElementById("rodList"); if (!el) return;
   el.innerHTML = FISHING_RODS.map((r,i) => {
     const selected = selectedRodIdx === i;
-    const canAfford = coins >= r.cost;
     if (!r.owned) {
       return `<button class="fishGearBtn ${selected?'fishGearSelected':''}" onclick="buyRod(${i})">
         ${r.emoji} ${r.name}<br>
@@ -1019,27 +1301,19 @@ function castLine() {
   if (fishCooldown > 0) return;
   const rod  = FISHING_RODS[selectedRodIdx]  || FISHING_RODS[0];
   const bait = FISHING_BAITS[selectedBaitIdx] || FISHING_BAITS[0];
-
-  // Consume bait if not infinite
   if (!bait.infinite) {
     if (!bait.owned || bait.count <= 0) { showToast("Nemáš návnadu! Kup ji v obchodě."); return; }
     bait.count--;
     if (bait.count <= 0) { bait.owned = false; selectedBaitIdx = 0; }
     renderBaitList();
   }
-
-  // Calculate which fish to catch
   const rarityBonus = rod.rarityBonus + bait.rarityBonus;
   const fish = pickFish(rarityBonus);
   totalFishCaught++;
-
-  // Show catch animation
   showFishCatch(fish);
   addFishToInventory(fish);
   renderFishInventory();
   updateFishSellTotal();
-
-  // Start cooldown
   fishCooldownMax = Math.max(1, Math.round(3 * rod.cooldownMult));
   fishCooldown = fishCooldownMax;
   startFishCooldown();
@@ -1047,7 +1321,6 @@ function castLine() {
 }
 
 function pickFish(rarityBonus) {
-  // Adjust weights based on rarity bonus
   let pool = FISH_TYPES.map(f => {
     let w = f.weight;
     if (f.rarity !== "common") w = w * (1 + rarityBonus / 100);
@@ -1060,7 +1333,6 @@ function pickFish(rarityBonus) {
 }
 
 function addFishToInventory(fish) {
-  // Fish value scales with coins (richer player = more valuable fish)
   const scaleMult = Math.max(1, Math.log10(Math.max(100, coins)) / 2);
   const value = Math.floor(fish.baseValue * scaleMult);
   const existing = fishInventory.find(f => f.id === fish.id);
@@ -1099,8 +1371,8 @@ function sellAllFish() {
 }
 
 function showFishCatch(fish) {
-  const pond = document.getElementById("fishingPond"); if (!pond) return;
-  const label = document.getElementById("pondLabel"); if (label) label.innerText = fish.emoji+" "+fish.name+" ("+fish.rarityLabel+")!";
+  const label = document.getElementById("pondLabel"); if (!label) return;
+  label.innerText = fish.emoji+" "+fish.name+" ("+fish.rarityLabel+")!";
   setTimeout(()=>{ if (label) label.innerText = "🎣 KLIKNI PRO RYBAŘENÍ"; }, 2000);
 }
 
@@ -1129,7 +1401,7 @@ const INVEST_DEFS = [
   { id:"inv_olga",   name:"Olgino Impérium",     emoji:"👩‍🦳",desc:"Legendární investice. Nebo zkáza.",   cost:50000000, minMult:5.0,  maxMult:20.0, failChance:0.60, durationSec:300, risk:"Legendární",riskColor:"#cc00ff" },
 ];
 
-let activeInvestments = []; // { defId, endsAt, cost, result (null until done) }
+let activeInvestments = [];
 let totalInvestments  = 0;
 let investTimerInterval = null;
 
@@ -1168,7 +1440,6 @@ function checkInvestments() {
 function makeInvestment(defId) {
   const def = INVEST_DEFS.find(d => d.id === defId); if (!def) return;
   if (coins < def.cost) { showToast("Nemáš dost coinů!"); return; }
-  // Max 1 aktivní investice stejného typu
   if (activeInvestments.some(i => i.defId === defId && i.result === null)) {
     showToast("Tato investice už probíhá!"); return;
   }
@@ -1187,11 +1458,8 @@ function renderInvestModal() {
   const grid = document.getElementById("investGrid"); if (!grid) return;
   const portfolio = document.getElementById("investPortfolio");
   const activeList = document.getElementById("investActiveList");
-
-  // Active investments
   const active = activeInvestments.filter(i => i.result === null);
   const finished = activeInvestments.filter(i => i.result !== null);
-
   if (active.length > 0 || finished.length > 0) {
     portfolio.style.display = "block";
     let html = active.map(inv => {
@@ -1213,8 +1481,6 @@ function renderInvestModal() {
   } else {
     portfolio.style.display = "none";
   }
-
-  // Investment options
   grid.innerHTML = INVEST_DEFS.map(def => {
     const isActive = activeInvestments.some(i => i.defId === def.id && i.result === null);
     const canAfford = coins >= def.cost;
@@ -1239,30 +1505,30 @@ function renderInvestModal() {
 }
 
 // ═══════════════════════════════════════
-//  KABINET / PEPTALK 🎓
+//  PEPTALK 🎓 (přejmenováno z Kabinet)
 // ═══════════════════════════════════════
 const PEPTALK_QUESTIONS = [
-  { q:"Kolik má Česká republika krajů?",    a:["13","14","15","16"],      correct:1, reward:5000 },
-  { q:"Co je hlavní město Francie?",        a:["Berlín","Madrid","Paříž","Řím"], correct:2, reward:3000 },
-  { q:"Kolik je 7 × 8?",                   a:["54","56","58","60"],      correct:1, reward:2000 },
-  { q:"Kdo napsal Babičku?",               a:["Němcová","Čapek","Mácha","Neruda"], correct:0, reward:4000 },
-  { q:"Jaký je chemický vzorec vody?",      a:["CO2","H2O","NaCl","O2"], correct:1, reward:6000 },
-  { q:"Kolik noh má pavouk?",              a:["6","8","10","12"],        correct:1, reward:3500 },
-  { q:"Který rok byl konec 2. světové války?",a:["1943","1944","1945","1946"],correct:2,reward:8000},
-  { q:"Co je největší oceán?",             a:["Atlantický","Indický","Tichý","Arktický"],correct:2,reward:5000},
-  { q:"Kolik bitů má 1 bajt?",             a:["4","6","8","16"],        correct:2, reward:7000 },
-  { q:"Jak se jmenuje ředitel Pep Clickeru?", a:["Kotlise","Ládych","Šifka","Kunys"], correct:0, reward:10000 },
-  { q:"Kolik planet má Sluneční soustava?", a:["7","8","9","10"],        correct:1, reward:4000 },
-  { q:"Jaký je nejdelší řeka světa?",      a:["Amazonka","Nil","Volha","Jang-c'-ťiang"],correct:1,reward:5000},
-  { q:"Co znamená zkratka CPU?",           a:["Centrální procesorová jednotka","Jednotka zpracování grafiky","Hlavní paměť","Síťová karta"],correct:0,reward:6000},
-  { q:"Kolik minut má hodina?",            a:["50","55","60","65"],     correct:2, reward:1000 },
-  { q:"Kdo namaloval Mona Lisu?",          a:["Picasso","da Vinci","van Gogh","Rembrandt"],correct:1,reward:7000},
+  { q:"Kolik má Česká republika krajů?",         a:["13","14","15","16"],                         correct:1, reward:5000  },
+  { q:"Co je hlavní město Francie?",             a:["Berlín","Madrid","Paříž","Řím"],             correct:2, reward:3000  },
+  { q:"Kolik je 7 × 8?",                         a:["54","56","58","60"],                          correct:1, reward:2000  },
+  { q:"Kdo napsal Babičku?",                     a:["Němcová","Čapek","Mácha","Neruda"],           correct:0, reward:4000  },
+  { q:"Jaký je chemický vzorec vody?",           a:["CO2","H2O","NaCl","O2"],                     correct:1, reward:6000  },
+  { q:"Kolik noh má pavouk?",                    a:["6","8","10","12"],                            correct:1, reward:3500  },
+  { q:"Který rok byl konec 2. světové války?",   a:["1943","1944","1945","1946"],                  correct:2, reward:8000  },
+  { q:"Co je největší oceán?",                   a:["Atlantický","Indický","Tichý","Arktický"],   correct:2, reward:5000  },
+  { q:"Kolik bitů má 1 bajt?",                   a:["4","6","8","16"],                             correct:2, reward:7000  },
+  { q:"Jak se jmenuje ředitel Pep Clickeru?",    a:["Kotlis","Ládych","Šifka","Kunys"],           correct:3, reward:10000 },
+  { q:"Kolik planet má Sluneční soustava?",      a:["7","8","9","10"],                             correct:1, reward:4000  },
+  { q:"Jaký je nejdelší řeka světa?",            a:["Amazonka","Nil","Volha","Jang-c'-ťiang"],    correct:1, reward:5000  },
+  { q:"Co znamená zkratka CPU?",                 a:["Centrální procesorová jednotka","Jednotka zpracování grafiky","Hlavní paměť","Síťová karta"], correct:0, reward:6000 },
+  { q:"Kolik minut má hodina?",                  a:["50","55","60","65"],                          correct:2, reward:1000  },
+  { q:"Kdo namaloval Mona Lisu?",                a:["Picasso","da Vinci","van Gogh","Rembrandt"], correct:1, reward:7000  },
 ];
 
-let peptalkState     = "idle"; // idle | question | result | cooldown
-let peptalkQIdx      = -1;
-let peptalkStreak    = 0;
-let peptalkVisits    = 0;
+let peptalkState       = "idle";
+let peptalkQIdx        = -1;
+let peptalkStreak      = 0;
+let peptalkVisits      = 0;
 let peptalkCooldownEnd = 0;
 
 function openPeptalk() {
@@ -1307,13 +1573,11 @@ function answerPeptalk(idx) {
   const q    = PEPTALK_QUESTIONS[peptalkQIdx];
   const resultEl = document.getElementById("peptalkResult");
   const answersEl = document.getElementById("peptalkAnswers");
-  // Disable all buttons
   answersEl.querySelectorAll("button").forEach((btn, i) => {
     btn.disabled = true;
     if (i === q.correct) btn.style.background = "rgba(57,255,107,0.3)";
     else if (i === idx && idx !== q.correct) btn.style.background = "rgba(255,50,50,0.3)";
   });
-
   if (idx === q.correct) {
     peptalkStreak++;
     const reward = Math.floor(q.reward * (1 + (peptalkStreak-1) * 0.5));
@@ -1329,7 +1593,7 @@ function answerPeptalk(idx) {
         const bonus = q.reward * 5;
         coins += bonus; totalCoinsEarned += bonus;
         peptalkStreak = 0;
-        peptalkCooldownEnd = Date.now() + 5*60*1000; // 5 min cooldown po sérii
+        peptalkCooldownEnd = Date.now() + 5*60*1000;
         update(); saveGame();
         setTimeout(() => closeModal("peptalkModal"), 2500);
       } else {
@@ -1342,7 +1606,7 @@ function answerPeptalk(idx) {
     resultEl.innerText = "❌ Špatně! Správně bylo: "+q.a[q.correct];
     resultEl.style.color = "#ff4444";
     resultEl.style.display = "block";
-    peptalkCooldownEnd = Date.now() + 2*60*1000; // 2 min cooldown po prohře
+    peptalkCooldownEnd = Date.now() + 2*60*1000;
     update();
     setTimeout(() => {
       answersEl.innerHTML = `<button class="peptalkAnswerBtn" onclick="nextPeptalkQuestion()" style="background:rgba(255,255,255,0.1)">Zkusit znovu</button>`;
@@ -1372,6 +1636,10 @@ function saveGame() {
     activeInvestments, totalInvestments,
     // peptalk
     peptalkVisits, peptalkCooldownEnd,
+    // tax system – timestamps
+    taxNextAt, taxEvadeNextAt, taxEvadeCount,
+    // dostihy
+    dostihyCooldownEnd, dostihyRaceCount, dostihyWinCount,
   }));
 }
 
@@ -1384,13 +1652,11 @@ function loadGame() {
     hasKotliseCar=d.hasKotliseCar||false; hasElectroBoiler=d.hasElectroBoiler||false;
     stableHorses=d.stableHorses||[];
 
-    // Slot timery – loaded as timestamps
     slotSpinsLeft=d.slotSpinsLeft??10;
     slotCooldownEnd=d.slotCooldownEnd||0;
     ultimateSpinsLeft=d.ultimateSpinsLeft??10;
     ultimateCooldownEnd=d.ultimateCooldownEnd||0;
 
-    // Check if cooldowns already expired
     if (slotCooldownEnd > 0 && Date.now() >= slotCooldownEnd) { slotSpinsLeft=10; slotCooldownEnd=0; }
     if (ultimateCooldownEnd > 0 && Date.now() >= ultimateCooldownEnd) { ultimateSpinsLeft=10; ultimateCooldownEnd=0; }
 
@@ -1422,12 +1688,23 @@ function loadGame() {
     // Investments
     if (d.activeInvestments) activeInvestments=d.activeInvestments;
     if (d.totalInvestments) totalInvestments=d.totalInvestments;
-    // Check investments that finished while offline
     checkInvestments();
 
     // Peptalk
     if (d.peptalkVisits) peptalkVisits=d.peptalkVisits;
     if (d.peptalkCooldownEnd) peptalkCooldownEnd=d.peptalkCooldownEnd;
+
+    // Tax system – load timestamps (timers přežijí reload)
+    if (d.taxNextAt) taxNextAt=d.taxNextAt;
+    if (d.taxEvadeNextAt) taxEvadeNextAt=d.taxEvadeNextAt;
+    if (d.taxEvadeCount) taxEvadeCount=d.taxEvadeCount;
+
+    // Dostihy
+    if (d.dostihyCooldownEnd) dostihyCooldownEnd=d.dostihyCooldownEnd;
+    if (d.dostihyRaceCount) dostihyRaceCount=d.dostihyRaceCount;
+    if (d.dostihyWinCount) dostihyWinCount=d.dostihyWinCount;
+    // Check if dostihy cooldown expired
+    if (dostihyCooldownEnd > 0 && Date.now() >= dostihyCooldownEnd) dostihyCooldownEnd=0;
 
     renderPrices();
   } catch(e) { console.error("Load error:",e); }
